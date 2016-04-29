@@ -20,30 +20,24 @@ import attendanceapp.modeltoresponseobjectmapper.SchoolToSchoolResponseMapper;
 import attendanceapp.requestobjecttomodelmapper.SchoolRequestToSchoolMapper;
 import attendanceapp.services.SchoolService;
 
-@Service
+@Service()
 public class SchoolServiceImpl implements SchoolService {
 
-	@Autowired
+	@Autowired()
 	SchoolDao schoolDao;
 
 	private SchoolResponseObject createSchoolResponseFromSchool(School school) {
-		return new SchoolToSchoolResponseMapper.SchoolResponseBuilder()
-				.id(school.getId()).email(school.getEmail())
-				.name(school.getName()).telephone(school.getTelephone())
-				.build();
+		return new SchoolToSchoolResponseMapper.SchoolResponseBuilder().id(school.getId()).email(school.getEmail())
+				.name(school.getName()).telephone(school.getTelephone()).build();
 	}
 
-	private School createSchoolFromSchoolResponseObject(
-			SchoolRequestObject schoolRequestObject) {
-		return new SchoolRequestToSchoolMapper.SchoolBuilder()
-				.id(schoolRequestObject.getId())
-				.email(schoolRequestObject.getEmail())
-				.name(schoolRequestObject.getName())
+	private School createSchoolFromSchoolResponseObject(SchoolRequestObject schoolRequestObject) {
+		return new SchoolRequestToSchoolMapper.SchoolBuilder().id(schoolRequestObject.getId())
+				.email(schoolRequestObject.getEmail()).name(schoolRequestObject.getName())
 				.telephone(schoolRequestObject.getTelephone()).build();
 	}
 
-	private List<SchoolResponseObject> createListOfSchoolResponseFromListOfSchool(
-			List<School> schools) {
+	private List<SchoolResponseObject> createListOfSchoolResponseFromListOfSchool(List<School> schools) {
 		List<SchoolResponseObject> schoolsResponseObject = new ArrayList<SchoolResponseObject>();
 		schools.forEach(school -> {
 			schoolsResponseObject.add(createSchoolResponseFromSchool(school));
@@ -51,7 +45,7 @@ public class SchoolServiceImpl implements SchoolService {
 		return schoolsResponseObject;
 	}
 
-	@Override
+	@Override()
 	public SchoolResponseObject getSchool(final long id) {
 		try {
 			School school = schoolDao.getSchool(id);
@@ -63,7 +57,7 @@ public class SchoolServiceImpl implements SchoolService {
 		}
 	}
 
-	@Override
+	@Override()
 	public List<SchoolResponseObject> getSchoolList() {
 		try {
 			List<School> schools = schoolDao.getSchoolList();
@@ -73,7 +67,7 @@ public class SchoolServiceImpl implements SchoolService {
 		}
 	}
 
-	@Override
+	@Override()
 	public void update(final SchoolRequestObject schoolRequestObject) {
 		try {
 			School school = createSchoolFromSchoolResponseObject(schoolRequestObject);
@@ -87,7 +81,7 @@ public class SchoolServiceImpl implements SchoolService {
 		}
 	}
 
-	@Override
+	@Override()
 	public void delete(final long id) {
 		try {
 			schoolDao.delete(id);
@@ -99,7 +93,7 @@ public class SchoolServiceImpl implements SchoolService {
 		}
 	}
 
-	@Override
+	@Override()
 	public void create(final SchoolRequestObject schoolRequestObject) {
 		try {
 			schoolDao.create(schoolRequestObject);
@@ -110,7 +104,7 @@ public class SchoolServiceImpl implements SchoolService {
 		}
 	}
 
-	@Override
+	@Override()
 	public void delete(final String ids) {
 		try {
 			schoolDao.delete(ids);

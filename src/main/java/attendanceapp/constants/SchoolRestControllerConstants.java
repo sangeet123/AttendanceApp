@@ -13,7 +13,7 @@ public final class SchoolRestControllerConstants {
 	public static final String DELETE_SCHOOL = "/delete/{id}";
 	public static final String DELETE_SCHOOL_LIST = "/deleteall/";
 	public static final String CREATE_SCHOOL = "/create";
-	public static final String UPDATE_SCHOOL = "/update/";
+	public static final String UPDATE_SCHOOL = "/update";
 
 	// REST Operation message Constants
 	public static final String DELETE_SUCCESS = "School has been deleted successfully.";
@@ -21,7 +21,7 @@ public final class SchoolRestControllerConstants {
 	public static final String SCHOOL_DOES_NOT_EXIST = "School does not exist.";
 	public static final String UPDATE_SUCCESS = "School has been updated sucessfully.";
 	public static final String UPDATE_FAILURE = "School could not be updated.";
-	public static final String CREATE_SUCCESS = "School created sucessfully";
+	public static final String CREATE_SUCCESS = "School created sucessfully.";
 	public static final String CREATE_UPDATE_FAILURE_DUPLICATE_ENTRY = "School with given name already exists. Please try with different name.";
 	public static final String CREATE_USER_FAILURE_DUPLICATE_ENTRY = "User with given name already exists. Please try with different name.";
 

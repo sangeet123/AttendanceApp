@@ -13,7 +13,7 @@ import org.springframework.web.context.WebApplicationContext;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath*:mvc-dispatcher-servlet-it.xml",
 		"classpath*:db-configuration-it.xml" })
-@WebAppConfiguration
+@WebAppConfiguration()
 public abstract class TestConfigurerIT {
 
 	@Autowired()
@@ -21,7 +21,7 @@ public abstract class TestConfigurerIT {
 
 	private MockMvc mockMvc;
 
-	@Before
+	@Before()
 	public void setUp() {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(ctx).build();
 

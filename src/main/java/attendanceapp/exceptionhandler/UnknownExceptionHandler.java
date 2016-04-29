@@ -11,9 +11,9 @@ import attendanceapp.exceptions.UnknownException;
 import attendanceapp.util.SchoolRestServiceUtils;
 import attendanceapp.util.StatusCodeUtil;
 
-@ControllerAdvice
+@ControllerAdvice()
 public class UnknownExceptionHandler {
-	@ResponseBody
+	@ResponseBody()
 	@ExceptionHandler(UnknownException.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public Status processUnknownException(UnknownException ex) {

@@ -13,17 +13,17 @@ import attendanceapp.exceptions.SchoolNotFoundException;
 import attendanceapp.util.SchoolRestServiceUtils;
 import attendanceapp.util.StatusCodeUtil;
 
-@ControllerAdvice
+@ControllerAdvice()
 public class SchoolNotFoundExceptionHandler {
 
 	private MessageSource messageSource;
 
-	@Autowired
+	@Autowired()
 	public SchoolNotFoundExceptionHandler(MessageSource messageSource) {
 		this.messageSource = messageSource;
 	}
 
-	@ResponseBody
+	@ResponseBody()
 	@ExceptionHandler(SchoolNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public Status processSchoolNotFoundException(SchoolNotFoundException ex) {

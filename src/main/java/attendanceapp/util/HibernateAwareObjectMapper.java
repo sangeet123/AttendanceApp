@@ -12,8 +12,6 @@ public class HibernateAwareObjectMapper extends ObjectMapper {
 
 	public HibernateAwareObjectMapper() {
 		Hibernate4Module hm = new Hibernate4Module();
-		// this.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-		// false);
 		registerModule(hm);
 	}
 }

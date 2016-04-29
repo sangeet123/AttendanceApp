@@ -23,13 +23,13 @@ import attendanceapp.model.User;
 import attendanceapp.model.requestobject.SchoolRequestObject;
 import attendanceapp.util.SchoolRestServiceUtils;
 
-@Repository
+@Repository()
 public class SchoolDaoImpl implements SchoolDao {
 
 	static final String LOAD_ALL_SCHOOL = "FROM attendanceapp.common.model.School";
 	static final String DELETE_ALL_SCHOOL = "delete from schools where id IN %s";
 
-	@Autowired
+	@Autowired()
 	SessionFactory sessionFactory;
 
 	Session session = null;
@@ -83,7 +83,7 @@ public class SchoolDaoImpl implements SchoolDao {
 		}
 	}
 
-	@Override
+	@Override()
 	public School getSchool(final long id) {
 		try {
 			session = sessionFactory.openSession();
@@ -95,7 +95,7 @@ public class SchoolDaoImpl implements SchoolDao {
 		}
 	}
 
-	@Override
+	@Override()
 	public List<School> getSchoolList() {
 		try {
 			session = sessionFactory.openSession();
@@ -109,7 +109,7 @@ public class SchoolDaoImpl implements SchoolDao {
 		}
 	}
 
-	@Override
+	@Override()
 	public void update(final School school) {
 		try {
 			session = sessionFactory.openSession();
@@ -124,7 +124,7 @@ public class SchoolDaoImpl implements SchoolDao {
 		}
 	}
 
-	@Override
+	@Override()
 	public void create(final SchoolRequestObject schoolRequestObject) {
 		boolean wasCreateSuccessFull = false;
 		try {
@@ -142,7 +142,7 @@ public class SchoolDaoImpl implements SchoolDao {
 		}
 	}
 
-	@Override
+	@Override()
 	public void delete(final long id) {
 		try {
 			session = sessionFactory.openSession();
@@ -156,7 +156,7 @@ public class SchoolDaoImpl implements SchoolDao {
 		}
 	}
 
-	@Override
+	@Override()
 	public void delete(final String ids) {
 		try {
 			String deleteAll = String.format(DELETE_ALL_SCHOOL, ids);

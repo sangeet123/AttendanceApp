@@ -19,9 +19,9 @@ import attendanceapp.util.StatusCodeUtil;
  * exceptions. Also make sure that service and dao layer
  * does not throw this exception.
  */
-@ControllerAdvice
+@ControllerAdvice()
 public class TypeMismatchExceptionHandler {
-	@ResponseBody
+	@ResponseBody()
 	@ExceptionHandler(TypeMismatchException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public Status processSchoolNotFoundException(Exception ex) {

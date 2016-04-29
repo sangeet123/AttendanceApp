@@ -12,10 +12,10 @@ import attendanceapp.customstatus.Status;
 import attendanceapp.util.SchoolRestServiceUtils;
 import attendanceapp.util.StatusCodeUtil;
 
-@ControllerAdvice
+@ControllerAdvice()
 public class HttpMessageNotReadableExceptionHandler {
 
-	@ResponseBody
+	@ResponseBody()
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public Status processSchoolNotFoundException(Exception ex) {

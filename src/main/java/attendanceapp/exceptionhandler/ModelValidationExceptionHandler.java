@@ -17,17 +17,17 @@ import java.util.Locale;
 
 import attendanceapp.modelvalidation.ValidationError;
 
-@ControllerAdvice
+@ControllerAdvice()
 public class ModelValidationExceptionHandler {
 
 	private MessageSource messageSource;
 
-	@Autowired
+	@Autowired()
 	public ModelValidationExceptionHandler(MessageSource messageSource) {
 		this.messageSource = messageSource;
 	}
 
-	@ResponseBody
+	@ResponseBody()
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ValidationError processValidationError(

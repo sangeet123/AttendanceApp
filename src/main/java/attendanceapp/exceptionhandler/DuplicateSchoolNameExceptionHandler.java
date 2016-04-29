@@ -14,17 +14,17 @@ import attendanceapp.exceptions.SchoolNotFoundException;
 import attendanceapp.util.SchoolRestServiceUtils;
 import attendanceapp.util.StatusCodeUtil;
 
-@ControllerAdvice
+@ControllerAdvice()
 public class DuplicateSchoolNameExceptionHandler {
 
 	private MessageSource messageSource;
 
-	@Autowired
+	@Autowired()
 	public DuplicateSchoolNameExceptionHandler(MessageSource messageSource) {
 		this.messageSource = messageSource;
 	}
 
-	@ResponseBody
+	@ResponseBody()
 	@ExceptionHandler(DuplicateSchoolNameException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)
 	public Status processDuplicateSchoolNameException(DuplicateSchoolNameException ex) {

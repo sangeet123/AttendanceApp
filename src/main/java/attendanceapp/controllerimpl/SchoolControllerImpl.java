@@ -21,24 +21,27 @@ import attendanceapp.services.SchoolService;
 import attendanceapp.util.AttendanceAppUtils;
 import attendanceapp.util.StatusCodeUtil;
 
-@Controller
+@Controller()
 @RequestMapping(SchoolRestControllerConstants.ROOT)
 public class SchoolControllerImpl implements SchoolController {
 
-	@Autowired
+	@Autowired()
 	SchoolService schoolService;
 
+	@Override()
 	@RequestMapping(value = SchoolRestControllerConstants.GET_SCHOOL, method = RequestMethod.GET)
 	public @ResponseBody SchoolResponseObject getSchool(
 			@PathVariable final long id) {
 		return schoolService.getSchool(id);
 	}
 
+	@Override()
 	@RequestMapping(value = SchoolRestControllerConstants.GET_SCHOOL_LIST, method = RequestMethod.GET)
 	public @ResponseBody List<SchoolResponseObject> getSchoolList() {
 		return schoolService.getSchoolList();
 	}
 
+	@Override()
 	@RequestMapping(value = SchoolRestControllerConstants.DELETE_SCHOOL, method = RequestMethod.DELETE)
 	public @ResponseBody Status delete(@PathVariable final long id) {
 		schoolService.delete(id);
@@ -48,6 +51,7 @@ public class SchoolControllerImpl implements SchoolController {
 				StatusCodeUtil.OPERATION_SUCCESS);
 	}
 
+	@Override()
 	@RequestMapping(value = SchoolRestControllerConstants.DELETE_SCHOOL_LIST, method = RequestMethod.DELETE)
 	public @ResponseBody Status delete(@RequestBody final String ids) {
 		schoolService.delete(ids);
@@ -57,6 +61,7 @@ public class SchoolControllerImpl implements SchoolController {
 				StatusCodeUtil.OPERATION_SUCCESS);
 	}
 
+	@Override()
 	@RequestMapping(value = SchoolRestControllerConstants.CREATE_SCHOOL, method = RequestMethod.POST)
 	public @ResponseBody Status create(
 			@Valid @RequestBody final SchoolRequestObject schoolRequestObject) {
@@ -67,6 +72,7 @@ public class SchoolControllerImpl implements SchoolController {
 				StatusCodeUtil.OPERATION_SUCCESS);
 	}
 
+	@Override()
 	@RequestMapping(value = SchoolRestControllerConstants.UPDATE_SCHOOL, method = RequestMethod.PUT)
 	public @ResponseBody Status update(
 			@Valid @RequestBody final SchoolRequestObject schoolRequestObject) {

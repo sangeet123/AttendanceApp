@@ -13,17 +13,17 @@ import attendanceapp.exceptions.DuplicateUserNameException;
 import attendanceapp.util.SchoolRestServiceUtils;
 import attendanceapp.util.StatusCodeUtil;
 
-@ControllerAdvice
+@ControllerAdvice()
 public class DuplicateUserNameExceptionHandler {
 
 	private MessageSource messageSource;
 
-	@Autowired
+	@Autowired()
 	public DuplicateUserNameExceptionHandler(MessageSource messageSource) {
 		this.messageSource = messageSource;
 	}
 
-	@ResponseBody
+	@ResponseBody()
 	@ExceptionHandler(DuplicateUserNameException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)
 	public Status processDuplicateUserNameException(

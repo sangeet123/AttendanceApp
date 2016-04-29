@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import attendanceapp.common.util.AttendanceAppUtils;
 
-@Entity
+@Entity()
 @Table(name = "schools", uniqueConstraints = { @UniqueConstraint(columnNames = "name") })
 public class School implements Serializable {
 	/**
@@ -32,29 +32,29 @@ public class School implements Serializable {
 	 */
 	private static final long serialVersionUID = -3776706368364694697L;
 
-	@Id
-	@Column
+	@Id()
+	@Column()
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@NotBlank
+	@NotBlank()
 	@Length(max = 250)
 	@Column(name = "name", unique = true, nullable = false, length = 250)
 	private String name;
 
-	@NotBlank
+	@NotBlank()
 	@Length(max = 250)
 	@Column(name = "telephone", unique = true, nullable = false, length = 250)
 	@Pattern(regexp = AttendanceAppUtils.TELEPHONE_VALIDATOR_REGEX)
 	private String telephone;
 
-	@NotBlank
+	@NotBlank()
 	@Length(max = 250)
 	@Column(name = "email", unique = true, nullable = false, length = 250)
 	@Pattern(regexp = AttendanceAppUtils.EMAIL_VALIDATOR_REGEX)
 	private String email;
 
-	@JsonIgnore
+	@JsonIgnore()
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id")
 	private Set<Student> students = new HashSet<Student>(0);
@@ -99,10 +99,9 @@ public class School implements Serializable {
 		this.students = students;
 	}
 
-	@Override
+	@Override()
 	public String toString() {
-		return "id=" + id + ", name=" + name + ", telephone=" + telephone
-				+ ", email=" + email;
+		return "id=" + id + ", name=" + name + ", telephone=" + telephone + ", email=" + email;
 	}
 
 }

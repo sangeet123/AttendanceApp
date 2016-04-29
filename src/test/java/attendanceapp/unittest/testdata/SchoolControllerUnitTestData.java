@@ -1,4 +1,4 @@
-package attendanceapp.unittest.admin.testdata;
+package attendanceapp.unittest.testdata;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,9 +10,9 @@ import java.util.stream.Collectors;
 
 import attendanceapp.model.responseobject.SchoolResponseObject;
 import attendanceapp.unitest.common.util.AttendanceAppUnitTestUtil;
-import attendanceapp.unittest.admin.constants.SchoolControllerUnitTestConstants;
+import attendanceapp.unittest.constants.SchoolControllerUnitTestConstants;
 
-public class SchoolControllerTestData {
+public class SchoolControllerUnitTestData {
 
 	public static final String TESTSCHOOLDATAFILEPATH = "test-school-data";
 
@@ -20,9 +20,7 @@ public class SchoolControllerTestData {
 
 	private static void readSchoolFromFile() throws IOException {
 		schoolsResponseObject = new ArrayList<SchoolResponseObject>();
-		File file = new File(
-				AttendanceAppUnitTestUtil
-						.resourceToString(TESTSCHOOLDATAFILEPATH));
+		File file = new File(AttendanceAppUnitTestUtil.resourceToString(TESTSCHOOLDATAFILEPATH));
 		@SuppressWarnings("resource")
 		BufferedReader buffer = new BufferedReader(new FileReader(file));
 		String line;
@@ -34,14 +32,12 @@ public class SchoolControllerTestData {
 	}
 
 	private static String getValueFromKeyVal(String keyVal) {
-		int index = keyVal
-				.indexOf(SchoolControllerUnitTestConstants.DELEIMITER);
+		int index = keyVal.indexOf(SchoolControllerUnitTestConstants.DELEIMITER);
 		String val = keyVal.substring(index + 1).trim();
 		return val;
 	}
 
-	public static List<SchoolResponseObject> getTestSchoolList()
-			throws IOException {
+	public static List<SchoolResponseObject> getTestSchoolList() throws IOException {
 		if (schoolsResponseObject == null) {
 			readSchoolFromFile();
 		}
@@ -54,14 +50,12 @@ public class SchoolControllerTestData {
 		for (String param : schoolParams) {
 
 			if (param.contains(SchoolControllerUnitTestConstants.ID)) {
-				schoolResponseObject.setId(Long
-						.parseLong(getValueFromKeyVal(param)));
+				schoolResponseObject.setId(Long.parseLong(getValueFromKeyVal(param)));
 			} else if (param.contains(SchoolControllerUnitTestConstants.NAME)) {
 				schoolResponseObject.setName(getValueFromKeyVal(param));
 			} else if (param.contains(SchoolControllerUnitTestConstants.EMAIL)) {
 				schoolResponseObject.setEmail(getValueFromKeyVal(param));
-			} else if (param
-					.contains(SchoolControllerUnitTestConstants.TELEPHONE)) {
+			} else if (param.contains(SchoolControllerUnitTestConstants.TELEPHONE)) {
 				schoolResponseObject.setTelephone(getValueFromKeyVal(param));
 			}
 		}
@@ -69,13 +63,12 @@ public class SchoolControllerTestData {
 		return schoolResponseObject;
 	}
 
-	public static List<SchoolResponseObject> getSchool(long id)
-			throws IOException {
+	public static List<SchoolResponseObject> getSchool(long id) throws IOException {
 		if (schoolsResponseObject == null) {
 			readSchoolFromFile();
 		}
-		List<SchoolResponseObject> school = schoolsResponseObject.stream()
-				.filter(s -> s.getId() == id).collect(Collectors.toList());
+		List<SchoolResponseObject> school = schoolsResponseObject.stream().filter(s -> s.getId() == id)
+				.collect(Collectors.toList());
 		return school;
 
 	}

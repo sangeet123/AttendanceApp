@@ -1,4 +1,4 @@
-package attendanceapp.unittest.admin.constants;
+package attendanceapp.unittest.constants;
 
 public class SchoolControllerUnitTestConstants {
 

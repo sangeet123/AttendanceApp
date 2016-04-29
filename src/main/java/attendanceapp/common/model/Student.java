@@ -14,25 +14,25 @@ import javax.validation.constraints.NotNull;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
-@Entity
+@Entity()
 @Table(name = "students")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Student implements Serializable {
 
 	private static final long serialVersionUID = 260641067862510958L;
 
-	@Id
-	@Column
+	@Id()
+	@Column()
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@NotNull
+	@NotNull()
 	private String name;
 
-	@NotNull
+	@NotNull()
 	private String telephone;
 
-	@NotNull
+	@NotNull()
 	@Column(name = "email", unique = true, nullable = false, length = 250)
 	private String email;
 
@@ -79,7 +79,7 @@ public class Student implements Serializable {
 		this.email = email;
 	}
 
-	@Override
+	@Override()
 	public String toString() {
 		return "id=" + id + ", name=" + name + ", telephone=" + telephone
 				+ ", email=" + email;
