@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import attendanceapp.constants.SchoolRestControllerConstants;
 import attendanceapp.controller.SchoolController;
 import attendanceapp.customstatus.Status;
-import attendanceapp.model.requestobject.SchoolRequestObject;
+import attendanceapp.model.requestobject.SchoolCreateRequestObject;
+import attendanceapp.model.requestobject.SchoolUpdateRequestObject;
 import attendanceapp.model.responseobject.SchoolResponseObject;
 import attendanceapp.services.SchoolService;
 import attendanceapp.util.AttendanceAppUtils;
@@ -30,8 +31,7 @@ public class SchoolControllerImpl implements SchoolController {
 
 	@Override()
 	@RequestMapping(value = SchoolRestControllerConstants.GET_SCHOOL, method = RequestMethod.GET)
-	public @ResponseBody SchoolResponseObject getSchool(
-			@PathVariable final long id) {
+	public @ResponseBody SchoolResponseObject getSchool(@PathVariable final long id) {
 		return schoolService.getSchool(id);
 	}
 
@@ -45,9 +45,7 @@ public class SchoolControllerImpl implements SchoolController {
 	@RequestMapping(value = SchoolRestControllerConstants.DELETE_SCHOOL, method = RequestMethod.DELETE)
 	public @ResponseBody Status delete(@PathVariable final long id) {
 		schoolService.delete(id);
-		return new Status(
-				AttendanceAppUtils
-						.messageToList(SchoolRestControllerConstants.DELETE_SUCCESS),
+		return new Status(AttendanceAppUtils.messageToList(SchoolRestControllerConstants.DELETE_SUCCESS),
 				StatusCodeUtil.OPERATION_SUCCESS);
 	}
 
@@ -55,32 +53,24 @@ public class SchoolControllerImpl implements SchoolController {
 	@RequestMapping(value = SchoolRestControllerConstants.DELETE_SCHOOL_LIST, method = RequestMethod.DELETE)
 	public @ResponseBody Status delete(@RequestBody final String ids) {
 		schoolService.delete(ids);
-		return new Status(
-				AttendanceAppUtils
-						.messageToList(SchoolRestControllerConstants.DELETE_SUCCESS),
+		return new Status(AttendanceAppUtils.messageToList(SchoolRestControllerConstants.DELETE_SUCCESS),
 				StatusCodeUtil.OPERATION_SUCCESS);
 	}
 
 	@Override()
 	@RequestMapping(value = SchoolRestControllerConstants.CREATE_SCHOOL, method = RequestMethod.POST)
-	public @ResponseBody Status create(
-			@Valid @RequestBody final SchoolRequestObject schoolRequestObject) {
+	public @ResponseBody Status create(@Valid @RequestBody final SchoolCreateRequestObject schoolRequestObject) {
 		schoolService.create(schoolRequestObject);
-		return new Status(
-				AttendanceAppUtils
-						.messageToList(SchoolRestControllerConstants.CREATE_SUCCESS),
+		return new Status(AttendanceAppUtils.messageToList(SchoolRestControllerConstants.CREATE_SUCCESS),
 				StatusCodeUtil.OPERATION_SUCCESS);
 	}
 
 	@Override()
 	@RequestMapping(value = SchoolRestControllerConstants.UPDATE_SCHOOL, method = RequestMethod.PUT)
-	public @ResponseBody Status update(
-			@Valid @RequestBody final SchoolRequestObject schoolRequestObject) {
-		schoolService.update(schoolRequestObject);
-		return new Status(
-				AttendanceAppUtils
-						.messageToList(SchoolRestControllerConstants.UPDATE_SUCCESS),
-				StatusCodeUtil.OPERATION_SUCCESS);
+	public @ResponseBody SchoolUpdateRequestObject update(
+			@Valid @RequestBody final SchoolUpdateRequestObject schoolUpdateRequestObject) {
+		schoolService.update(schoolUpdateRequestObject);
+		return schoolUpdateRequestObject;
 	}
 
 }

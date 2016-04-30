@@ -3,7 +3,7 @@ package attendanceapp.dao;
 import java.util.List;
 
 import attendanceapp.model.School;
-import attendanceapp.model.requestobject.SchoolRequestObject;
+import attendanceapp.model.requestobject.SchoolCreateRequestObject;
 
 public interface SchoolDao {
 	public School getSchool(final long id);
@@ -16,5 +16,5 @@ public interface SchoolDao {
 
 	public void delete(final String ids);
 
-	void create(final SchoolRequestObject schoolRequestObject);
+	void create(final SchoolCreateRequestObject schoolRequestObject);
 }

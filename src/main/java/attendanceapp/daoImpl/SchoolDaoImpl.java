@@ -20,7 +20,7 @@ import attendanceapp.exceptions.DuplicateUserNameException;
 import attendanceapp.model.Authority;
 import attendanceapp.model.School;
 import attendanceapp.model.User;
-import attendanceapp.model.requestobject.SchoolRequestObject;
+import attendanceapp.model.requestobject.SchoolCreateRequestObject;
 import attendanceapp.util.SchoolRestServiceUtils;
 
 @Repository()
@@ -53,10 +53,9 @@ public class SchoolDaoImpl implements SchoolDao {
 		}
 	}
 
-	private void createSchool(final SchoolRequestObject schoolRequestObject) {
+	private void createSchool(final SchoolCreateRequestObject schoolRequestObject) {
 		try {
-			School school = SchoolRestServiceUtils
-					.createSchoolFromSchoolResponseObject(schoolRequestObject);
+			School school = SchoolRestServiceUtils.createSchoolFromSchoolResponseObject(schoolRequestObject);
 			long schoolId = (long) session.save(school);
 			schoolRequestObject.setId(schoolId);
 			session.flush();
@@ -65,16 +64,13 @@ public class SchoolDaoImpl implements SchoolDao {
 		}
 	}
 
-	private void createUser(final SchoolRequestObject schoolRequestObject) {
+	private void createUser(final SchoolCreateRequestObject schoolRequestObject) {
 		try {
-			School school = SchoolRestServiceUtils
-					.createSchoolFromSchoolResponseObject(schoolRequestObject);
-			User user = SchoolRestServiceUtils
-					.createUserFromSchoolResponseObject(schoolRequestObject);
+			School school = SchoolRestServiceUtils.createSchoolFromSchoolResponseObject(schoolRequestObject);
+			User user = SchoolRestServiceUtils.createUserFromSchoolResponseObject(schoolRequestObject);
 			user.setSchool(school);
 			session.save(user);
-			Authority authority = SchoolRestServiceUtils
-					.createAuthorityFromSchoolRequestObject(schoolRequestObject);
+			Authority authority = SchoolRestServiceUtils.createAuthorityFromSchoolRequestObject(schoolRequestObject);
 			authority.setUser(user);
 			session.save(authority);
 			session.flush();
@@ -87,8 +83,7 @@ public class SchoolDaoImpl implements SchoolDao {
 	public School getSchool(final long id) {
 		try {
 			session = sessionFactory.openSession();
-			Optional<School> school = Optional.of((School) session.get(
-					School.class, new Long(id)));
+			Optional<School> school = Optional.of((School) session.get(School.class, new Long(id)));
 			return school.get();
 		} finally {
 			closeSession();
@@ -101,8 +96,7 @@ public class SchoolDaoImpl implements SchoolDao {
 			session = sessionFactory.openSession();
 			org.hibernate.Query query = session.createQuery(LOAD_ALL_SCHOOL);
 			@SuppressWarnings("unchecked")
-			final List<School> schools = Collections.checkedList(query.list(),
-					School.class);
+			final List<School> schools = Collections.checkedList(query.list(), School.class);
 			return schools;
 		} finally {
 			closeSession();
@@ -114,10 +108,9 @@ public class SchoolDaoImpl implements SchoolDao {
 		try {
 			session = sessionFactory.openSession();
 			transaction = session.beginTransaction();
-			Optional<School> schoolToUpdate = Optional.of((School) session.get(
-					School.class, new Long(school.getId())));
+			Optional<School> schoolToUpdate = Optional.of((School) session.get(School.class, new Long(school.getId())));
 			copyAttributes(schoolToUpdate.get(), school);
-			session.update(schoolToUpdate);
+			session.update(schoolToUpdate.get());
 			transaction.commit();
 		} finally {
 			closeSession();
@@ -125,7 +118,7 @@ public class SchoolDaoImpl implements SchoolDao {
 	}
 
 	@Override()
-	public void create(final SchoolRequestObject schoolRequestObject) {
+	public void create(final SchoolCreateRequestObject schoolRequestObject) {
 		boolean wasCreateSuccessFull = false;
 		try {
 			session = sessionFactory.openSession();
@@ -147,8 +140,7 @@ public class SchoolDaoImpl implements SchoolDao {
 		try {
 			session = sessionFactory.openSession();
 			transaction = session.beginTransaction();
-			Optional<School> school = Optional.of((School) session.load(
-					School.class, new Long(id)));
+			Optional<School> school = Optional.of((School) session.load(School.class, new Long(id)));
 			session.delete(school.get());
 			transaction.commit();
 		} finally {

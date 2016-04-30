@@ -46,45 +46,50 @@ public class SchoolControllerdeleteIT extends TestConfigurerIT {
 	@Test()
 	public void delete_school_with_valid_id_1_that_exist() throws Exception {
 		final long validSchoolId = 1L;
+		final String responseJsonString = "{\"statusCode\":1,\"message\":[\"School has been deleted successfully.\"]}";
 		getMockMvc().perform(delete(SchoolControllerConstantsIT.DELETESCHOOL, validSchoolId)).andExpect(status().isOk())
-				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)).andExpect(
-						content().string("{\"statusCode\":1,\"message\":[\"School has been deleted successfully.\"]}"));
+				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
+				.andExpect(content().string(responseJsonString));
 	}
 
 	@Test()
 	public void delete_school_with_valid_id_10_that_exist() throws Exception {
 		final long validSchoolId = 10L;
+		final String responseJsonString = "{\"statusCode\":1,\"message\":[\"School has been deleted successfully.\"]}";
 		getMockMvc().perform(delete(SchoolControllerConstantsIT.DELETESCHOOL, validSchoolId)).andExpect(status().isOk())
-				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)).andExpect(
-						content().string("{\"statusCode\":1,\"message\":[\"School has been deleted successfully.\"]}"));
+				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
+				.andExpect(content().string(responseJsonString));
 	}
 
 	@Test()
 	public void delete_school_with_valid_id_15_that_does_not_exist() throws Exception {
 		final long validIdThatDoesNotExist = 15L;
+		final String responseJsonString = "{\"statusCode\":2,\"message\":[\"School does not exist.\"]}";
 		getMockMvc().perform(delete(SchoolControllerConstantsIT.DELETESCHOOL, validIdThatDoesNotExist))
 				.andExpect(status().isNotFound())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(content().string("{\"statusCode\":2,\"message\":[\"School does not exist.\"]}"));
+				.andExpect(content().string(responseJsonString));
 
 	}
 
 	@Test()
 	public void delete_school_with_invalid_id_negative_1() throws Exception {
 		final long invalidId = -1L;
+		final String responseJsonString = "{\"statusCode\":2,\"message\":[\"School does not exist.\"]}";
 		getMockMvc().perform(delete(SchoolControllerConstantsIT.DELETESCHOOL, invalidId))
 				.andExpect(status().isNotFound())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(content().string("{\"statusCode\":2,\"message\":[\"School does not exist.\"]}"));
+				.andExpect(content().string(responseJsonString));
 	}
 
 	@Test()
 	public void delete_school_with_invalid_id_one() throws Exception {
 		final String invalidStringId = "one";
+		final String responseJsonString = "{\"statusCode\":2,\"message\":[\"Resource does not exist.\"]}";
 		getMockMvc().perform(delete(SchoolControllerConstantsIT.DELETESCHOOL, invalidStringId))
 				.andExpect(status().isNotFound())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(content().string("{\"statusCode\":2,\"message\":[\"Resource does not exist.\"]}"));
+				.andExpect(content().string(responseJsonString));
 
 	}
 }

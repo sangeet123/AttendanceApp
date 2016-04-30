@@ -7,7 +7,7 @@ import attendanceapp.customstatus.Status;
 import attendanceapp.model.Authority;
 import attendanceapp.model.School;
 import attendanceapp.model.User;
-import attendanceapp.model.requestobject.SchoolRequestObject;
+import attendanceapp.model.requestobject.SchoolCreateRequestObject;
 import attendanceapp.requestobjecttomodelmapper.SchoolRequestToAuthoritiesMapper;
 import attendanceapp.requestobjecttomodelmapper.SchoolRequestToSchoolMapper;
 import attendanceapp.requestobjecttomodelmapper.SchoolRequestToUserMapper;
@@ -27,7 +27,7 @@ public class SchoolRestServiceUtils {
 	}
 
 	public static School createSchoolFromSchoolResponseObject(
-			final SchoolRequestObject schoolRequestObject) {
+			final SchoolCreateRequestObject schoolRequestObject) {
 		return new SchoolRequestToSchoolMapper.SchoolBuilder()
 				.id(schoolRequestObject.getId())
 				.email(schoolRequestObject.getEmail())
@@ -36,7 +36,7 @@ public class SchoolRestServiceUtils {
 	}
 
 	public static User createUserFromSchoolResponseObject(
-			final SchoolRequestObject schoolRequestObject) {
+			final SchoolCreateRequestObject schoolRequestObject) {
 		return new SchoolRequestToUserMapper.UserBuilder()
 				.username(schoolRequestObject.getUsername())
 				.password(schoolRequestObject.getPassword()).enabled(true)
@@ -44,7 +44,7 @@ public class SchoolRestServiceUtils {
 	}
 
 	public static Authority createAuthorityFromSchoolRequestObject(
-			final SchoolRequestObject schoolRequestObject) {
+			final SchoolCreateRequestObject schoolRequestObject) {
 		String authority = Role.ROLE_SCHOOL_ADMIN;
 		return new SchoolRequestToAuthoritiesMapper.AuthorityBuilder()
 				.username(schoolRequestObject.getUsername())

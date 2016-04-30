@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import attendanceapp.constants.SchoolRestControllerConstants;
 import attendanceapp.customstatus.Status;
-import attendanceapp.model.requestobject.SchoolRequestObject;
+import attendanceapp.model.requestobject.SchoolCreateRequestObject;
+import attendanceapp.model.requestobject.SchoolUpdateRequestObject;
 import attendanceapp.model.responseobject.SchoolResponseObject;
 
 public interface SchoolController {
 
 	@RequestMapping(value = SchoolRestControllerConstants.GET_SCHOOL, method = RequestMethod.GET)
-	public @ResponseBody SchoolResponseObject getSchool(
-			@PathVariable final long id);
+	public @ResponseBody SchoolResponseObject getSchool(@PathVariable final long id);
 
 	@RequestMapping(value = SchoolRestControllerConstants.GET_SCHOOL_LIST, method = RequestMethod.GET)
 	public @ResponseBody List<SchoolResponseObject> getSchoolList();
@@ -31,10 +31,9 @@ public interface SchoolController {
 	public @ResponseBody Status delete(@RequestBody final String ids);
 
 	@RequestMapping(value = SchoolRestControllerConstants.CREATE_SCHOOL, method = RequestMethod.POST)
-	public @ResponseBody Status create(
-			@Valid @RequestBody final SchoolRequestObject schoolRequestObject);
+	public @ResponseBody Status create(@Valid @RequestBody final SchoolCreateRequestObject schoolRequestObject);
 
 	@RequestMapping(value = SchoolRestControllerConstants.UPDATE_SCHOOL, method = RequestMethod.PUT)
-	public @ResponseBody Status update(
-			@Valid @RequestBody final SchoolRequestObject schoolRequestObject);
+	public @ResponseBody SchoolUpdateRequestObject update(
+			@Valid @RequestBody final SchoolUpdateRequestObject schoolRequestObject);
 }

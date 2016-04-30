@@ -14,10 +14,11 @@ import attendanceapp.exceptions.DuplicateUserNameException;
 import attendanceapp.exceptions.SchoolNotFoundException;
 import attendanceapp.exceptions.UnknownException;
 import attendanceapp.model.School;
-import attendanceapp.model.requestobject.SchoolRequestObject;
+import attendanceapp.model.requestobject.SchoolCreateRequestObject;
+import attendanceapp.model.requestobject.SchoolUpdateRequestObject;
 import attendanceapp.model.responseobject.SchoolResponseObject;
 import attendanceapp.modeltoresponseobjectmapper.SchoolToSchoolResponseMapper;
-import attendanceapp.requestobjecttomodelmapper.SchoolRequestToSchoolMapper;
+import attendanceapp.requestobjecttomodelmapper.SchoolUpdateRequestToSchoolMapper;
 import attendanceapp.services.SchoolService;
 
 @Service()
@@ -31,10 +32,10 @@ public class SchoolServiceImpl implements SchoolService {
 				.name(school.getName()).telephone(school.getTelephone()).build();
 	}
 
-	private School createSchoolFromSchoolResponseObject(SchoolRequestObject schoolRequestObject) {
-		return new SchoolRequestToSchoolMapper.SchoolBuilder().id(schoolRequestObject.getId())
-				.email(schoolRequestObject.getEmail()).name(schoolRequestObject.getName())
-				.telephone(schoolRequestObject.getTelephone()).build();
+	private School createSchoolFromSchoolUpdateRequestObject(SchoolUpdateRequestObject schoolUpdateRequestObject) {
+		return new SchoolUpdateRequestToSchoolMapper.SchoolBuilder().id(schoolUpdateRequestObject.getId())
+				.email(schoolUpdateRequestObject.getEmail()).name(schoolUpdateRequestObject.getName())
+				.telephone(schoolUpdateRequestObject.getTelephone()).build();
 	}
 
 	private List<SchoolResponseObject> createListOfSchoolResponseFromListOfSchool(List<School> schools) {
@@ -68,9 +69,9 @@ public class SchoolServiceImpl implements SchoolService {
 	}
 
 	@Override()
-	public void update(final SchoolRequestObject schoolRequestObject) {
+	public void update(final SchoolUpdateRequestObject schoolUpdateRequestObject) {
 		try {
-			School school = createSchoolFromSchoolResponseObject(schoolRequestObject);
+			School school = createSchoolFromSchoolUpdateRequestObject(schoolUpdateRequestObject);
 			schoolDao.update(school);
 		} catch (ObjectNotFoundException | NullPointerException ex) {
 			throw new SchoolNotFoundException();
@@ -94,7 +95,7 @@ public class SchoolServiceImpl implements SchoolService {
 	}
 
 	@Override()
-	public void create(final SchoolRequestObject schoolRequestObject) {
+	public void create(final SchoolCreateRequestObject schoolRequestObject) {
 		try {
 			schoolDao.create(schoolRequestObject);
 		} catch (DuplicateSchoolNameException | DuplicateUserNameException ex) {

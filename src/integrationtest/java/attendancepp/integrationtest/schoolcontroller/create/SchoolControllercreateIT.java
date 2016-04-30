@@ -13,7 +13,7 @@ import attendanceapp.controllerimpl.SchoolControllerImpl;
 import attendanceapp.integrationtest.admin.constants.SchoolControllerConstantsIT;
 import attendanceapp.integrationtest.common.util.AttendanceAppUtilIT;
 import attendanceapp.integrationtest.common.util.TestConfigurerIT;
-import attendanceapp.model.requestobject.SchoolRequestObject;
+import attendanceapp.model.requestobject.SchoolCreateRequestObject;
 import attendanceapp.unitest.common.util.AttendanceAppUnitTestUtil;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -47,7 +47,7 @@ public class SchoolControllercreateIT extends TestConfigurerIT {
 
 	@Test()
 	public void create_valid_school() throws Exception {
-		SchoolRequestObject schoolRequestObject = getSchoolRequestObject("testschool15", "Rujesh1@", "Test School",
+		SchoolCreateRequestObject schoolRequestObject = getSchoolRequestObject("testschool15", "Rujesh1@", "Test School",
 				"testemail@email.com", "2453469123");
 		final String responseJsonString = "{\"statusCode\":1,\"message\":[\"School created sucessfully.\"]}";
 		getMockMvc()
@@ -62,7 +62,7 @@ public class SchoolControllercreateIT extends TestConfigurerIT {
 	@Test()
 	public void creating_school_that_already_exist() throws Exception {
 		String schoolThatExistInDatabase = "Test School";
-		SchoolRequestObject schoolRequestObject = getSchoolRequestObject("testschool25", "Rujesh1@",
+		SchoolCreateRequestObject schoolRequestObject = getSchoolRequestObject("testschool25", "Rujesh1@",
 				schoolThatExistInDatabase, "testemail@email.com", "2453469123");
 		final String responseJsonString = "{\"statusCode\":3,\"message\":[\"School with given name already exists. Please try with different name.\"]}";
 		getMockMvc()
@@ -77,7 +77,7 @@ public class SchoolControllercreateIT extends TestConfigurerIT {
 	@Test()
 	public void creating_school_for_which_user_already_exist() throws Exception {
 		String userThatExistInDatabase = "testschool15";
-		SchoolRequestObject schoolRequestObject = getSchoolRequestObject(userThatExistInDatabase, "Rujesh1@",
+		SchoolCreateRequestObject schoolRequestObject = getSchoolRequestObject(userThatExistInDatabase, "Rujesh1@",
 				"Test School2", "testemail@email.com", "2453469123");
 		final String responseJsonString = "{\"statusCode\":3,\"message\":[\"User with given name already exists. Please try with different name.\"]}";
 		getMockMvc()
@@ -89,9 +89,9 @@ public class SchoolControllercreateIT extends TestConfigurerIT {
 				.andExpect(content().string(responseJsonString));
 	}
 
-	private SchoolRequestObject getSchoolRequestObject(String username, String password, String name, String email,
+	private SchoolCreateRequestObject getSchoolRequestObject(String username, String password, String name, String email,
 			String telephone) {
-		SchoolRequestObject schoolRequestObject = new SchoolRequestObject();
+		SchoolCreateRequestObject schoolRequestObject = new SchoolCreateRequestObject();
 		schoolRequestObject.setUsername(username);
 		schoolRequestObject.setPassword(password);
 		schoolRequestObject.setName(name);

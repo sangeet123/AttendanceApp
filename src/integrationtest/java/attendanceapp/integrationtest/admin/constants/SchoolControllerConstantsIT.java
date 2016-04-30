@@ -11,6 +11,7 @@ public final class SchoolControllerConstantsIT {
 	public static final String GETALLSCHOOLS = "/school";
 	public static final String CREATESCHOOL = "/school/create";
 	public static final String DELETESCHOOL = "/school/delete/{id}";
+	public static final String UPDATESCHOOL = "/school/update";
 
 	// Key for school model
 	public static final String ID = "id";

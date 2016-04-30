@@ -7,7 +7,7 @@ public final class DuplicateSchoolNameException extends RuntimeException {
 	private static final long serialVersionUID = -1577450877995620835L;
 
 	public DuplicateSchoolNameException() {
-		super(SchoolRestControllerConstants.CREATE_UPDATE_FAILURE_DUPLICATE_ENTRY);
+		super(SchoolRestControllerConstants.DUPLICATE_SCHOOL_NAME);
 	}
 
 	public DuplicateSchoolNameException(String mesg) {
