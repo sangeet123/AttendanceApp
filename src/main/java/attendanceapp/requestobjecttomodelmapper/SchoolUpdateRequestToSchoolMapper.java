@@ -1,5 +1,7 @@
 package attendanceapp.requestobjecttomodelmapper;
 
+import java.time.LocalDateTime;
+
 import attendanceapp.model.School;
 
 public class SchoolUpdateRequestToSchoolMapper {
@@ -12,6 +14,8 @@ public class SchoolUpdateRequestToSchoolMapper {
 		private String telephone;
 
 		private String email;
+
+		private LocalDateTime updatedOn;
 
 		public SchoolBuilder id(long id) {
 			this.id = id;
@@ -33,12 +37,18 @@ public class SchoolUpdateRequestToSchoolMapper {
 			return this;
 		}
 
+		public SchoolBuilder updatedOn(LocalDateTime updatedOn) {
+			this.updatedOn = updatedOn;
+			return this;
+		}
+
 		public School build() {
 			School school = new School();
 			school.setId(this.id);
 			school.setEmail(this.email);
 			school.setName(this.name);
 			school.setTelephone(this.telephone);
+			school.setUpdatedOn(updatedOn);
 			return school;
 		}
 	}

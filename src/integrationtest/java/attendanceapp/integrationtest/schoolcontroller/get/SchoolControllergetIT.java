@@ -15,6 +15,7 @@ import attendanceapp.integrationtest.common.util.AttendanceAppUtilIT;
 import attendanceapp.integrationtest.common.util.TestConfigurerIT;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.hamcrest.Matchers.*;
 
 public class SchoolControllergetIT extends TestConfigurerIT {
 
@@ -46,19 +47,21 @@ public class SchoolControllergetIT extends TestConfigurerIT {
 	@Test()
 	public void get_school_with_valid_id_1_that_exist() throws Exception {
 		final long validSchoolId = 1L;
-		final String responseJsonString = "{\"id\":1,\"name\":\"test1\",\"telephone\":\"123456789\",\"email\":\"test1@email.com\"}";
 		getMockMvc().perform(get(SchoolControllerConstantsIT.GETSCHOOLWITHID, validSchoolId)).andExpect(status().isOk())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(content().string(responseJsonString));
+				.andExpect(jsonPath("$.id", is(1))).andExpect(jsonPath("$.name", is("test1")))
+				.andExpect(jsonPath("$.telephone", is("123456789")))
+				.andExpect(jsonPath("$.email", is("test1@email.com")));
 	}
 
 	@Test()
 	public void get_school_with_valid_id_10_that_exist() throws Exception {
 		final long validSchoolId = 10L;
-		final String responseJsonString = "{\"id\":10,\"name\":\"test10\",\"telephone\":\"234567891\",\"email\":\"test10@email.com\"}";
 		getMockMvc().perform(get(SchoolControllerConstantsIT.GETSCHOOLWITHID, validSchoolId)).andExpect(status().isOk())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(content().string(responseJsonString));
+				.andExpect(jsonPath("$.id", is(10))).andExpect(jsonPath("$.name", is("test10")))
+				.andExpect(jsonPath("$.telephone", is("234567891")))
+				.andExpect(jsonPath("$.email", is("test10@email.com")));
 	}
 
 	@Test()

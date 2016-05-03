@@ -8,6 +8,7 @@ public class SchoolControllerUnitTestConstants {
 	public static final String CREATESCHOOL = "/school/create";
 	public static final String DELETESCHOOL = "/school/delete/{id}";
 	public static final String UPDATESCHOOL = "/school/update";
+	public static final String DELETE_SELECTED_SCHOOL = "/school/deleteselected";
 
 	// Key for school model
 	public static final String ID = "id";

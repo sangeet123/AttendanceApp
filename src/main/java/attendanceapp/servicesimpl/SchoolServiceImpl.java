@@ -1,5 +1,7 @@
 package attendanceapp.servicesimpl;
 
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,7 @@ import attendanceapp.exceptions.DuplicateUserNameException;
 import attendanceapp.exceptions.SchoolNotFoundException;
 import attendanceapp.exceptions.UnknownException;
 import attendanceapp.model.School;
+import attendanceapp.model.requestobject.DeleteSelectedSchoolRequestObject;
 import attendanceapp.model.requestobject.SchoolCreateRequestObject;
 import attendanceapp.model.requestobject.SchoolUpdateRequestObject;
 import attendanceapp.model.responseobject.SchoolResponseObject;
@@ -29,13 +32,15 @@ public class SchoolServiceImpl implements SchoolService {
 
 	private SchoolResponseObject createSchoolResponseFromSchool(School school) {
 		return new SchoolToSchoolResponseMapper.SchoolResponseBuilder().id(school.getId()).email(school.getEmail())
-				.name(school.getName()).telephone(school.getTelephone()).build();
+				.name(school.getName()).telephone(school.getTelephone()).createdOn(school.getCreatedOn())
+				.updatedOn(school.getUpdatedOn()).build();
 	}
 
 	private School createSchoolFromSchoolUpdateRequestObject(SchoolUpdateRequestObject schoolUpdateRequestObject) {
+		LocalDateTime utcNow = LocalDateTime.now(Clock.systemUTC());
 		return new SchoolUpdateRequestToSchoolMapper.SchoolBuilder().id(schoolUpdateRequestObject.getId())
 				.email(schoolUpdateRequestObject.getEmail()).name(schoolUpdateRequestObject.getName())
-				.telephone(schoolUpdateRequestObject.getTelephone()).build();
+				.telephone(schoolUpdateRequestObject.getTelephone()).updatedOn(utcNow).build();
 	}
 
 	private List<SchoolResponseObject> createListOfSchoolResponseFromListOfSchool(List<School> schools) {
@@ -106,9 +111,9 @@ public class SchoolServiceImpl implements SchoolService {
 	}
 
 	@Override()
-	public void delete(final String ids) {
+	public void delete(final DeleteSelectedSchoolRequestObject deleteSelectedSchoolRequestObject) {
 		try {
-			schoolDao.delete(ids);
+			schoolDao.delete(deleteSelectedSchoolRequestObject.getCommaSeparatedIds());
 		} catch (Exception ex) {
 			throw new UnknownException();
 		}

@@ -64,7 +64,7 @@ public class SchoolControllercreateIT extends TestConfigurerIT {
 		String schoolThatExistInDatabase = "Test School";
 		SchoolCreateRequestObject schoolRequestObject = getSchoolRequestObject("testschool25", "Rujesh1@",
 				schoolThatExistInDatabase, "testemail@email.com", "2453469123");
-		final String responseJsonString = "{\"statusCode\":3,\"message\":[\"School with given name already exists. Please try with different name.\"]}";
+		final String responseJsonString = "{\"statusCode\":3,\"message\":[\"School with given name already exists. Please enter different name.\"]}";
 		getMockMvc()
 				.perform(post(SchoolControllerConstantsIT.CREATESCHOOL)
 						.contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)

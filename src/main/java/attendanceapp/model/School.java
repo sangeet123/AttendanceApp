@@ -1,6 +1,7 @@
 package attendanceapp.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,9 +17,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+
 @Entity
 @Table(name = "schools", uniqueConstraints = { @UniqueConstraint(columnNames = "name") })
-public class School implements Serializable {
+public class School implements Serializable{
 	/**
 	 * 
 	 */
@@ -39,23 +41,18 @@ public class School implements Serializable {
 	private String email;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name="SCHOOL_ID")
+	@JoinColumn(name = "SCHOOL_ID")
 	private Set<Student> students = new HashSet<Student>(0);
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name="SCHOOL_ID")
+	@JoinColumn(name = "SCHOOL_ID")
 	private Set<User> users = new HashSet<User>(0);
 
-	public School() {
+	@Column(name = "createdOn", nullable = false)
+	private LocalDateTime createdOn;
 
-	}
-
-	public School(long id, String email, String name, String telephone) {
-		this.id = id;
-		this.name = name;
-		this.telephone = telephone;
-		this.email = email;
-	}
+	@Column(name = "updatedOn", nullable = false)
+	private LocalDateTime updatedOn;
 
 	public long getId() {
 		return id;
@@ -89,6 +86,22 @@ public class School implements Serializable {
 		this.email = email;
 	}
 
+	public LocalDateTime getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(LocalDateTime createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public LocalDateTime getUpdatedOn() {
+		return updatedOn;
+	}
+
+	public void setUpdatedOn(LocalDateTime updatedOn) {
+		this.updatedOn = updatedOn;
+	}
+
 	public Set<Student> getStudents() {
 		return students;
 	}
@@ -105,10 +118,10 @@ public class School implements Serializable {
 		this.users = users;
 	}
 
-	@Override
+	@Override()
 	public String toString() {
-		return "id=" + id + ", name=" + name + ", telephone=" + telephone
-				+ ", email=" + email;
+		return "School [id=" + id + ", name=" + name + ", telephone=" + telephone + ", email=" + email + ", students="
+				+ students + ", users=" + users + ", createdOn=" + createdOn + ", updatedOn=" + updatedOn + "]";
 	}
 
 }

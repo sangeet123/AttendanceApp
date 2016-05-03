@@ -8,7 +8,7 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<security:http auto-config="true" create-session="stateless">
-	    <!-- requires-channel="https" -->
+		<!-- requires-channel="https" -->
 		<security:intercept-url pattern="/school/**"
 			access="ROLE_USER,ROLE_ADMIN" />
 		<security:http-basic />
@@ -18,10 +18,6 @@
 		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
 		<constructor-arg name="strength" value="11" />
 	</bean>
-
-	<!-- <authentication-manager alias="authenticationManager" xmlns="http://www.springframework.org/schema/security"> 
-		<authentication-provider> <user-service> <user name="user1" password="user1Pass" 
-		authorities="ROLE_USER" /> </user-service> </authentication-provider> </authentication-manager> -->
 
 	<authentication-manager alias="authenticationManager"
 		xmlns="http://www.springframework.org/schema/security">

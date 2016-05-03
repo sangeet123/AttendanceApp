@@ -14,7 +14,7 @@
 		<maven-compiler-plugin>3.0</maven-compiler-plugin>
 		<maven-war-pugin>2.4</maven-war-pugin>
 		<org.springframework.version>4.0.5.RELEASE</org.springframework.version>
-		<hibernate>4.3.6.Final</hibernate>
+		<hibernate>5.1.0.Final</hibernate>
 		<spring-security-oauth2>2.0.1.RELEASE</spring-security-oauth2>
 		<spring.security.version>3.2.4.RELEASE</spring.security.version>
 		<jersey-spring>1.18.1</jersey-spring>
@@ -396,6 +396,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-java8</artifactId>
+			<version>${hibernate}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate}</version>
 		</dependency>
@@ -409,6 +414,12 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.31</version>
 		</dependency>
+		<dependency>
+			<groupId>com.carmanconsulting.hibiscus</groupId>
+			<artifactId>hibiscus-event</artifactId>
+			<version>1.1</version>
+		</dependency>
+
 
 
 		<!-- Jersey Spring Integration -->
@@ -495,7 +506,6 @@
 			<artifactId>javax.el</artifactId>
 			<version>2.2.6</version>
 		</dependency>
-
 	</dependencies>
 
 	<profiles>

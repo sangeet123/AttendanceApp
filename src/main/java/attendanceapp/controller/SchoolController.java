@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import attendanceapp.constants.SchoolRestControllerConstants;
 import attendanceapp.customstatus.Status;
+import attendanceapp.model.requestobject.DeleteSelectedSchoolRequestObject;
 import attendanceapp.model.requestobject.SchoolCreateRequestObject;
 import attendanceapp.model.requestobject.SchoolUpdateRequestObject;
 import attendanceapp.model.responseobject.SchoolResponseObject;
@@ -28,7 +29,8 @@ public interface SchoolController {
 	public @ResponseBody Status delete(@PathVariable final long id);
 
 	@RequestMapping(value = SchoolRestControllerConstants.DELETE_SCHOOL_LIST, method = RequestMethod.DELETE)
-	public @ResponseBody Status delete(@RequestBody final String ids);
+	public @ResponseBody Status delete(
+			@Valid @RequestBody final DeleteSelectedSchoolRequestObject deleteSelectedSchoolRequestObject);
 
 	@RequestMapping(value = SchoolRestControllerConstants.CREATE_SCHOOL, method = RequestMethod.POST)
 	public @ResponseBody Status create(@Valid @RequestBody final SchoolCreateRequestObject schoolRequestObject);

@@ -1,9 +1,7 @@
-package attendanceapp.daoImpl;
+package attendanceapp.daoimpl;
 
 import java.util.Collections;
 import java.util.List;
-
-import javax.persistence.Query;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -27,7 +25,7 @@ import attendanceapp.util.SchoolRestServiceUtils;
 public class SchoolDaoImpl implements SchoolDao {
 
 	static final String LOAD_ALL_SCHOOL = "FROM attendanceapp.common.model.School";
-	static final String DELETE_ALL_SCHOOL = "delete from schools where id IN %s";
+	static final String DELETE_SELECTED_SCHOOL = "CALL delete_selected_schools(:ids)";
 
 	@Autowired()
 	SessionFactory sessionFactory;
@@ -151,11 +149,9 @@ public class SchoolDaoImpl implements SchoolDao {
 	@Override()
 	public void delete(final String ids) {
 		try {
-			String deleteAll = String.format(DELETE_ALL_SCHOOL, ids);
 			session = sessionFactory.openSession();
 			transaction = session.beginTransaction();
-			Query query = (Query) session.createQuery(deleteAll);
-			query.executeUpdate();
+			session.createSQLQuery(DELETE_SELECTED_SCHOOL).setParameter("ids", ids).executeUpdate();
 			transaction.commit();
 		} finally {
 			closeSession();

@@ -1,5 +1,7 @@
 package attendanceapp.modeltoresponseobjectmapper;
 
+import java.time.LocalDateTime;
+
 import attendanceapp.model.responseobject.SchoolResponseObject;
 
 public class SchoolToSchoolResponseMapper {
@@ -12,6 +14,10 @@ public class SchoolToSchoolResponseMapper {
 		private String telephone;
 
 		private String email;
+
+		private LocalDateTime createdOn;
+
+		private LocalDateTime updatedOn;
 
 		public SchoolResponseBuilder id(long id) {
 			this.id = id;
@@ -33,12 +39,24 @@ public class SchoolToSchoolResponseMapper {
 			return this;
 		}
 
+		public SchoolResponseBuilder createdOn(LocalDateTime createdOn) {
+			this.createdOn = createdOn;
+			return this;
+		}
+
+		public SchoolResponseBuilder updatedOn(LocalDateTime updatedOn) {
+			this.updatedOn = updatedOn;
+			return this;
+		}
+
 		public SchoolResponseObject build() {
 			SchoolResponseObject schoolResponse = new SchoolResponseObject();
 			schoolResponse.setId(this.id);
 			schoolResponse.setEmail(this.email);
 			schoolResponse.setName(this.name);
 			schoolResponse.setTelephone(this.telephone);
+			schoolResponse.setCreatedOn(createdOn);
+			schoolResponse.setUpdatedOn(updatedOn);
 			return schoolResponse;
 		}
 	}

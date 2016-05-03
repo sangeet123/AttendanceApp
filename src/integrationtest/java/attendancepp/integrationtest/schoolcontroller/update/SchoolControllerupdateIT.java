@@ -1,4 +1,4 @@
-package attendancepp.integrationtest.schoolcontroller.update.copy;
+package attendancepp.integrationtest.schoolcontroller.update;
 
 import java.sql.SQLException;
 
@@ -15,6 +15,7 @@ import attendanceapp.integrationtest.common.util.AttendanceAppUtilIT;
 import attendanceapp.integrationtest.common.util.TestConfigurerIT;
 import attendanceapp.model.requestobject.SchoolUpdateRequestObject;
 import attendanceapp.unitest.common.util.AttendanceAppUnitTestUtil;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -47,7 +48,8 @@ public class SchoolControllerupdateIT extends TestConfigurerIT {
 
 	@Test()
 	public void update_valid_school_that_exist_in_database() throws Exception {
-		SchoolUpdateRequestObject schoolUpdateRequestObject = getSchoolUpdateRequestObject(1L, "newtest1schoolname",
+		final String updateSchoolName = "newtest1schoolname";
+		SchoolUpdateRequestObject schoolUpdateRequestObject = getSchoolUpdateRequestObject(1L, updateSchoolName,
 				"testemail@email.com", "2453469123");
 		final String responseJsonString = AttendanceAppUtilIT.convertObjectToJsonString(schoolUpdateRequestObject);
 		getMockMvc()

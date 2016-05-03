@@ -2,6 +2,7 @@ package attendanceapp.services;
 
 import java.util.List;
 
+import attendanceapp.model.requestobject.DeleteSelectedSchoolRequestObject;
 import attendanceapp.model.requestobject.SchoolCreateRequestObject;
 import attendanceapp.model.requestobject.SchoolUpdateRequestObject;
 import attendanceapp.model.responseobject.SchoolResponseObject;
@@ -17,5 +18,5 @@ public interface SchoolService {
 
 	public void create(final SchoolCreateRequestObject school);
 
-	public void delete(final String ids);
+	public void delete(final DeleteSelectedSchoolRequestObject deleteSelectedSchoolRequestObject);
 }

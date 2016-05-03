@@ -14,6 +14,8 @@ import attendanceapp.controller.SchoolController;
 import attendanceapp.controllerimpl.SchoolControllerImpl;
 import attendanceapp.exceptions.DuplicateSchoolNameException;
 import attendanceapp.exceptions.SchoolNotFoundException;
+import attendanceapp.integrationtest.common.util.AttendanceAppUtilIT;
+import attendanceapp.model.requestobject.DeleteSelectedSchoolRequestObject;
 import attendanceapp.model.requestobject.SchoolCreateRequestObject;
 import attendanceapp.model.requestobject.SchoolUpdateRequestObject;
 import attendanceapp.model.responseobject.SchoolResponseObject;
@@ -43,7 +45,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	}
 
 	@Test()
-	public void getSchool_ShouldReturnAllRegisteredSchools() throws Exception {
+	public void get_school_should_return_all_registered_schools() throws Exception {
 
 		List<SchoolResponseObject> testSchools = SchoolControllerUnitTestData.getTestSchoolList();
 
@@ -71,7 +73,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	}
 
 	@Test()
-	public void getSchoolById_ShouldReturnSchool_for_valid_id_and_school_that_exist() throws Exception {
+	public void get_school_by_id_should_return_school_for_valid_id_and_school_that_exist() throws Exception {
 
 		long id = 5;
 		List<SchoolResponseObject> schoolsResponseObject = SchoolControllerUnitTestData.getSchool(id);
@@ -95,7 +97,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	}
 
 	@Test()
-	public void getSchoolById_ShouldReturnHttpStatusCode404_for_valid_id_but_school_that_does_not_exist()
+	public void get_school_by_id_should_return_http_status_code_404_for_valid_id_but_school_that_does_not_exist()
 			throws Exception {
 		long validIdThatDoesNotExist = 11L;
 		when(schoolServiceMock.getSchool(validIdThatDoesNotExist))
@@ -111,7 +113,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	}
 
 	@Test()
-	public void getSchoolById_ShouldReturnHttpStatusCode404_for_id_that_is_invalid() throws Exception {
+	public void get_school_by_id_should_return_http_status_code_404_for_id_that_is_invalid() throws Exception {
 		long invalidSchoolId = -1L;
 		when(schoolServiceMock.getSchool(invalidSchoolId))
 				.thenThrow(new SchoolNotFoundException(SchoolRestControllerConstants.SCHOOL_DOES_NOT_EXIST));
@@ -122,7 +124,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	}
 
 	@Test()
-	public void deleteSchoolById_ShouldReturnHttpStatusCode404_for_id_that_is_valid_but_does_not_exist()
+	public void delete_school_by_id_should_return_http_status_code_404_for_id_that_is_valid_but_does_not_exist()
 			throws Exception {
 		long validSchoolIdThatDoesNotExist = 15L;
 		doThrow(new SchoolNotFoundException(SchoolRestControllerConstants.SCHOOL_DOES_NOT_EXIST))
@@ -134,7 +136,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	}
 
 	@Test()
-	public void deleteSchoolById_ShouldReturnHttpStatusCode404_for_id_that_is_invalid() throws Exception {
+	public void delete_school_by_id_should_return_http_status_code_404_for_id_that_is_invalid() throws Exception {
 		long invalidSchoolId = -1L;
 		doThrow(new SchoolNotFoundException(SchoolRestControllerConstants.SCHOOL_DOES_NOT_EXIST))
 				.when(schoolServiceMock).delete(invalidSchoolId);
@@ -145,7 +147,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	}
 
 	@Test()
-	public void createSchool_ShouldReturnHttpStatusCode200() throws Exception {
+	public void create_school_should_return_http_status_code_of_200() throws Exception {
 		SchoolCreateRequestObject schoolRequestObject = getSchoolCreateRequestObject("testschool15", "Rujesh1@",
 				"Test School", "testemail@email.com", "2453469123");
 		doNothing().when(schoolServiceMock).create(schoolRequestObject);
@@ -162,7 +164,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	}
 
 	@Test()
-	public void createSchool_ShouldReturnValidationError_For_Empty_School_In_English_() throws Exception {
+	public void create_school_should_return_validation_error_for_empty_school_in_english_language() throws Exception {
 		SchoolCreateRequestObject schoolRequestObject = new SchoolCreateRequestObject();
 		getMockMvc()
 				.perform(post(SchoolControllerUnitTestConstants.CREATESCHOOL)
@@ -170,9 +172,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(schoolRequestObject)))
 				.andExpect(status().isBadRequest())
 				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
-
 				.andExpect(jsonPath("$.fieldErrors", hasSize(5)))
-
 				.andExpect(jsonPath("$.fieldErrors[*].field",
 						containsInAnyOrder("telephone", "name", "email", "username", "password")))
 				.andExpect(jsonPath("$.fieldErrors[*].message",
@@ -185,7 +185,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	}
 
 	@Test()
-	public void createSchool_ShouldReturnValidationError_For_InvalidTelephone_InvalidEmail_And_Null_School_Name_In_English_()
+	public void create_school_should_return_validation_error_for_invalid_telephone_invalid_email_and_null_school_name_in_english_language()
 			throws Exception {
 		SchoolCreateRequestObject schoolRequestObject = getSchoolCreateRequestObject(null, null, null, "abc@", "1234");
 		getMockMvc()
@@ -194,9 +194,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(schoolRequestObject)))
 				.andExpect(status().isBadRequest())
 				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
-
 				.andExpect(jsonPath("$.fieldErrors", hasSize(5)))
-
 				.andExpect(jsonPath("$.fieldErrors[*].field",
 						containsInAnyOrder("telephone", "name", "email", "username", "password")))
 				.andExpect(jsonPath("$.fieldErrors[*].message",
@@ -209,7 +207,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	}
 
 	@Test()
-	public void updateSchool_ShouldReturnHttpStatusCode200_and_school_update_response_object() throws Exception {
+	public void update_school_should_return_http_status_code_200_and_school_update_response_object() throws Exception {
 		SchoolUpdateRequestObject schoolUpdateRequestObject = getSchoolUpdateRequestObject(1L, "Test School",
 				"testemail@email.com", "2453469123");
 		doNothing().when(schoolServiceMock).update(schoolUpdateRequestObject);
@@ -227,7 +225,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	}
 
 	@Test()
-	public void updateSchool_ShouldReturnValidationError_For_Empty_School_In_English_() throws Exception {
+	public void update_school_should_return_validation_error_for_empty_school_in_english_language() throws Exception {
 		SchoolUpdateRequestObject schoolUpdateRequestObject = new SchoolUpdateRequestObject();
 		getMockMvc()
 				.perform(put(SchoolControllerUnitTestConstants.UPDATESCHOOL)
@@ -235,9 +233,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(schoolUpdateRequestObject)))
 				.andExpect(status().isBadRequest())
 				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
-
 				.andExpect(jsonPath("$.fieldErrors", hasSize(3)))
-
 				.andExpect(jsonPath("$.fieldErrors[*].field", containsInAnyOrder("telephone", "name", "email")))
 				.andExpect(jsonPath("$.fieldErrors[*].message", containsInAnyOrder("Telephone number cannot be empty.",
 						"School name cannot be empty.", "School email cannot be empty.")));
@@ -246,7 +242,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	}
 
 	@Test()
-	public void updateSchool_ShouldReturnValidationError_For_InvalidTelephone_InvalidEmail_And_Null_School_Name_In_English()
+	public void update_school_should_return_validation_error_for_invalid_telephone_invalid_email_and_null_school_name_in_english_language()
 			throws Exception {
 		SchoolUpdateRequestObject schoolUpdateRequestObject = new SchoolUpdateRequestObject();
 		schoolUpdateRequestObject.setEmail("abc@");
@@ -258,9 +254,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(schoolUpdateRequestObject)))
 				.andExpect(status().isBadRequest())
 				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
-
 				.andExpect(jsonPath("$.fieldErrors", hasSize(3)))
-
 				.andExpect(jsonPath("$.fieldErrors[*].field", containsInAnyOrder("telephone", "name", "email")))
 				.andExpect(jsonPath("$.fieldErrors[*].message",
 						containsInAnyOrder("School email is not a valid email. Please enter the valid email address.",
@@ -270,7 +264,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	}
 
 	@Test
-	public void updateSchool_SchouldReturn_DuplicateSchoolNameException_For_School_that_already_exist()
+	public void update_school_should_return_duplicate_school_name_exception_for_school_that_already_exist()
 			throws Exception {
 		final String duplicateSchoolName = "Test School";
 		SchoolUpdateRequestObject schoolUpdateRequestObject = getSchoolUpdateRequestObject(1L, duplicateSchoolName,
@@ -290,7 +284,8 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	}
 
 	@Test
-	public void updateSchool_SchouldReturn_SchoolNotFoundException_For_School_that_does_not_exist() throws Exception {
+	public void update_school_should_return_school_not_found_exception_for_school_that_does_not_exist()
+			throws Exception {
 		final long nonExistantSchoolId = 10L;
 		SchoolUpdateRequestObject schoolUpdateRequestObject = getSchoolUpdateRequestObject(nonExistantSchoolId,
 				"Test School", "testemail@email.com", "2453469123");
@@ -305,6 +300,59 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));
 		verify(schoolServiceMock, atLeast(1)).update(schoolUpdateRequestObject);
+		verifyNoMoreInteractions(schoolServiceMock);
+	}
+
+	@Test
+	public void delete_selected_school_should_return_validation_errors_for_invalid_format_input() throws Exception {
+		final String commaSeparatedIds = "20,10,";
+		DeleteSelectedSchoolRequestObject deleteSelectedSchoolRequestObject = new DeleteSelectedSchoolRequestObject();
+		deleteSelectedSchoolRequestObject.setCommaSeparatedIds(commaSeparatedIds);
+		getMockMvc()
+				.perform(delete(SchoolControllerUnitTestConstants.DELETE_SELECTED_SCHOOL)
+						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8)
+						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(deleteSelectedSchoolRequestObject)))
+				.andExpect(status().isBadRequest())
+				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
+				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$.fieldErrors", hasSize(1)))
+				.andExpect(jsonPath("$.fieldErrors[*].field", containsInAnyOrder("commaSeparatedIds")))
+				.andExpect(jsonPath("$.fieldErrors[*].message",
+						containsInAnyOrder("Invalid input format. Ids should be seperated by comma.")));
+		verifyZeroInteractions(schoolServiceMock);
+	}
+
+	@Test
+	public void delete_selected_school_should_return_validation_errors_for_invalid_empty_input() throws Exception {
+		DeleteSelectedSchoolRequestObject deleteSelectedSchoolRequestObject = new DeleteSelectedSchoolRequestObject();
+		getMockMvc()
+				.perform(delete(SchoolControllerUnitTestConstants.DELETE_SELECTED_SCHOOL)
+						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8)
+						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(deleteSelectedSchoolRequestObject)))
+				.andExpect(status().isBadRequest())
+				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$.fieldErrors", hasSize(1)))
+				.andExpect(jsonPath("$.fieldErrors[*].field", containsInAnyOrder("commaSeparatedIds")))
+				.andExpect(jsonPath("$.fieldErrors[*].message",
+						containsInAnyOrder("Please select at least one id to delete.")));
+		verifyZeroInteractions(schoolServiceMock);
+	}
+
+	@Test
+	public void delete_selected_school_should_return_success_message_for_valid_input() throws Exception {
+		final String commaSeparatedIds = "20,10";
+		DeleteSelectedSchoolRequestObject deleteSelectedSchoolRequestObject = new DeleteSelectedSchoolRequestObject();
+		deleteSelectedSchoolRequestObject.setCommaSeparatedIds(commaSeparatedIds);
+		doNothing().when(schoolServiceMock).delete(deleteSelectedSchoolRequestObject);
+		final String responseJsonString = "{\"statusCode\":1,\"message\":[\"Selected schools has been deleted successfully.\"]}";
+		getMockMvc()
+				.perform(delete(SchoolControllerUnitTestConstants.DELETE_SELECTED_SCHOOL)
+						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8)
+						.content(AttendanceAppUtilIT.convertObjectToJsonBytes(deleteSelectedSchoolRequestObject)))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
+				.andExpect(content().string(responseJsonString));
+		verify(schoolServiceMock, atLeast(1)).delete(deleteSelectedSchoolRequestObject);
 		verifyNoMoreInteractions(schoolServiceMock);
 	}
 
