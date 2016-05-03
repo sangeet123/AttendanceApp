@@ -28,6 +28,7 @@
 		<jackson-core>2.7.3</jackson-core>
 		<jackson-annotations>2.7.3</jackson-annotations>
 		<jackson-databind>2.7.3</jackson-databind>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<dependencies>
@@ -630,18 +631,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.2</version>
+				<version>${maven-war-pugin}</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
-					<encoding>${project.build.sourceEncoding}</encoding>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven-war-pugin}</version>
-				<configuration>
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>

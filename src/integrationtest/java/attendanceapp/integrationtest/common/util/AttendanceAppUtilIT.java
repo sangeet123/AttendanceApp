@@ -10,11 +10,7 @@ import java.nio.charset.Charset;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
-
 import org.springframework.http.MediaType;
-
-import attendanceapp.unitest.common.util.AttendanceAppUnitTestUtil;
-
 import com.mysql.jdbc.Connection;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -44,10 +40,15 @@ public class AttendanceAppUtilIT {
 		return mapper.writeValueAsBytes(object);
 	}
 
+	public static String resourceToString(String fileName) {
+		String url = Thread.currentThread().getContextClassLoader().getResource(fileName).getPath();
+		return url;
+	}
+
 	public static Properties readDatabaseProperties(String fileName) {
 
 		Properties prop = new Properties();
-		File file = new File(AttendanceAppUnitTestUtil.resourceToString(DATABASEPROPERTIESFILE));
+		File file = new File(resourceToString(DATABASEPROPERTIESFILE));
 		InputStream inputStream = null;
 
 		try {
@@ -76,7 +77,7 @@ public class AttendanceAppUtilIT {
 		Connection con = (Connection) DriverManager.getConnection(prop.getProperty(JDBCURL),
 				prop.getProperty(JDBCUSERNAME), prop.getProperty(JDBCPASSWORD));
 
-		File file = new File(AttendanceAppUnitTestUtil.resourceToString(sqlQueryFileName));
+		File file = new File(resourceToString(sqlQueryFileName));
 		InputStream inputStream = null;
 
 		try {
