@@ -1,4 +1,4 @@
-package attendanceapp.integrationtest.schoolcontroller.delete;
+package attendanceapp.integrationtest.schoolcontroller.get.id;
 
 import java.sql.SQLException;
 
@@ -16,8 +16,9 @@ import attendanceapp.integrationtest.utils.SchoolControllerUtilIT;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.hamcrest.Matchers.*;
 
-public class SchoolControllerdeleteIT extends TestConfigurerIT {
+public class SchoolControllergetIdIT extends TestConfigurerIT {
 
 	private static final String insertSchoolQuerySQLScriptFilePath = "it-insert-school-queries.sql";
 	private static boolean isSettedUp = false;
@@ -45,52 +46,51 @@ public class SchoolControllerdeleteIT extends TestConfigurerIT {
 	}
 
 	@Test()
-	public void delete_school_with_valid_id_1_that_exist() throws Exception {
+	public void get_school_with_valid_id_1_that_exist() throws Exception {
 		final long validSchoolId = 1L;
-		final String responseJsonString = "{\"statusCode\":1,\"message\":[\"School has been deleted successfully.\"]}";
-		getMockMvc().perform(delete(SchoolControllerUtilIT.DELETESCHOOL, validSchoolId)).andExpect(status().isOk())
+		getMockMvc().perform(get(SchoolControllerUtilIT.GETSCHOOLWITHID, validSchoolId)).andExpect(status().isOk())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(content().string(responseJsonString));
+				.andExpect(jsonPath("$.id", is(1))).andExpect(jsonPath("$.name", is("test1")))
+				.andExpect(jsonPath("$.telephone", is("123456789")))
+				.andExpect(jsonPath("$.email", is("test1@email.com")));
 	}
 
 	@Test()
-	public void delete_school_with_valid_id_10_that_exist() throws Exception {
+	public void get_school_with_valid_id_10_that_exist() throws Exception {
 		final long validSchoolId = 10L;
-		final String responseJsonString = "{\"statusCode\":1,\"message\":[\"School has been deleted successfully.\"]}";
-		getMockMvc().perform(delete(SchoolControllerUtilIT.DELETESCHOOL, validSchoolId)).andExpect(status().isOk())
+		getMockMvc().perform(get(SchoolControllerUtilIT.GETSCHOOLWITHID, validSchoolId)).andExpect(status().isOk())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(content().string(responseJsonString));
+				.andExpect(jsonPath("$.id", is(10))).andExpect(jsonPath("$.name", is("test10")))
+				.andExpect(jsonPath("$.telephone", is("234567891")))
+				.andExpect(jsonPath("$.email", is("test10@email.com")));
 	}
 
 	@Test()
-	public void delete_school_with_valid_id_15_that_does_not_exist() throws Exception {
+	public void get_school_with_valid_id_15_that_does_not_exist() throws Exception {
 		final long validIdThatDoesNotExist = 15L;
 		final String responseJsonString = "{\"statusCode\":2,\"message\":[\"School does not exist.\"]}";
-		getMockMvc().perform(delete(SchoolControllerUtilIT.DELETESCHOOL, validIdThatDoesNotExist))
+		getMockMvc().perform(get(SchoolControllerUtilIT.GETSCHOOLWITHID, validIdThatDoesNotExist))
 				.andExpect(status().isNotFound())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));
-
 	}
 
 	@Test()
-	public void delete_school_with_invalid_id_negative_1() throws Exception {
+	public void get_school_with_invalid_id_negative_1() throws Exception {
 		final long invalidId = -1L;
 		final String responseJsonString = "{\"statusCode\":2,\"message\":[\"School does not exist.\"]}";
-		getMockMvc().perform(delete(SchoolControllerUtilIT.DELETESCHOOL, invalidId))
-				.andExpect(status().isNotFound())
+		getMockMvc().perform(get(SchoolControllerUtilIT.GETSCHOOLWITHID, invalidId)).andExpect(status().isNotFound())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));
 	}
 
 	@Test()
-	public void delete_school_with_invalid_id_one() throws Exception {
+	public void get_school_with_invalid_id_one() throws Exception {
 		final String invalidStringId = "one";
 		final String responseJsonString = "{\"statusCode\":2,\"message\":[\"Resource does not exist.\"]}";
-		getMockMvc().perform(delete(SchoolControllerUtilIT.DELETESCHOOL, invalidStringId))
+		getMockMvc().perform(get(SchoolControllerUtilIT.GETSCHOOLWITHID, invalidStringId))
 				.andExpect(status().isNotFound())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));
-
 	}
 }

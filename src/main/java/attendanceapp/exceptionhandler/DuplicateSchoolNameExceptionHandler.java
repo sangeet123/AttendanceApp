@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import attendanceapp.customstatus.Status;
 import attendanceapp.exceptions.DuplicateSchoolNameException;
-import attendanceapp.exceptions.SchoolNotFoundException;
-import attendanceapp.util.SchoolRestServiceUtils;
+import attendanceapp.util.AttendanceAppUtils;
 import attendanceapp.util.StatusCodeUtil;
 
 @ControllerAdvice()
@@ -28,8 +27,7 @@ public class DuplicateSchoolNameExceptionHandler {
 	@ExceptionHandler(DuplicateSchoolNameException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)
 	public Status processDuplicateSchoolNameException(DuplicateSchoolNameException ex) {
-		Status status = SchoolRestServiceUtils.createStatus(ex.getMessage(),
-				StatusCodeUtil.DUPLICATE_ITEM_EXIST_CODE);
+		Status status = AttendanceAppUtils.createStatus(ex.getMessage(), StatusCodeUtil.DUPLICATE_ITEM_EXIST_CODE);
 		return status;
 	}
 }

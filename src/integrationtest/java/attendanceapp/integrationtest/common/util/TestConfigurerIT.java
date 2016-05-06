@@ -10,11 +10,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static com.sun.xml.internal.ws.dump.LoggingDumpTube.Position.Before;
-
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath*:mvc-dispatcher-servlet-it.xml",
-		"classpath*:db-configuration-it.xml" })
+@ContextConfiguration(locations = { "classpath*:mvc-dispatcher-servlet-it.xml", "classpath*:db-configuration-it.xml" })
 @WebAppConfiguration()
 public abstract class TestConfigurerIT {
 

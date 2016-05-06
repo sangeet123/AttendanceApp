@@ -1,12 +1,13 @@
 package attendanceapp.unitest.common.util;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
+
+import org.springframework.http.MediaType;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.http.MediaType;
-
-import java.io.IOException;
 
 public class AttendanceAppUnitTestUtil {
 
@@ -40,8 +41,6 @@ public class AttendanceAppUnitTestUtil {
 		for (int index = 0; index < length; index++) {
 			builder.append("a");
 		}
-
 		return builder.toString();
 	}
-
 }

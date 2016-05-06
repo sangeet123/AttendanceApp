@@ -1,7 +1,6 @@
 package attendanceapp.model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,10 +16,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-
 @Entity
 @Table(name = "schools", uniqueConstraints = { @UniqueConstraint(columnNames = "name") })
-public class School implements Serializable{
+public class School extends CreatedAndUpdatedDate implements Serializable {
 	/**
 	 * 
 	 */
@@ -48,11 +46,9 @@ public class School implements Serializable{
 	@JoinColumn(name = "SCHOOL_ID")
 	private Set<User> users = new HashSet<User>(0);
 
-	@Column(name = "createdOn", nullable = false)
-	private LocalDateTime createdOn;
-
-	@Column(name = "updatedOn", nullable = false)
-	private LocalDateTime updatedOn;
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "SCHOOL_ID")
+	private Set<Subject> courses = new HashSet<Subject>(0);
 
 	public long getId() {
 		return id;
@@ -86,22 +82,6 @@ public class School implements Serializable{
 		this.email = email;
 	}
 
-	public LocalDateTime getCreatedOn() {
-		return createdOn;
-	}
-
-	public void setCreatedOn(LocalDateTime createdOn) {
-		this.createdOn = createdOn;
-	}
-
-	public LocalDateTime getUpdatedOn() {
-		return updatedOn;
-	}
-
-	public void setUpdatedOn(LocalDateTime updatedOn) {
-		this.updatedOn = updatedOn;
-	}
-
 	public Set<Student> getStudents() {
 		return students;
 	}
@@ -118,10 +98,17 @@ public class School implements Serializable{
 		this.users = users;
 	}
 
-	@Override()
+	public Set<Subject> getCourses() {
+		return courses;
+	}
+
+	public void setCourses(Set<Subject> courses) {
+		this.courses = courses;
+	}
+
+	@Override
 	public String toString() {
 		return "School [id=" + id + ", name=" + name + ", telephone=" + telephone + ", email=" + email + ", students="
 				+ students + ", users=" + users + ", createdOn=" + createdOn + ", updatedOn=" + updatedOn + "]";
 	}
-
 }

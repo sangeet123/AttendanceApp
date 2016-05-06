@@ -2,11 +2,16 @@ package attendanceapp.model.requestobject;
 
 import javax.validation.constraints.Pattern;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotBlank;
 
 import attendanceapp.util.AttendanceAppUtils;
 
 public class DeleteSelectedSchoolRequestObject {
+
+	private static final int INITIAL_NONZERO_ODD_NUM = 17;
+	private static final int MULTIPLIER_NONZERO_ODD_NUM = 157;
 
 	@NotBlank()
 	@Pattern(regexp = AttendanceAppUtils.COMMA_SEPERATED_IDS_REGEX)
@@ -22,27 +27,19 @@ public class DeleteSelectedSchoolRequestObject {
 
 	@Override()
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((commaSeparatedIds == null) ? 0 : commaSeparatedIds.hashCode());
-		return result;
+		return new HashCodeBuilder(INITIAL_NONZERO_ODD_NUM, MULTIPLIER_NONZERO_ODD_NUM).append(commaSeparatedIds)
+				.toHashCode();
 	}
 
 	@Override()
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (obj == null || getClass() != obj.getClass()) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		}
 		DeleteSelectedSchoolRequestObject other = (DeleteSelectedSchoolRequestObject) obj;
-		if (commaSeparatedIds == null) {
-			if (other.commaSeparatedIds != null)
-				return false;
-		} else if (!commaSeparatedIds.equals(other.commaSeparatedIds))
-			return false;
-		return true;
+		return new EqualsBuilder().append(commaSeparatedIds, other.getCommaSeparatedIds()).isEquals();
 	}
 
 	@Override

@@ -12,11 +12,11 @@ public interface SchoolService {
 
 	public List<SchoolResponseObject> getSchoolList();
 
-	public void update(final SchoolUpdateRequestObject schoolUpdateRequest);
+	public SchoolResponseObject update(final SchoolUpdateRequestObject schoolUpdateRequest);
 
 	public void delete(final long id);
 
-	public void create(final SchoolCreateRequestObject school);
+	public void create(final SchoolCreateRequestObject schoolCreateRequestObject);
 
 	public void delete(final DeleteSelectedSchoolRequestObject deleteSelectedSchoolRequestObject);
 }

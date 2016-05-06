@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import attendanceapp.constants.Constant;
 import attendanceapp.customstatus.Status;
-import attendanceapp.util.SchoolRestServiceUtils;
+import attendanceapp.util.AttendanceAppUtils;
 import attendanceapp.util.StatusCodeUtil;
 
 /*
@@ -25,7 +25,7 @@ public class TypeMismatchExceptionHandler {
 	@ExceptionHandler(TypeMismatchException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public Status processSchoolNotFoundException(Exception ex) {
-		Status status = SchoolRestServiceUtils.createStatus(Constant.RESOURSE_DOES_NOT_EXIST,
+		Status status = AttendanceAppUtils.createStatus(Constant.RESOURSE_DOES_NOT_EXIST,
 				StatusCodeUtil.ITEM_NOT_FOUND_CODE);
 		return status;
 	}

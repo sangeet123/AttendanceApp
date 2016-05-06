@@ -10,9 +10,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import attendanceapp.controller.SchoolController;
 import attendanceapp.controllerimpl.SchoolControllerImpl;
-import attendanceapp.integrationtest.admin.constants.SchoolControllerConstantsIT;
 import attendanceapp.integrationtest.common.util.AttendanceAppUtilIT;
 import attendanceapp.integrationtest.common.util.TestConfigurerIT;
+import attendanceapp.integrationtest.utils.SchoolControllerUtilIT;
 import attendanceapp.model.requestobject.DeleteSelectedSchoolRequestObject;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -56,7 +56,7 @@ public class SchoolControllerdeleteselectedIT extends TestConfigurerIT {
 		deleteSelectedSchoolRequestObject.setCommaSeparatedIds(commaSeparatedIds);
 		final String responseJsonString = "{\"statusCode\":1,\"message\":[\"Selected schools has been deleted successfully.\"]}";
 		getMockMvc()
-				.perform(delete(SchoolControllerConstantsIT.DELETE_SELECTED_SCHOOL)
+				.perform(delete(SchoolControllerUtilIT.DELETE_SELECTED_SCHOOL)
 						.contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)
 						.content(AttendanceAppUtilIT.convertObjectToJsonBytes(deleteSelectedSchoolRequestObject)))
 				.andExpect(status().isOk()).andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
@@ -74,7 +74,7 @@ public class SchoolControllerdeleteselectedIT extends TestConfigurerIT {
 		deleteSelectedSchoolRequestObject.setCommaSeparatedIds(commaSeparatedIds);
 		final String responseJsonString = "{\"statusCode\":1,\"message\":[\"Selected schools has been deleted successfully.\"]}";
 		getMockMvc()
-				.perform(delete(SchoolControllerConstantsIT.DELETE_SELECTED_SCHOOL)
+				.perform(delete(SchoolControllerUtilIT.DELETE_SELECTED_SCHOOL)
 						.contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)
 						.content(AttendanceAppUtilIT.convertObjectToJsonBytes(deleteSelectedSchoolRequestObject)))
 				.andExpect(status().isOk()).andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
@@ -92,7 +92,7 @@ public class SchoolControllerdeleteselectedIT extends TestConfigurerIT {
 		deleteSelectedSchoolRequestObject.setCommaSeparatedIds(commaSeparatedIds);
 		final String responseJsonString = "{\"statusCode\":1,\"message\":[\"Selected schools has been deleted successfully.\"]}";
 		getMockMvc()
-				.perform(delete(SchoolControllerConstantsIT.DELETE_SELECTED_SCHOOL)
+				.perform(delete(SchoolControllerUtilIT.DELETE_SELECTED_SCHOOL)
 						.contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)
 						.content(AttendanceAppUtilIT.convertObjectToJsonBytes(deleteSelectedSchoolRequestObject)))
 				.andExpect(status().isOk()).andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))

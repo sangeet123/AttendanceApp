@@ -7,9 +7,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-
 import attendanceapp.customstatus.Status;
-import attendanceapp.util.SchoolRestServiceUtils;
+import attendanceapp.util.AttendanceAppUtils;
 import attendanceapp.util.StatusCodeUtil;
 
 @ControllerAdvice()
@@ -19,8 +18,7 @@ public class HttpMessageNotReadableExceptionHandler {
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public Status processSchoolNotFoundException(Exception ex) {
-		Status status = SchoolRestServiceUtils.createStatus("",
-				StatusCodeUtil.BAD_REQUEST_ERROR_CODE);
+		Status status = AttendanceAppUtils.createStatus("", StatusCodeUtil.BAD_REQUEST_ERROR_CODE);
 		return status;
 	}
 

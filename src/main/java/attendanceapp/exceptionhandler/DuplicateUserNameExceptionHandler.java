@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import attendanceapp.customstatus.Status;
 import attendanceapp.exceptions.DuplicateUserNameException;
-import attendanceapp.util.SchoolRestServiceUtils;
+import attendanceapp.util.AttendanceAppUtils;
 import attendanceapp.util.StatusCodeUtil;
 
 @ControllerAdvice()
@@ -26,10 +26,8 @@ public class DuplicateUserNameExceptionHandler {
 	@ResponseBody()
 	@ExceptionHandler(DuplicateUserNameException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)
-	public Status processDuplicateUserNameException(
-			DuplicateUserNameException ex) {
-		Status status = SchoolRestServiceUtils.createStatus(ex.getMessage(),
-				StatusCodeUtil.DUPLICATE_ITEM_EXIST_CODE);
+	public Status processDuplicateUserNameException(DuplicateUserNameException ex) {
+		Status status = AttendanceAppUtils.createStatus(ex.getMessage(), StatusCodeUtil.DUPLICATE_ITEM_EXIST_CODE);
 		return status;
 	}
 

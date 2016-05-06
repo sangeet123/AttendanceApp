@@ -2,12 +2,17 @@ package attendanceapp.model.requestobject;
 
 import javax.validation.constraints.Pattern;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 import attendanceapp.util.AttendanceAppUtils;
 
 public class SchoolUpdateRequestObject {
+
+	private static final int INITIAL_NONZERO_ODD_NUM = 17;
+	private static final int MULTIPLIER_NONZERO_ODD_NUM = 157;
 
 	private long id;
 
@@ -59,42 +64,20 @@ public class SchoolUpdateRequestObject {
 
 	@Override()
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((telephone == null) ? 0 : telephone.hashCode());
-		return result;
+		return new HashCodeBuilder(INITIAL_NONZERO_ODD_NUM, MULTIPLIER_NONZERO_ODD_NUM).append(email).append(id)
+				.append(name).append(telephone).toHashCode();
 	}
 
 	@Override()
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (obj == null || getClass() != obj.getClass()) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		}
 		SchoolUpdateRequestObject other = (SchoolUpdateRequestObject) obj;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		if (id != other.id)
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (telephone == null) {
-			if (other.telephone != null)
-				return false;
-		} else if (!telephone.equals(other.telephone))
-			return false;
-		return true;
+		return new EqualsBuilder().append(id, other.getId()).append(email, other.getEmail())
+				.append(name, other.getName()).append(telephone, other.getTelephone()).isEquals();
 	}
 
 	@Override()

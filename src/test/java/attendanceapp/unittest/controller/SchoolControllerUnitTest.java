@@ -1,5 +1,22 @@
 package attendanceapp.unittest.controller;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import java.util.List;
 
 import org.junit.Test;
@@ -14,7 +31,6 @@ import attendanceapp.controller.SchoolController;
 import attendanceapp.controllerimpl.SchoolControllerImpl;
 import attendanceapp.exceptions.DuplicateSchoolNameException;
 import attendanceapp.exceptions.SchoolNotFoundException;
-import attendanceapp.integrationtest.common.util.AttendanceAppUtilIT;
 import attendanceapp.model.requestobject.DeleteSelectedSchoolRequestObject;
 import attendanceapp.model.requestobject.SchoolCreateRequestObject;
 import attendanceapp.model.requestobject.SchoolUpdateRequestObject;
@@ -22,13 +38,8 @@ import attendanceapp.model.responseobject.SchoolResponseObject;
 import attendanceapp.services.SchoolService;
 import attendanceapp.unitest.common.util.AttendanceAppUnitTestUtil;
 import attendanceapp.unitest.common.util.UnitTestConfigurer;
-import attendanceapp.unittest.constants.SchoolControllerUnitTestConstants;
 import attendanceapp.unittest.testdata.SchoolControllerUnitTestData;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.mockito.Mockito.*;
-import static org.hamcrest.Matchers.*;
+import attendanceapp.unittest.utils.SchoolControllerUnitTestUtil;
 
 public class SchoolControllerUnitTest extends UnitTestConfigurer {
 
@@ -51,7 +62,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 
 		when(schoolServiceMock.getSchoolList()).thenReturn(testSchools);
 
-		ResultActions resultAction = getMockMvc().perform(get(SchoolControllerUnitTestConstants.GETALLSCHOOLS))
+		ResultActions resultAction = getMockMvc().perform(get(SchoolControllerUnitTestUtil.GETALLSCHOOLS))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$", hasSize(testSchools.size())));
@@ -59,13 +70,13 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 		for (int i = 0; i < testSchools.size(); ++i) {
 			String jasonPath = String.format(AttendanceAppUnitTestUtil.JASONLIST, i);
 			SchoolResponseObject schoolResponseObject = testSchools.get(i);
-			resultAction.andExpect(jsonPath(jasonPath.concat(SchoolControllerUnitTestConstants.ID),
+			resultAction.andExpect(jsonPath(jasonPath.concat(SchoolControllerUnitTestUtil.ID),
 					is((int) schoolResponseObject.getId())));
-			resultAction.andExpect(jsonPath(jasonPath.concat(SchoolControllerUnitTestConstants.NAME),
-					is(schoolResponseObject.getName())));
-			resultAction.andExpect(jsonPath(jasonPath.concat(SchoolControllerUnitTestConstants.EMAIL),
+			resultAction.andExpect(
+					jsonPath(jasonPath.concat(SchoolControllerUnitTestUtil.NAME), is(schoolResponseObject.getName())));
+			resultAction.andExpect(jsonPath(jasonPath.concat(SchoolControllerUnitTestUtil.EMAIL),
 					is(schoolResponseObject.getEmail())));
-			resultAction.andExpect(jsonPath(jasonPath.concat(SchoolControllerUnitTestConstants.TELEPHONE),
+			resultAction.andExpect(jsonPath(jasonPath.concat(SchoolControllerUnitTestUtil.TELEPHONE),
 					is(schoolResponseObject.getTelephone())));
 		}
 		verify(schoolServiceMock, atLeast(1)).getSchoolList();
@@ -80,16 +91,15 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 		SchoolResponseObject returnedSchoolResponseObject = schoolsResponseObject.get(0);
 		when(schoolServiceMock.getSchool(id)).thenReturn(returnedSchoolResponseObject);
 
-		getMockMvc().perform(get(SchoolControllerUnitTestConstants.GETSCHOOLWITHID, id)).andExpect(status().isOk())
+		getMockMvc().perform(get(SchoolControllerUnitTestUtil.GETSCHOOLWITHID, id)).andExpect(status().isOk())
 				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
-				.andExpect(jsonPath(AttendanceAppUnitTestUtil.JASONUNIT.concat(SchoolControllerUnitTestConstants.ID),
+				.andExpect(jsonPath(AttendanceAppUnitTestUtil.JASONUNIT.concat(SchoolControllerUnitTestUtil.ID),
 						is((int) returnedSchoolResponseObject.getId())))
-				.andExpect(jsonPath(AttendanceAppUnitTestUtil.JASONUNIT.concat(SchoolControllerUnitTestConstants.NAME),
+				.andExpect(jsonPath(AttendanceAppUnitTestUtil.JASONUNIT.concat(SchoolControllerUnitTestUtil.NAME),
 						is(returnedSchoolResponseObject.getName())))
-				.andExpect(jsonPath(AttendanceAppUnitTestUtil.JASONUNIT.concat(SchoolControllerUnitTestConstants.EMAIL),
+				.andExpect(jsonPath(AttendanceAppUnitTestUtil.JASONUNIT.concat(SchoolControllerUnitTestUtil.EMAIL),
 						is(returnedSchoolResponseObject.getEmail())))
-				.andExpect(jsonPath(
-						AttendanceAppUnitTestUtil.JASONUNIT.concat(SchoolControllerUnitTestConstants.TELEPHONE),
+				.andExpect(jsonPath(AttendanceAppUnitTestUtil.JASONUNIT.concat(SchoolControllerUnitTestUtil.TELEPHONE),
 						is(returnedSchoolResponseObject.getTelephone())));
 		verify(schoolServiceMock, atLeast(1)).getSchool(id);
 		verifyNoMoreInteractions(schoolServiceMock);
@@ -103,7 +113,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 		when(schoolServiceMock.getSchool(validIdThatDoesNotExist))
 				.thenThrow(new SchoolNotFoundException(SchoolRestControllerConstants.SCHOOL_DOES_NOT_EXIST));
 		final String responseJsonString = "{\"statusCode\":2,\"message\":[\"School does not exist.\"]}";
-		getMockMvc().perform(get(SchoolControllerUnitTestConstants.GETSCHOOLWITHID, validIdThatDoesNotExist))
+		getMockMvc().perform(get(SchoolControllerUnitTestUtil.GETSCHOOLWITHID, validIdThatDoesNotExist))
 				.andExpect(status().isNotFound())
 				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));
@@ -117,7 +127,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 		long invalidSchoolId = -1L;
 		when(schoolServiceMock.getSchool(invalidSchoolId))
 				.thenThrow(new SchoolNotFoundException(SchoolRestControllerConstants.SCHOOL_DOES_NOT_EXIST));
-		getMockMvc().perform(get(SchoolControllerUnitTestConstants.GETSCHOOLWITHID, invalidSchoolId))
+		getMockMvc().perform(get(SchoolControllerUnitTestUtil.GETSCHOOLWITHID, invalidSchoolId))
 				.andExpect(status().isNotFound());
 		verify(schoolServiceMock, atLeast(1)).getSchool(invalidSchoolId);
 		verifyNoMoreInteractions(schoolServiceMock);
@@ -129,7 +139,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 		long validSchoolIdThatDoesNotExist = 15L;
 		doThrow(new SchoolNotFoundException(SchoolRestControllerConstants.SCHOOL_DOES_NOT_EXIST))
 				.when(schoolServiceMock).delete(validSchoolIdThatDoesNotExist);
-		getMockMvc().perform(delete(SchoolControllerUnitTestConstants.DELETESCHOOL, validSchoolIdThatDoesNotExist))
+		getMockMvc().perform(delete(SchoolControllerUnitTestUtil.DELETESCHOOL, validSchoolIdThatDoesNotExist))
 				.andExpect(status().isNotFound());
 		verify(schoolServiceMock, atLeast(1)).delete(validSchoolIdThatDoesNotExist);
 		verifyNoMoreInteractions(schoolServiceMock);
@@ -140,7 +150,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 		long invalidSchoolId = -1L;
 		doThrow(new SchoolNotFoundException(SchoolRestControllerConstants.SCHOOL_DOES_NOT_EXIST))
 				.when(schoolServiceMock).delete(invalidSchoolId);
-		getMockMvc().perform(delete(SchoolControllerUnitTestConstants.DELETESCHOOL, invalidSchoolId))
+		getMockMvc().perform(delete(SchoolControllerUnitTestUtil.DELETESCHOOL, invalidSchoolId))
 				.andExpect(status().isNotFound());
 		verify(schoolServiceMock, atLeast(1)).delete(invalidSchoolId);
 		verifyNoMoreInteractions(schoolServiceMock);
@@ -148,12 +158,12 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 
 	@Test()
 	public void create_school_should_return_http_status_code_of_200() throws Exception {
-		SchoolCreateRequestObject schoolRequestObject = getSchoolCreateRequestObject("testschool15", "Rujesh1@",
-				"Test School", "testemail@email.com", "2453469123");
+		SchoolCreateRequestObject schoolRequestObject = SchoolControllerUnitTestUtil.getSchoolCreateRequestObject(
+				"testschool15", "Rujesh1@", "Test School", "testemail@email.com", "2453469123");
 		doNothing().when(schoolServiceMock).create(schoolRequestObject);
 		final String responseJsonString = "{\"statusCode\":1,\"message\":[\"School created sucessfully.\"]}";
 		getMockMvc()
-				.perform(post(SchoolControllerUnitTestConstants.CREATESCHOOL)
+				.perform(post(SchoolControllerUnitTestUtil.CREATESCHOOL)
 						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8)
 						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(schoolRequestObject)))
 				.andExpect(status().isOk())
@@ -167,7 +177,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	public void create_school_should_return_validation_error_for_empty_school_in_english_language() throws Exception {
 		SchoolCreateRequestObject schoolRequestObject = new SchoolCreateRequestObject();
 		getMockMvc()
-				.perform(post(SchoolControllerUnitTestConstants.CREATESCHOOL)
+				.perform(post(SchoolControllerUnitTestUtil.CREATESCHOOL)
 						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8)
 						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(schoolRequestObject)))
 				.andExpect(status().isBadRequest())
@@ -187,9 +197,10 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	@Test()
 	public void create_school_should_return_validation_error_for_invalid_telephone_invalid_email_and_null_school_name_in_english_language()
 			throws Exception {
-		SchoolCreateRequestObject schoolRequestObject = getSchoolCreateRequestObject(null, null, null, "abc@", "1234");
+		SchoolCreateRequestObject schoolRequestObject = SchoolControllerUnitTestUtil.getSchoolCreateRequestObject(null,
+				null, null, "abc@", "1234");
 		getMockMvc()
-				.perform(post(SchoolControllerUnitTestConstants.CREATESCHOOL)
+				.perform(post(SchoolControllerUnitTestUtil.CREATESCHOOL)
 						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8)
 						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(schoolRequestObject)))
 				.andExpect(status().isBadRequest())
@@ -207,14 +218,15 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	}
 
 	@Test()
-	public void update_school_should_return_http_status_code_200_and_school_update_response_object() throws Exception {
-		SchoolUpdateRequestObject schoolUpdateRequestObject = getSchoolUpdateRequestObject(1L, "Test School",
-				"testemail@email.com", "2453469123");
-		doNothing().when(schoolServiceMock).update(schoolUpdateRequestObject);
-		final String responseJsonString = AttendanceAppUnitTestUtil
-				.convertObjectToJsonString(schoolUpdateRequestObject);
+	public void update_school_should_return_http_status_code_200_and_school_response_object() throws Exception {
+		SchoolUpdateRequestObject schoolUpdateRequestObject = SchoolControllerUnitTestUtil
+				.getSchoolUpdateRequestObject(1L, "Test School Update", "testemail@email.com", "2453469123");
+		SchoolResponseObject schoolResponseObject = SchoolControllerUnitTestUtil.getSchoolResponseObject(1L,
+				"Test School Update", "testemail@email.com", "2453469123");
+		String responseJsonString = AttendanceAppUnitTestUtil.convertObjectToJsonString(schoolResponseObject);
+		when(schoolServiceMock.update(schoolUpdateRequestObject)).thenReturn(schoolResponseObject);
 		getMockMvc()
-				.perform(put(SchoolControllerUnitTestConstants.UPDATESCHOOL)
+				.perform(put(SchoolControllerUnitTestUtil.UPDATESCHOOL)
 						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8)
 						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(schoolUpdateRequestObject)))
 				.andExpect(status().isOk())
@@ -228,7 +240,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	public void update_school_should_return_validation_error_for_empty_school_in_english_language() throws Exception {
 		SchoolUpdateRequestObject schoolUpdateRequestObject = new SchoolUpdateRequestObject();
 		getMockMvc()
-				.perform(put(SchoolControllerUnitTestConstants.UPDATESCHOOL)
+				.perform(put(SchoolControllerUnitTestUtil.UPDATESCHOOL)
 						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8)
 						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(schoolUpdateRequestObject)))
 				.andExpect(status().isBadRequest())
@@ -249,7 +261,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 		schoolUpdateRequestObject.setTelephone("1234");
 
 		getMockMvc()
-				.perform(put(SchoolControllerUnitTestConstants.UPDATESCHOOL)
+				.perform(put(SchoolControllerUnitTestUtil.UPDATESCHOOL)
 						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8)
 						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(schoolUpdateRequestObject)))
 				.andExpect(status().isBadRequest())
@@ -267,13 +279,13 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	public void update_school_should_return_duplicate_school_name_exception_for_school_that_already_exist()
 			throws Exception {
 		final String duplicateSchoolName = "Test School";
-		SchoolUpdateRequestObject schoolUpdateRequestObject = getSchoolUpdateRequestObject(1L, duplicateSchoolName,
-				"testemail@email.com", "2453469123");
+		SchoolUpdateRequestObject schoolUpdateRequestObject = SchoolControllerUnitTestUtil
+				.getSchoolUpdateRequestObject(1L, duplicateSchoolName, "testemail@email.com", "2453469123");
 		doThrow(new DuplicateSchoolNameException(SchoolRestControllerConstants.DUPLICATE_SCHOOL_NAME))
 				.when(schoolServiceMock).update(schoolUpdateRequestObject);
 		final String responseJsonString = "{\"statusCode\":3,\"message\":[\"School with given name already exists. Please enter different name.\"]}";
 		getMockMvc()
-				.perform(put(SchoolControllerUnitTestConstants.UPDATESCHOOL)
+				.perform(put(SchoolControllerUnitTestUtil.UPDATESCHOOL)
 						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8)
 						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(schoolUpdateRequestObject)))
 				.andExpect(status().isConflict())
@@ -287,13 +299,13 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	public void update_school_should_return_school_not_found_exception_for_school_that_does_not_exist()
 			throws Exception {
 		final long nonExistantSchoolId = 10L;
-		SchoolUpdateRequestObject schoolUpdateRequestObject = getSchoolUpdateRequestObject(nonExistantSchoolId,
-				"Test School", "testemail@email.com", "2453469123");
+		SchoolUpdateRequestObject schoolUpdateRequestObject = SchoolControllerUnitTestUtil
+				.getSchoolUpdateRequestObject(nonExistantSchoolId, "Test School", "testemail@email.com", "2453469123");
 		doThrow(new SchoolNotFoundException(SchoolRestControllerConstants.SCHOOL_DOES_NOT_EXIST))
 				.when(schoolServiceMock).update(schoolUpdateRequestObject);
 		final String responseJsonString = "{\"statusCode\":2,\"message\":[\"School does not exist.\"]}";
 		getMockMvc()
-				.perform(put(SchoolControllerUnitTestConstants.UPDATESCHOOL)
+				.perform(put(SchoolControllerUnitTestUtil.UPDATESCHOOL)
 						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8)
 						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(schoolUpdateRequestObject)))
 				.andExpect(status().isNotFound())
@@ -309,7 +321,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 		DeleteSelectedSchoolRequestObject deleteSelectedSchoolRequestObject = new DeleteSelectedSchoolRequestObject();
 		deleteSelectedSchoolRequestObject.setCommaSeparatedIds(commaSeparatedIds);
 		getMockMvc()
-				.perform(delete(SchoolControllerUnitTestConstants.DELETE_SELECTED_SCHOOL)
+				.perform(delete(SchoolControllerUnitTestUtil.DELETE_SELECTED_SCHOOL)
 						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8)
 						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(deleteSelectedSchoolRequestObject)))
 				.andExpect(status().isBadRequest())
@@ -326,7 +338,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	public void delete_selected_school_should_return_validation_errors_for_invalid_empty_input() throws Exception {
 		DeleteSelectedSchoolRequestObject deleteSelectedSchoolRequestObject = new DeleteSelectedSchoolRequestObject();
 		getMockMvc()
-				.perform(delete(SchoolControllerUnitTestConstants.DELETE_SELECTED_SCHOOL)
+				.perform(delete(SchoolControllerUnitTestUtil.DELETE_SELECTED_SCHOOL)
 						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8)
 						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(deleteSelectedSchoolRequestObject)))
 				.andExpect(status().isBadRequest())
@@ -346,9 +358,9 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 		doNothing().when(schoolServiceMock).delete(deleteSelectedSchoolRequestObject);
 		final String responseJsonString = "{\"statusCode\":1,\"message\":[\"Selected schools has been deleted successfully.\"]}";
 		getMockMvc()
-				.perform(delete(SchoolControllerUnitTestConstants.DELETE_SELECTED_SCHOOL)
+				.perform(delete(SchoolControllerUnitTestUtil.DELETE_SELECTED_SCHOOL)
 						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8)
-						.content(AttendanceAppUtilIT.convertObjectToJsonBytes(deleteSelectedSchoolRequestObject)))
+						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(deleteSelectedSchoolRequestObject)))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));
@@ -356,24 +368,4 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 		verifyNoMoreInteractions(schoolServiceMock);
 	}
 
-	private SchoolCreateRequestObject getSchoolCreateRequestObject(String username, String password, String name,
-			String email, String telephone) {
-		SchoolCreateRequestObject schoolRequestObject = new SchoolCreateRequestObject();
-		schoolRequestObject.setUsername(username);
-		schoolRequestObject.setPassword(password);
-		schoolRequestObject.setName(name);
-		schoolRequestObject.setEmail(email);
-		schoolRequestObject.setTelephone(telephone);
-		return schoolRequestObject;
-	}
-
-	private SchoolUpdateRequestObject getSchoolUpdateRequestObject(long id, String name, String email,
-			String telephone) {
-		SchoolUpdateRequestObject schoolUpdateRequestObject = new SchoolUpdateRequestObject();
-		schoolUpdateRequestObject.setId(id);
-		schoolUpdateRequestObject.setName(name);
-		schoolUpdateRequestObject.setEmail(email);
-		schoolUpdateRequestObject.setTelephone(telephone);
-		return schoolUpdateRequestObject;
-	}
 }

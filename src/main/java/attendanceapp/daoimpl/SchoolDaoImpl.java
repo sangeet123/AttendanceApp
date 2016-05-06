@@ -19,12 +19,12 @@ import attendanceapp.model.Authority;
 import attendanceapp.model.School;
 import attendanceapp.model.User;
 import attendanceapp.model.requestobject.SchoolCreateRequestObject;
-import attendanceapp.util.SchoolRestServiceUtils;
+import attendanceapp.services.util.SchoolServiceUtils;
 
 @Repository()
 public class SchoolDaoImpl implements SchoolDao {
 
-	static final String LOAD_ALL_SCHOOL = "FROM attendanceapp.common.model.School";
+	static final String LOAD_ALL_SCHOOL = "FROM attendanceapp.model.School";
 	static final String DELETE_SELECTED_SCHOOL = "CALL delete_selected_schools(:ids)";
 
 	@Autowired()
@@ -53,7 +53,7 @@ public class SchoolDaoImpl implements SchoolDao {
 
 	private void createSchool(final SchoolCreateRequestObject schoolRequestObject) {
 		try {
-			School school = SchoolRestServiceUtils.createSchoolFromSchoolResponseObject(schoolRequestObject);
+			School school = SchoolServiceUtils.createSchoolFromSchoolResponseObject(schoolRequestObject);
 			long schoolId = (long) session.save(school);
 			schoolRequestObject.setId(schoolId);
 			session.flush();
@@ -64,11 +64,11 @@ public class SchoolDaoImpl implements SchoolDao {
 
 	private void createUser(final SchoolCreateRequestObject schoolRequestObject) {
 		try {
-			School school = SchoolRestServiceUtils.createSchoolFromSchoolResponseObject(schoolRequestObject);
-			User user = SchoolRestServiceUtils.createUserFromSchoolResponseObject(schoolRequestObject);
+			School school = SchoolServiceUtils.createSchoolFromSchoolResponseObject(schoolRequestObject);
+			User user = SchoolServiceUtils.createUserFromSchoolResponseObject(schoolRequestObject);
 			user.setSchool(school);
 			session.save(user);
-			Authority authority = SchoolRestServiceUtils.createAuthorityFromSchoolRequestObject(schoolRequestObject);
+			Authority authority = SchoolServiceUtils.createAuthorityFromSchoolRequestObject(schoolRequestObject);
 			authority.setUser(user);
 			session.save(authority);
 			session.flush();

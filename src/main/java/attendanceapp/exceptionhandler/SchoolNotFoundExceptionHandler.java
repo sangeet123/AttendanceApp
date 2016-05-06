@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import attendanceapp.customstatus.Status;
 import attendanceapp.exceptions.SchoolNotFoundException;
-import attendanceapp.util.SchoolRestServiceUtils;
+import attendanceapp.util.AttendanceAppUtils;
 import attendanceapp.util.StatusCodeUtil;
 
 @ControllerAdvice()
@@ -27,8 +27,7 @@ public class SchoolNotFoundExceptionHandler {
 	@ExceptionHandler(SchoolNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public Status processSchoolNotFoundException(SchoolNotFoundException ex) {
-		Status status = SchoolRestServiceUtils.createStatus(ex.getMessage(),
-				StatusCodeUtil.ITEM_NOT_FOUND_CODE);
+		Status status = AttendanceAppUtils.createStatus(ex.getMessage(), StatusCodeUtil.ITEM_NOT_FOUND_CODE);
 		return status;
 	}
 }

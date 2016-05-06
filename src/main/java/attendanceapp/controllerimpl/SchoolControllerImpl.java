@@ -70,10 +70,9 @@ public class SchoolControllerImpl implements SchoolController {
 
 	@Override()
 	@RequestMapping(value = SchoolRestControllerConstants.UPDATE_SCHOOL, method = RequestMethod.PUT)
-	public @ResponseBody SchoolUpdateRequestObject update(
+	public @ResponseBody SchoolResponseObject update(
 			@Valid @RequestBody final SchoolUpdateRequestObject schoolUpdateRequestObject) {
-		schoolService.update(schoolUpdateRequestObject);
-		return schoolUpdateRequestObject;
+		return schoolService.update(schoolUpdateRequestObject);
 	}
 
 }

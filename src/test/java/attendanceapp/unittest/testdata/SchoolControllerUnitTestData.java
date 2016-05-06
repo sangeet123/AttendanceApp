@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 import attendanceapp.model.responseobject.SchoolResponseObject;
 import attendanceapp.unitest.common.util.AttendanceAppUnitTestUtil;
-import attendanceapp.unittest.constants.SchoolControllerUnitTestConstants;
+import attendanceapp.unittest.utils.SchoolControllerUnitTestUtil;
 
 public class SchoolControllerUnitTestData {
 
@@ -32,7 +32,7 @@ public class SchoolControllerUnitTestData {
 	}
 
 	private static String getValueFromKeyVal(String keyVal) {
-		int index = keyVal.indexOf(SchoolControllerUnitTestConstants.DELEIMITER);
+		int index = keyVal.indexOf(SchoolControllerUnitTestUtil.DELEIMITER);
 		String val = keyVal.substring(index + 1).trim();
 		return val;
 	}
@@ -49,13 +49,13 @@ public class SchoolControllerUnitTestData {
 		SchoolResponseObject schoolResponseObject = new SchoolResponseObject();
 		for (String param : schoolParams) {
 
-			if (param.contains(SchoolControllerUnitTestConstants.ID)) {
+			if (param.contains(SchoolControllerUnitTestUtil.ID)) {
 				schoolResponseObject.setId(Long.parseLong(getValueFromKeyVal(param)));
-			} else if (param.contains(SchoolControllerUnitTestConstants.NAME)) {
+			} else if (param.contains(SchoolControllerUnitTestUtil.NAME)) {
 				schoolResponseObject.setName(getValueFromKeyVal(param));
-			} else if (param.contains(SchoolControllerUnitTestConstants.EMAIL)) {
+			} else if (param.contains(SchoolControllerUnitTestUtil.EMAIL)) {
 				schoolResponseObject.setEmail(getValueFromKeyVal(param));
-			} else if (param.contains(SchoolControllerUnitTestConstants.TELEPHONE)) {
+			} else if (param.contains(SchoolControllerUnitTestUtil.TELEPHONE)) {
 				schoolResponseObject.setTelephone(getValueFromKeyVal(param));
 			}
 		}

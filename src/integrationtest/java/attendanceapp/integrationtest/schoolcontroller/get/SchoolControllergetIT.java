@@ -10,9 +10,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import attendanceapp.controller.SchoolController;
 import attendanceapp.controllerimpl.SchoolControllerImpl;
-import attendanceapp.integrationtest.admin.constants.SchoolControllerConstantsIT;
 import attendanceapp.integrationtest.common.util.AttendanceAppUtilIT;
 import attendanceapp.integrationtest.common.util.TestConfigurerIT;
+import attendanceapp.integrationtest.utils.SchoolControllerUtilIT;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.*;
@@ -45,52 +46,14 @@ public class SchoolControllergetIT extends TestConfigurerIT {
 	}
 
 	@Test()
-	public void get_school_with_valid_id_1_that_exist() throws Exception {
-		final long validSchoolId = 1L;
-		getMockMvc().perform(get(SchoolControllerConstantsIT.GETSCHOOLWITHID, validSchoolId)).andExpect(status().isOk())
+	public void get_all_schools_that_exist_in_database() throws Exception {
+		getMockMvc().perform(get(SchoolControllerUtilIT.GETALLSCHOOLS)).andExpect(status().isOk())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(jsonPath("$.id", is(1))).andExpect(jsonPath("$.name", is("test1")))
-				.andExpect(jsonPath("$.telephone", is("123456789")))
-				.andExpect(jsonPath("$.email", is("test1@email.com")));
+				.andExpect(jsonPath("$", hasSize(2))).andExpect(jsonPath("$[0].id", is(1)))
+				.andExpect(jsonPath("$[0].name", is("test1"))).andExpect(jsonPath("$[0].telephone", is("123456789")))
+				.andExpect(jsonPath("$[0].email", is("test1@email.com"))).andExpect(jsonPath("$[1].id", is(10)))
+				.andExpect(jsonPath("$[1].name", is("test10"))).andExpect(jsonPath("$[1].telephone", is("234567891")))
+				.andExpect(jsonPath("$[1].email", is("test10@email.com")));
 	}
 
-	@Test()
-	public void get_school_with_valid_id_10_that_exist() throws Exception {
-		final long validSchoolId = 10L;
-		getMockMvc().perform(get(SchoolControllerConstantsIT.GETSCHOOLWITHID, validSchoolId)).andExpect(status().isOk())
-				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(jsonPath("$.id", is(10))).andExpect(jsonPath("$.name", is("test10")))
-				.andExpect(jsonPath("$.telephone", is("234567891")))
-				.andExpect(jsonPath("$.email", is("test10@email.com")));
-	}
-
-	@Test()
-	public void get_school_with_valid_id_15_that_does_not_exist() throws Exception {
-		final long validIdThatDoesNotExist = 15L;
-		final String responseJsonString = "{\"statusCode\":2,\"message\":[\"School does not exist.\"]}";
-		getMockMvc().perform(get(SchoolControllerConstantsIT.GETSCHOOLWITHID, validIdThatDoesNotExist))
-				.andExpect(status().isNotFound())
-				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(content().string(responseJsonString));
-	}
-
-	@Test()
-	public void get_school_with_invalid_id_negative_1() throws Exception {
-		final long invalidId = -1L;
-		final String responseJsonString = "{\"statusCode\":2,\"message\":[\"School does not exist.\"]}";
-		getMockMvc().perform(get(SchoolControllerConstantsIT.GETSCHOOLWITHID, invalidId))
-				.andExpect(status().isNotFound())
-				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(content().string(responseJsonString));
-	}
-
-	@Test()
-	public void get_school_with_invalid_id_one() throws Exception {
-		final String invalidStringId = "one";
-		final String responseJsonString = "{\"statusCode\":2,\"message\":[\"Resource does not exist.\"]}";
-		getMockMvc().perform(get(SchoolControllerConstantsIT.GETSCHOOLWITHID, invalidStringId))
-				.andExpect(status().isNotFound())
-				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(content().string(responseJsonString));
-	}
 }

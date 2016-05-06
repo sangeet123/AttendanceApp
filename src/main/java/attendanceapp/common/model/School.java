@@ -22,7 +22,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import attendanceapp.common.util.AttendanceAppUtils;
+import attendanceapp.util.AttendanceAppUtils;
 
 @Entity()
 @Table(name = "schools", uniqueConstraints = { @UniqueConstraint(columnNames = "name") })
