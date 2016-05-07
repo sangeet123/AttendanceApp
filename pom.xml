@@ -511,6 +511,13 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.4</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<version>4.1.0.RELEASE</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<profiles>
