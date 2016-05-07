@@ -10,7 +10,7 @@
 	<security:http auto-config="true" create-session="stateless">
 		<!-- requires-channel="https" -->
 		<security:intercept-url pattern="/school/**"
-			access="ROLE_USER,ROLE_ADMIN" />
+			access="ROLE_SCHOOL_ADMIN,ROLE_ADMIN" />
 		<security:http-basic />
 	</security:http>
 

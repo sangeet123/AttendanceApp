@@ -13,4 +13,9 @@
 		factory-method="mock">
 		<constructor-arg value="attendanceapp.services.SchoolService" />
 	</bean>
+
+	<bean id="subjectService" name="subjectService" class="org.mockito.Mockito"
+		factory-method="mock">
+		<constructor-arg value="attendanceapp.services.SubjectService" />
+	</bean>
 </beans>

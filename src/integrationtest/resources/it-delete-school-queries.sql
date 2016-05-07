@@ -1,1 +1,3 @@
-delete from schools where id>=1;
+delete from authorities;
+delete from users;
+delete from schools;

@@ -3,7 +3,13 @@ package attendanceapp.customstatus;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 public class Status {
+
+	private static final int INITIAL_NONZERO_ODD_NUM = 17;
+	private static final int MULTIPLIER_NONZERO_ODD_NUM = 157;
 
 	private int statusCode;
 
@@ -26,40 +32,30 @@ public class Status {
 		this.statusCode = statusCode;
 	}
 
-	public List<String> getMessage() {
+	public List<String> getMessages() {
 		return messages;
 	}
 
-	public void setMessage(List<String> messages) {
+	public void setMessages(List<String> messages) {
 		this.messages = messages;
 	}
 
 	@Override()
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((messages == null) ? 0 : messages.hashCode());
-		result = prime * result + statusCode;
-		return result;
+		return new HashCodeBuilder(INITIAL_NONZERO_ODD_NUM, MULTIPLIER_NONZERO_ODD_NUM).append(messages)
+				.append(statusCode).toHashCode();
 	}
 
 	@Override()
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (obj == null || getClass() != obj.getClass()) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		}
 		Status other = (Status) obj;
-		if (messages == null) {
-			if (other.messages != null)
-				return false;
-		} else if (!messages.equals(other.messages))
-			return false;
-		if (statusCode != other.statusCode)
-			return false;
-		return true;
+		return new EqualsBuilder().append(statusCode, other.getStatusCode()).append(messages, other.getMessages())
+				.isEquals();
 	}
 
 	@Override()
