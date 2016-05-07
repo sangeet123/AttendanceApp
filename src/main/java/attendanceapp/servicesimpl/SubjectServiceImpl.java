@@ -25,11 +25,10 @@ public class SubjectServiceImpl implements SubjectService {
 	@Override()
 	public SubjectResponseObject getSubject(long schoolId, long subjectId) {
 		try {
-			if (!subjectDao.isValidPair(schoolId, subjectId)) {
-				throw new SubjectNotFoundException();
-			}
 			Subject subject = subjectDao.getSubject(schoolId, subjectId);
 			return SubjectServiceUtil.createSubjectResponseObjectFromSubject(subject);
+		} catch (SubjectNotFoundException ex) {
+			throw ex;
 		} catch (Exception ex) {
 			throw new UnknownException();
 		}
@@ -48,9 +47,6 @@ public class SubjectServiceImpl implements SubjectService {
 	@Override()
 	public SubjectResponseObject update(long schoolId, SubjectUpdateRequestObject subjectUpdateRequestObject) {
 		try {
-			if (!subjectDao.isValidPair(schoolId, subjectUpdateRequestObject.getId())) {
-				throw new SubjectNotFoundException();
-			}
 			Subject subject = SubjectServiceUtil.creaSubjectFromSubjectUpdateRequestObject(subjectUpdateRequestObject);
 			subjectDao.update(schoolId, subject);
 			return SubjectServiceUtil.createSubjectResponseObjectFromSubject(subject);
@@ -62,9 +58,6 @@ public class SubjectServiceImpl implements SubjectService {
 	@Override()
 	public void delete(long schoolId, long subjectId) {
 		try {
-			if (!subjectDao.isValidPair(schoolId, subjectId)) {
-				throw new SubjectNotFoundException();
-			}
 			subjectDao.delete(schoolId, subjectId);
 		} catch (Exception ex) {
 			throw new UnknownException();

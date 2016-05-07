@@ -60,9 +60,9 @@ public abstract class SchoolControllerTestConfigurerIT {
 		}
 	}
 
-	@Configuration
-	@EnableWebMvcSecurity
-	@EnableWebMvc
+	@Configuration()
+	@EnableWebMvcSecurity()
+	@EnableWebMvc()
 	static class Config extends WebSecurityConfigurerAdapter {
 
 		@Autowired()

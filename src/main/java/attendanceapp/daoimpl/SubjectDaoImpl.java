@@ -2,13 +2,16 @@ package attendanceapp.daoimpl;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import attendanceapp.dao.SubjectDao;
+import attendanceapp.exceptions.SubjectNotFoundException;
 import attendanceapp.model.Subject;
 
 @Repository()
@@ -20,22 +23,41 @@ public class SubjectDaoImpl implements SubjectDao {
 	Session session = null;
 	Transaction transaction = null;
 
+	private void closeSession() {
+		if (session != null) {
+			session.close();
+		}
+	}
+
 	@Override()
 	public Subject getSubject(long schoolId, long subjectId) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			session = sessionFactory.openSession();
+			Criteria criteria = session.createCriteria(Subject.class);
+			criteria.add(Restrictions.eqOrIsNull("", schoolId)).add(Restrictions.eq("", subjectId));
+			@SuppressWarnings("rawtypes")
+			List subjects = criteria.list();
+			if (subjects.isEmpty()) {
+				throw new SubjectNotFoundException();
+			}
+			return (Subject) subjects.get(0);
+		} finally {
+			closeSession();
+		}
+
 	}
 
-	@Override()
-	public boolean isValidPair(long schoolId, long subjectId) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
+	@SuppressWarnings("unchecked")
 	@Override()
 	public List<Subject> getSubjects(long schoolId) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			session = sessionFactory.openSession();
+			Criteria criteria = session.createCriteria(Subject.class);
+			criteria.add(Restrictions.eqOrIsNull("", schoolId));
+			return criteria.list();
+		} finally {
+			closeSession();
+		}
 	}
 
 	@Override()

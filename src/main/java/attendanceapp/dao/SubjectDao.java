@@ -7,8 +7,6 @@ import attendanceapp.model.Subject;
 public interface SubjectDao {
 	public Subject getSubject(final long schoolId, final long subjectId);
 
-	public boolean isValidPair(final long schoolId, final long subjectId);
-
 	public List<Subject> getSubjects(final long schoolId);
 
 	public void update(final long schoolId, final Subject subject);
