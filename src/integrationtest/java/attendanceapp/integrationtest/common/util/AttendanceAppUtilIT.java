@@ -70,13 +70,21 @@ public class AttendanceAppUtilIT {
 		return null;
 	}
 
-	public static void mysqlScriptRunner(String sqlQueryFileName) throws ClassNotFoundException, SQLException {
-
+	public static Connection getDatabaseConnection() throws ClassNotFoundException {
 		Properties prop = readDatabaseProperties(DATABASEPROPERTIESFILE);
 		Class.forName(prop.getProperty(JDBCDRIVERCLASS));
-		Connection con = (Connection) DriverManager.getConnection(prop.getProperty(JDBCURL),
-				prop.getProperty(JDBCUSERNAME), prop.getProperty(JDBCPASSWORD));
+		Connection con = null;
+		try {
+			con = (Connection) DriverManager.getConnection(prop.getProperty(JDBCURL), prop.getProperty(JDBCUSERNAME),
+					prop.getProperty(JDBCPASSWORD));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return con;
+	}
 
+	public static void mysqlScriptRunner(String sqlQueryFileName) throws ClassNotFoundException, SQLException {
+		Connection con = getDatabaseConnection();
 		File file = new File(resourceToString(sqlQueryFileName));
 		InputStream inputStream = null;
 
