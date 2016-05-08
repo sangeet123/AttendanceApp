@@ -53,7 +53,7 @@ public class SubjectDaoImpl implements SubjectDao {
 		try {
 			session = sessionFactory.openSession();
 			Criteria criteria = session.createCriteria(Subject.class);
-			criteria.add(Restrictions.eqOrIsNull("", schoolId));
+			criteria.add(Restrictions.eqOrIsNull("school.id", schoolId));
 			return criteria.list();
 		} finally {
 			closeSession();

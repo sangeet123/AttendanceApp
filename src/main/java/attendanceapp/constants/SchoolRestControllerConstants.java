@@ -7,7 +7,7 @@ public final class SchoolRestControllerConstants {
 	}
 
 	// URI Constants
-	public static final String ROOT = "/school";
+	public static final String ROOT = "/admin/school";
 	public static final String GET_SCHOOL = "/{id}";
 	public static final String GET_SCHOOL_LIST = "";
 	public static final String DELETE_SCHOOL = "/delete/{id}";

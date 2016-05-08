@@ -18,7 +18,7 @@ public final class SubjectServiceUtil {
 	public static SubjectResponseObject createSubjectResponseObjectFromSubject(final Subject subject) {
 		return new SubjectToSubjectResponseMapper.SubjectResponseBuilder().createdOn(subject.getCreatedOn())
 				.updatedOn(subject.getUpdatedOn()).shortName(subject.getShortName()).id(subject.getId())
-				.name(subject.getName()).build();
+				.credit(subject.getCredit()).name(subject.getName()).build();
 	}
 
 	public static List<SubjectResponseObject> createSubjectResponseObjectListFromSubjectList(

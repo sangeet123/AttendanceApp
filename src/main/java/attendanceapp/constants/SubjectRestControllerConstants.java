@@ -7,10 +7,10 @@ public final class SubjectRestControllerConstants {
 	}
 
 	// URI Constants
-	public static final String ROOT = "school/{school_id}/subject";
-	public static final String GET_SUBJECT = "/{id}";
+	public static final String ROOT = "/school/{schoolId}/subject";
+	public static final String GET_SUBJECT = "/{subjectId}";
 	public static final String GET_SUBJECT_LIST = "";
-	public static final String DELETE_SUBJECT = "/delete/{id}";
+	public static final String DELETE_SUBJECT = "/delete/{subjectId}";
 	public static final String DELETE_SUBJECT_LIST = "/deleteselected";
 	public static final String CREATE_SUBJECT = "/create";
 	public static final String UPDATE_SUBJECT = "/update";

@@ -9,20 +9,13 @@ public final class SchoolControllerUtilIT {
 		throw new Error();
 	}
 
-	// URI for school controller	
-	public static final String GETSCHOOLWITHID = "/school/{id}";
-	public static final String GETALLSCHOOLS = "/school";
-	public static final String CREATESCHOOL = "/school/create";
-	public static final String DELETESCHOOL = "/school/delete/{id}";
-	public static final String UPDATESCHOOL = "/school/update";
-	public static final String DELETE_SELECTED_SCHOOL = "/school/deleteselected";
-
-	// Key for school model
-	public static final String ID = "id";
-	public static final String NAME = "name";
-	public static final String EMAIL = "email";
-	public static final String TELEPHONE = "telephone";
-	public static final String DELEIMITER = ":";
+	// URI for school controller
+	public static final String GETSCHOOLWITHID = "/admin/school/{id}";
+	public static final String GETALLSCHOOLS = "/admin/school";
+	public static final String CREATESCHOOL = "/admin/school/create";
+	public static final String DELETESCHOOL = "/admin/school/delete/{id}";
+	public static final String UPDATESCHOOL = "/admin/school/update";
+	public static final String DELETE_SELECTED_SCHOOL = "/admin/school/deleteselected";
 
 	public static SchoolCreateRequestObject getSchoolRequestObject(String username, String password, String name,
 			String email, String telephone) {
