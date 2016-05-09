@@ -13,7 +13,7 @@ public final class SubjectControllerUtilIT {
 	public static final String GETSUBJECTWITHID = "/school/{schoolId}/subject/{subjectId}";
 	public static final String GETALLSUBJECTS = "/school/{schoolId}/subject";
 	public static final String CREATESCHOOL = "/school/create";
-	public static final String DELETESCHOOL = "/school/delete/{id}";
+	public static final String DELETESUBJECT = "/school/{schoolId}/subject/delete/{subjectId}";
 	public static final String UPDATESCHOOL = "/school/update";
 	public static final String DELETE_SELECTED_SCHOOL = "/school/deleteselected";
 

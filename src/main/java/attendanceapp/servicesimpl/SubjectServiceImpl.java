@@ -23,7 +23,7 @@ public class SubjectServiceImpl implements SubjectService {
 	SubjectDao subjectDao;
 
 	@Override()
-	public SubjectResponseObject getSubject(long schoolId, long subjectId) {
+	public SubjectResponseObject getSubject(final long schoolId, final long subjectId) {
 		try {
 			Subject subject = subjectDao.getSubject(schoolId, subjectId);
 			return SubjectServiceUtil.createSubjectResponseObjectFromSubject(subject);
@@ -35,7 +35,7 @@ public class SubjectServiceImpl implements SubjectService {
 	}
 
 	@Override()
-	public List<SubjectResponseObject> getSubjectList(long schoolId) {
+	public List<SubjectResponseObject> getSubjectList(final long schoolId) {
 		try {
 			List<Subject> subjects = subjectDao.getSubjects(schoolId);
 			return SubjectServiceUtil.createSubjectResponseObjectListFromSubjectList(subjects);
@@ -45,7 +45,8 @@ public class SubjectServiceImpl implements SubjectService {
 	}
 
 	@Override()
-	public SubjectResponseObject update(long schoolId, SubjectUpdateRequestObject subjectUpdateRequestObject) {
+	public SubjectResponseObject update(final long schoolId,
+			final SubjectUpdateRequestObject subjectUpdateRequestObject) {
 		try {
 			Subject subject = SubjectServiceUtil.creaSubjectFromSubjectUpdateRequestObject(subjectUpdateRequestObject);
 			subjectDao.update(schoolId, subject);
@@ -56,16 +57,19 @@ public class SubjectServiceImpl implements SubjectService {
 	}
 
 	@Override()
-	public void delete(long schoolId, long subjectId) {
+	public void delete(final long schoolId, final long subjectId) {
 		try {
 			subjectDao.delete(schoolId, subjectId);
+		} catch (SubjectNotFoundException ex) {
+			throw ex;
 		} catch (Exception ex) {
 			throw new UnknownException();
 		}
 	}
 
 	@Override()
-	public SubjectResponseObject create(long schoolId, SubjectCreateRequestObject subjectCreateRequestObject) {
+	public SubjectResponseObject create(final long schoolId,
+			final SubjectCreateRequestObject subjectCreateRequestObject) {
 		try {
 			Subject subject = SubjectServiceUtil.creaSubjectFromSubjectCreateRequestObject(subjectCreateRequestObject);
 			subjectDao.update(schoolId, subject);

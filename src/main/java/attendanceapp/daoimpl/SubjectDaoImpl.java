@@ -3,6 +3,7 @@ package attendanceapp.daoimpl;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -16,6 +17,8 @@ import attendanceapp.model.Subject;
 
 @Repository()
 public class SubjectDaoImpl implements SubjectDao {
+
+	final String deleteSubjectById = "delete attendanceapp.model.Subject where id= :subjectId and school.id= :schoolId";
 
 	@Autowired()
 	SessionFactory sessionFactory;
@@ -68,8 +71,16 @@ public class SubjectDaoImpl implements SubjectDao {
 
 	@Override()
 	public void delete(long schoolId, long subjectId) {
-		// TODO Auto-generated method stub
-
+		try {
+			session = sessionFactory.openSession();
+			Query query = session.createQuery(deleteSubjectById).setParameter("subjectId", subjectId)
+					.setParameter("schoolId", schoolId);
+			if (query.executeUpdate() == 0) {
+				throw new SubjectNotFoundException();
+			}
+		} finally {
+			closeSession();
+		}
 	}
 
 	@Override()
