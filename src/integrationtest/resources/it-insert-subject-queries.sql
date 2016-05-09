@@ -2,3 +2,4 @@ insert into testattendanceapp.schools (id,name,telephone,email,createdOn,updated
 insert into testattendanceapp.users (id,enabled,username,password,school_id) VALUES (1,true,'subjecttestuser','$2a$11$6PQx/qAT2EfqB9esGCEKX.zdzXPMVYjMhZN7u4RyV1WTsoVL/6wEu',1);
 insert into testattendanceapp.authorities(id,username,authority,user_id) VALUES (1,'subjecttestuser','ROLE_SCHOOL_ADMIN',1);
 insert into testattendanceapp.subjects(id,createdOn,updatedOn,credit,name,short_name,school_id) VALUES(1,'2016-05-01T14:39:56.430','2016-05-01T14:39:56.430',5,'Computer Programming','CP101',1);
+insert into testattendanceapp.subjects(id,createdOn,updatedOn,credit,name,short_name,school_id) VALUES(2,'2016-05-01T14:39:56.430','2016-05-01T14:39:56.430',5,'Java Programming','JP301',1);

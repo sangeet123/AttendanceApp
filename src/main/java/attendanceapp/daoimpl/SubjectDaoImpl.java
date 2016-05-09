@@ -34,7 +34,7 @@ public class SubjectDaoImpl implements SubjectDao {
 		try {
 			session = sessionFactory.openSession();
 			Criteria criteria = session.createCriteria(Subject.class);
-			criteria.add(Restrictions.eqOrIsNull("", schoolId)).add(Restrictions.eq("", subjectId));
+			criteria.add(Restrictions.eq("school.id", schoolId)).add(Restrictions.eq("id", subjectId));
 			@SuppressWarnings("rawtypes")
 			List subjects = criteria.list();
 			if (subjects.isEmpty()) {
@@ -53,7 +53,7 @@ public class SubjectDaoImpl implements SubjectDao {
 		try {
 			session = sessionFactory.openSession();
 			Criteria criteria = session.createCriteria(Subject.class);
-			criteria.add(Restrictions.eqOrIsNull("school.id", schoolId));
+			criteria.add(Restrictions.eq("school.id", schoolId));
 			return criteria.list();
 		} finally {
 			closeSession();
