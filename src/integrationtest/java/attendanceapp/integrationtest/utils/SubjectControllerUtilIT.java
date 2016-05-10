@@ -15,7 +15,7 @@ public final class SubjectControllerUtilIT {
 	public static final String CREATESCHOOL = "/school/create";
 	public static final String DELETESUBJECT = "/school/{schoolId}/subject/delete/{subjectId}";
 	public static final String UPDATESCHOOL = "/school/update";
-	public static final String DELETE_SELECTED_SCHOOL = "/school/deleteselected";
+	public static final String DELETE_SUBJECTS = "/school/{schoolId}/subject/delete";
 
 	public static SchoolCreateRequestObject getSchoolRequestObject(String username, String password, String name,
 			String email, String telephone) {

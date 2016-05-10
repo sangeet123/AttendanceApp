@@ -1,6 +1,8 @@
 package attendanceapp.daoimpl;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -19,6 +21,7 @@ import attendanceapp.model.Subject;
 public class SubjectDaoImpl implements SubjectDao {
 
 	final String deleteSubjectById = "delete attendanceapp.model.Subject where id= :subjectId and school.id= :schoolId";
+	final String deleteSubjectsByIds = "delete attendanceapp.model.Subject where id in (:subjectIds) and school.id= :schoolId";
 
 	@Autowired()
 	SessionFactory sessionFactory;
@@ -85,7 +88,15 @@ public class SubjectDaoImpl implements SubjectDao {
 
 	@Override()
 	public void delete(long schoolId, String ids) {
-		// TODO Auto-generated method stub
+		try {
+			List<Long> numbers = Stream.of(ids.split(",")).map(Long::parseLong).collect(Collectors.toList());
+			session = sessionFactory.openSession();
+			Query query = session.createQuery(deleteSubjectsByIds).setParameter("schoolId", schoolId)
+					.setParameterList("subjectIds", numbers);
+			query.executeUpdate();
+		} finally {
+			closeSession();
+		}
 
 	}
 

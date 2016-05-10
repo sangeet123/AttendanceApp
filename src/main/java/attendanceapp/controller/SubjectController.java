@@ -18,9 +18,10 @@ public interface SubjectController {
 	public Status delete(final long schoolId,
 			final DeleteSelectedSubjectRequestObject deleteSelectedSubjectRequestObject);
 
-	public Status create(final long schoolId, final SubjectCreateRequestObject subjectCreateRequestObject);
+	public SubjectResponseObject create(final long schoolId,
+			final SubjectCreateRequestObject subjectCreateRequestObject);
 
-	public SubjectUpdateRequestObject update(final long schoolId,
+	public SubjectResponseObject update(final long schoolId,
 			final SubjectUpdateRequestObject subjectUpdateRequestObject);
 
 }

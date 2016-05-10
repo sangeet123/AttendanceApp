@@ -57,25 +57,22 @@ public class SubjectControllerImpl implements SubjectController {
 			@Valid @RequestBody final DeleteSelectedSubjectRequestObject deleteSelectedSubjectRequestObject) {
 		subjectService.delete(schoolId, deleteSelectedSubjectRequestObject);
 		return new Status(
-				AttendanceAppUtils.messageToList(SubjectRestControllerConstants.SELECTED_SUBJECT_DELETE_SUCCESS),
+				AttendanceAppUtils.messageToList(SubjectRestControllerConstants.SUBJECTS_DELETE_SUCCESS),
 				StatusCodeUtil.OPERATION_SUCCESS);
 	}
 
 	@Override()
 	@RequestMapping(value = SubjectRestControllerConstants.CREATE_SUBJECT, method = RequestMethod.POST)
-	public @ResponseBody Status create(@PathVariable final long schoolId,
+	public @ResponseBody SubjectResponseObject create(@PathVariable final long schoolId,
 			@Valid @RequestBody final SubjectCreateRequestObject subjectCreateRequestObject) {
-		subjectService.create(schoolId, subjectCreateRequestObject);
-		return new Status(AttendanceAppUtils.messageToList(SubjectRestControllerConstants.CREATE_SUCCESS),
-				StatusCodeUtil.OPERATION_SUCCESS);
+		return subjectService.create(schoolId, subjectCreateRequestObject);
 	}
 
 	@Override()
 	@RequestMapping(value = SubjectRestControllerConstants.UPDATE_SUBJECT, method = RequestMethod.PUT)
-	public @ResponseBody SubjectUpdateRequestObject update(@PathVariable final long schoolId,
+	public @ResponseBody SubjectResponseObject update(@PathVariable final long schoolId,
 			@Valid @RequestBody final SubjectUpdateRequestObject subjectUpdateRequestObject) {
-		subjectService.update(schoolId, subjectUpdateRequestObject);
-		return subjectUpdateRequestObject;
+		return subjectService.update(schoolId, subjectUpdateRequestObject);
 	}
 
 }

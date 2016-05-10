@@ -1,4 +1,4 @@
-package attendanceapp.integrationtest.schoolcontroller.deleteselected;
+package attendanceapp.integrationtest.schoolcontroller.deleteschools;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -16,7 +16,7 @@ import attendanceapp.integrationtest.common.util.TestConfigurerIT;
 import attendanceapp.integrationtest.utils.SchoolControllerUtilIT;
 import attendanceapp.model.requestobject.DeleteSelectedSchoolRequestObject;
 
-public class SchoolControllerdeleteselectedIT extends TestConfigurerIT {
+public class SchoolControllerdeleteSchoolsIT extends TestConfigurerIT {
 
 	public static final String basicDigestHeaderValue = "Basic "
 			+ new String(Base64.encode(("admin:password").getBytes()));
@@ -55,7 +55,7 @@ public class SchoolControllerdeleteselectedIT extends TestConfigurerIT {
 		final String commaSeparatedIds = "1,15";
 		DeleteSelectedSchoolRequestObject deleteSelectedSchoolRequestObject = new DeleteSelectedSchoolRequestObject();
 		deleteSelectedSchoolRequestObject.setCommaSeparatedIds(commaSeparatedIds);
-		final String responseJsonString = "{\"statusCode\":1,\"messages\":[\"Selected schools has been deleted successfully.\"]}";
+		final String responseJsonString = "{\"statusCode\":1,\"messages\":[\"Schools have been deleted successfully.\"]}";
 		getMockMvc()
 				.perform(delete(SchoolControllerUtilIT.DELETE_SELECTED_SCHOOL)
 						.header("Authorization", basicDigestHeaderValue)
@@ -74,7 +74,7 @@ public class SchoolControllerdeleteselectedIT extends TestConfigurerIT {
 		final String commaSeparatedIds = "20,10";
 		DeleteSelectedSchoolRequestObject deleteSelectedSchoolRequestObject = new DeleteSelectedSchoolRequestObject();
 		deleteSelectedSchoolRequestObject.setCommaSeparatedIds(commaSeparatedIds);
-		final String responseJsonString = "{\"statusCode\":1,\"messages\":[\"Selected schools has been deleted successfully.\"]}";
+		final String responseJsonString = "{\"statusCode\":1,\"messages\":[\"Schools have been deleted successfully.\"]}";
 		getMockMvc()
 				.perform(delete(SchoolControllerUtilIT.DELETE_SELECTED_SCHOOL)
 						.header("Authorization", basicDigestHeaderValue)
@@ -93,7 +93,7 @@ public class SchoolControllerdeleteselectedIT extends TestConfigurerIT {
 		final String commaSeparatedIds = "20,10";
 		DeleteSelectedSchoolRequestObject deleteSelectedSchoolRequestObject = new DeleteSelectedSchoolRequestObject();
 		deleteSelectedSchoolRequestObject.setCommaSeparatedIds(commaSeparatedIds);
-		final String responseJsonString = "{\"statusCode\":1,\"messages\":[\"Selected schools has been deleted successfully.\"]}";
+		final String responseJsonString = "{\"statusCode\":1,\"messages\":[\"Schools have been deleted successfully.\"]}";
 		getMockMvc()
 				.perform(delete(SchoolControllerUtilIT.DELETE_SELECTED_SCHOOL)
 						.header("Authorization", basicDigestHeaderValue)
