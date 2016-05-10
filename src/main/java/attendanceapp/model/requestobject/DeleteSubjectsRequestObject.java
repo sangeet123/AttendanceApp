@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import attendanceapp.util.AttendanceAppUtils;
 
-public class DeleteSelectedSubjectRequestObject {
+public class DeleteSubjectsRequestObject {
 
 	private static final int INITIAL_NONZERO_ODD_NUM = 17;
 	private static final int MULTIPLIER_NONZERO_ODD_NUM = 157;
@@ -38,7 +38,7 @@ public class DeleteSelectedSubjectRequestObject {
 		if (obj == null || getClass() != obj.getClass()) {
 			return false;
 		}
-		DeleteSelectedSubjectRequestObject other = (DeleteSelectedSubjectRequestObject) obj;
+		DeleteSubjectsRequestObject other = (DeleteSubjectsRequestObject) obj;
 		return new EqualsBuilder().append(commaSeparatedIds, other.getCommaSeparatedIds()).isEquals();
 	}
 

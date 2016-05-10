@@ -109,32 +109,4 @@ public class SubjectControllergetIdIT extends TestConfigurerIT {
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));
 	}
-
-	@Test()
-	public void get_subject_with_invalid_school_id_10_and_invalid_subjectId_one_that_does_not_exist() throws Exception {
-		final long invalidSchoolId = 10L;
-		final String invalidSubjectId = "one";
-		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Resource does not exist.\"]}";
-		getMockMvc()
-				.perform(get(SubjectControllerUtilIT.GETSUBJECTWITHID, invalidSchoolId, invalidSubjectId)
-						.header("Authorization", basicDigestHeaderValue))
-				.andExpect(status().isNotFound())
-				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(content().string(responseJsonString));
-	}
-
-	@Test()
-	public void get_subject_with_invalid_school_id_two_and_invalid_subjectId_one_that_does_not_exist()
-			throws Exception {
-		final String invalidSchoolId = "two";
-		final String invalidSubjectId = "one";
-		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Resource does not exist.\"]}";
-		getMockMvc()
-				.perform(get(SubjectControllerUtilIT.GETSUBJECTWITHID, invalidSchoolId, invalidSubjectId)
-						.header("Authorization", basicDigestHeaderValue))
-				.andExpect(status().isNotFound())
-				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(content().string(responseJsonString));
-	}
-
 }

@@ -20,14 +20,21 @@ public class SchoolControllerUnitTestData {
 
 	private static void readSchoolFromFile() throws IOException {
 		schoolsResponseObject = new ArrayList<SchoolResponseObject>();
-		File file = new File(AttendanceAppUnitTestUtil.resourceToString(TESTSCHOOLDATAFILEPATH));
-		@SuppressWarnings("resource")
-		BufferedReader buffer = new BufferedReader(new FileReader(file));
-		String line;
-		while ((line = buffer.readLine()) != null) {
-			line = line.trim();
-			SchoolResponseObject schoolResponseObject = extractSchoolFromLine(line);
-			schoolsResponseObject.add(schoolResponseObject);
+		File file = null;
+		BufferedReader buffer = null;
+		try {
+			file = new File(AttendanceAppUnitTestUtil.resourceToString(TESTSCHOOLDATAFILEPATH));
+			buffer = new BufferedReader(new FileReader(file));
+			String line;
+			while ((line = buffer.readLine()) != null) {
+				line = line.trim();
+				SchoolResponseObject schoolResponseObject = extractSchoolFromLine(line);
+				schoolsResponseObject.add(schoolResponseObject);
+			}
+		} finally {
+			if (buffer != null) {
+				buffer.close();
+			}
 		}
 	}
 

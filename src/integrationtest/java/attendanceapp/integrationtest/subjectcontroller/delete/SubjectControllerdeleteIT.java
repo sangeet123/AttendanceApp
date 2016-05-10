@@ -69,8 +69,8 @@ public class SubjectControllerdeleteIT extends TestConfigurerIT {
 				.andExpect(content().string(responseJsonString));
 	}
 
-	@Test()
-	public void delete_subject_with_valid_school_id_1_and_invalid_subjectId_10_that_does_not_exist() throws Exception {
+	/*@Test()
+	public void delete_subject_with_valid_school_id_1_and_valid_subjectId_10_that_does_not_exist() throws Exception {
 		final long validSchoolId = 1L;
 		final long invalidSubjectId = 10L;
 		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Subject does not exist.\"]}";
@@ -107,33 +107,6 @@ public class SubjectControllerdeleteIT extends TestConfigurerIT {
 				.andExpect(status().isNotFound())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));
-	}
+	}*/
 
-	@Test()
-	public void delete_subject_with_invalid_school_id_10_and_invalid_subjectId_one_that_does_not_exist()
-			throws Exception {
-		final long invalidSchoolId = 10L;
-		final String invalidSubjectId = "one";
-		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Resource does not exist.\"]}";
-		getMockMvc()
-				.perform(delete(SubjectControllerUtilIT.DELETESUBJECT, invalidSchoolId, invalidSubjectId)
-						.header("Authorization", basicDigestHeaderValue))
-				.andExpect(status().isNotFound())
-				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(content().string(responseJsonString));
-	}
-
-	@Test()
-	public void delete_subject_with_invalid_school_id_two_and_invalid_subjectId_one_that_does_not_exist()
-			throws Exception {
-		final String invalidSchoolId = "two";
-		final String invalidSubjectId = "one";
-		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Resource does not exist.\"]}";
-		getMockMvc()
-				.perform(delete(SubjectControllerUtilIT.DELETESUBJECT, invalidSchoolId, invalidSubjectId)
-						.header("Authorization", basicDigestHeaderValue))
-				.andExpect(status().isNotFound())
-				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(content().string(responseJsonString));
-	}
 }

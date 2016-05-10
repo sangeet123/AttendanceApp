@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import attendanceapp.constants.SubjectRestControllerConstants;
 import attendanceapp.controller.SubjectController;
 import attendanceapp.customstatus.Status;
-import attendanceapp.model.requestobject.DeleteSelectedSubjectRequestObject;
+import attendanceapp.model.requestobject.DeleteSubjectsRequestObject;
 import attendanceapp.model.requestobject.SubjectCreateRequestObject;
 import attendanceapp.model.requestobject.SubjectUpdateRequestObject;
 import attendanceapp.model.responseobject.SubjectResponseObject;
@@ -54,7 +54,7 @@ public class SubjectControllerImpl implements SubjectController {
 	@Override()
 	@RequestMapping(value = SubjectRestControllerConstants.DELETE_SUBJECT_LIST, method = RequestMethod.DELETE)
 	public @ResponseBody Status delete(@PathVariable final long schoolId,
-			@Valid @RequestBody final DeleteSelectedSubjectRequestObject deleteSelectedSubjectRequestObject) {
+			@Valid @RequestBody final DeleteSubjectsRequestObject deleteSelectedSubjectRequestObject) {
 		subjectService.delete(schoolId, deleteSelectedSubjectRequestObject);
 		return new Status(
 				AttendanceAppUtils.messageToList(SubjectRestControllerConstants.SUBJECTS_DELETE_SUCCESS),

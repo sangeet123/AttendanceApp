@@ -9,7 +9,7 @@ import attendanceapp.dao.SubjectDao;
 import attendanceapp.exceptions.SubjectNotFoundException;
 import attendanceapp.exceptions.UnknownException;
 import attendanceapp.model.Subject;
-import attendanceapp.model.requestobject.DeleteSelectedSubjectRequestObject;
+import attendanceapp.model.requestobject.DeleteSubjectsRequestObject;
 import attendanceapp.model.requestobject.SubjectCreateRequestObject;
 import attendanceapp.model.requestobject.SubjectUpdateRequestObject;
 import attendanceapp.model.responseobject.SubjectResponseObject;
@@ -81,7 +81,7 @@ public class SubjectServiceImpl implements SubjectService {
 	}
 
 	@Override()
-	public void delete(long schoolId, DeleteSelectedSubjectRequestObject deleteSelectedSchoolRequestObject) {
+	public void delete(long schoolId, DeleteSubjectsRequestObject deleteSelectedSchoolRequestObject) {
 		try {
 			subjectDao.delete(schoolId, deleteSelectedSchoolRequestObject.getCommaSeparatedIds());
 		} catch (Exception ex) {

@@ -2,7 +2,7 @@ package attendanceapp.services;
 
 import java.util.List;
 
-import attendanceapp.model.requestobject.DeleteSelectedSubjectRequestObject;
+import attendanceapp.model.requestobject.DeleteSubjectsRequestObject;
 import attendanceapp.model.requestobject.SubjectCreateRequestObject;
 import attendanceapp.model.requestobject.SubjectUpdateRequestObject;
 import attendanceapp.model.responseobject.SubjectResponseObject;
@@ -21,5 +21,5 @@ public interface SubjectService {
 	public SubjectResponseObject create(final long schoolId,
 			final SubjectCreateRequestObject subjectCreateRequestObject);
 
-	public void delete(final long schoolId, final DeleteSelectedSubjectRequestObject deleteSelectedSchoolRequestObject);
+	public void delete(final long schoolId, final DeleteSubjectsRequestObject deleteSelectedSchoolRequestObject);
 }

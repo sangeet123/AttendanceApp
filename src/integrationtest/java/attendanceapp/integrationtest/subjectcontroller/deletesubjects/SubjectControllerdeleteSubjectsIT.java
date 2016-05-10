@@ -7,14 +7,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.sql.SQLException;
 
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.security.crypto.codec.Base64;
 
 import attendanceapp.integrationtest.common.util.AttendanceAppUtilIT;
 import attendanceapp.integrationtest.common.util.TestConfigurerIT;
 import attendanceapp.integrationtest.utils.SubjectControllerUtilIT;
-import attendanceapp.model.requestobject.DeleteSelectedSubjectRequestObject;
+import attendanceapp.model.requestobject.DeleteSubjectsRequestObject;
 
 public class SubjectControllerdeleteSubjectsIT extends TestConfigurerIT {
 
@@ -24,7 +23,7 @@ public class SubjectControllerdeleteSubjectsIT extends TestConfigurerIT {
 	public static final String clearSubjectQuerySQLScriptFilePath = "it-delete-subject-queries.sql";
 	public static boolean isSettedUp = false;
 
-	@Before()
+	// @Before()
 	public void setUp() {
 		super.setUp();
 		if (!isSettedUp) {
@@ -54,7 +53,7 @@ public class SubjectControllerdeleteSubjectsIT extends TestConfigurerIT {
 	public void deleted_subjects_id_1_that_exist_and_10_that_does_not_exist_for_school_id_1() throws Exception {
 		final long schoolId = 1L;
 		final String commaSeparatedIds = "1,10";
-		DeleteSelectedSubjectRequestObject deleteSelectedSubjectRequestObject = new DeleteSelectedSubjectRequestObject();
+		DeleteSubjectsRequestObject deleteSelectedSubjectRequestObject = new DeleteSubjectsRequestObject();
 		deleteSelectedSubjectRequestObject.setCommaSeparatedIds(commaSeparatedIds);
 		final String responseJsonString = "{\"statusCode\":1,\"messages\":[\"Subjects have been deleted successfully.\"]}";
 		getMockMvc()
@@ -74,7 +73,7 @@ public class SubjectControllerdeleteSubjectsIT extends TestConfigurerIT {
 	public void deleted_subjects_id_2_that_exist_and_10_that_does_not_exist_for_school_id_1() throws Exception {
 		final String commaSeparatedIds = "10,2";
 		final long schoolId = 1L;
-		DeleteSelectedSubjectRequestObject deleteSelectedSubjectRequestObject = new DeleteSelectedSubjectRequestObject();
+		DeleteSubjectsRequestObject deleteSelectedSubjectRequestObject = new DeleteSubjectsRequestObject();
 		deleteSelectedSubjectRequestObject.setCommaSeparatedIds(commaSeparatedIds);
 		final String responseJsonString = "{\"statusCode\":1,\"messages\":[\"Subjects have been deleted successfully.\"]}";
 		getMockMvc()
@@ -94,7 +93,7 @@ public class SubjectControllerdeleteSubjectsIT extends TestConfigurerIT {
 	public void deleted_subjects_id_20_and_10_that_does_not_exist_for_school_id_1() throws Exception {
 		final String commaSeparatedIds = "20,10";
 		final long schoolId = 1L;
-		DeleteSelectedSubjectRequestObject deleteSelectedSubjectRequestObject = new DeleteSelectedSubjectRequestObject();
+		DeleteSubjectsRequestObject deleteSelectedSubjectRequestObject = new DeleteSubjectsRequestObject();
 		deleteSelectedSubjectRequestObject.setCommaSeparatedIds(commaSeparatedIds);
 		final String responseJsonString = "{\"statusCode\":1,\"messages\":[\"Subjects have been deleted successfully.\"]}";
 		getMockMvc()

@@ -14,12 +14,12 @@ public final class SchoolControllerUnitTestUtil {
 	}
 
 	// URI for school controller
-	public static final String GETSCHOOLWITHID = "/school/{id}";
-	public static final String GETALLSCHOOLS = "/school";
-	public static final String CREATESCHOOL = "/school/create";
-	public static final String DELETESCHOOL = "/school/delete/{id}";
-	public static final String UPDATESCHOOL = "/school/update";
-	public static final String DELETE_SELECTED_SCHOOL = "/school/deleteselected";
+	public static final String GETSCHOOLWITHID = "/admin/school/{id}";
+	public static final String GETALLSCHOOLS = "/admin/school";
+	public static final String CREATESCHOOL = "/admin/school/create";
+	public static final String DELETESCHOOL = "/admin/school/delete/{id}";
+	public static final String UPDATESCHOOL = "/admin/school/update";
+	public static final String DELETE_SELECTED_SCHOOL = "/admin/school/delete";
 
 	// Key for school model
 	public static final String ID = "id";

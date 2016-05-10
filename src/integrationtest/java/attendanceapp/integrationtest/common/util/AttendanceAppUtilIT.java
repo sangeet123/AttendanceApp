@@ -24,6 +24,7 @@ public class AttendanceAppUtilIT {
 	private static final String JDBCURL = "jdbc.url";
 	private static final String JDBCUSERNAME = "jdbc.username";
 	private static final String JDBCPASSWORD = "jdbc.password";
+	private static Connection con = null;
 
 	public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(),
 			MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
@@ -73,10 +74,11 @@ public class AttendanceAppUtilIT {
 	public static Connection getDatabaseConnection() throws ClassNotFoundException {
 		Properties prop = readDatabaseProperties(DATABASEPROPERTIESFILE);
 		Class.forName(prop.getProperty(JDBCDRIVERCLASS));
-		Connection con = null;
 		try {
-			con = (Connection) DriverManager.getConnection(prop.getProperty(JDBCURL), prop.getProperty(JDBCUSERNAME),
-					prop.getProperty(JDBCPASSWORD));
+			if (con == null) {
+				con = (Connection) DriverManager.getConnection(prop.getProperty(JDBCURL),
+						prop.getProperty(JDBCUSERNAME), prop.getProperty(JDBCPASSWORD));
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

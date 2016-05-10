@@ -2,7 +2,7 @@ package attendanceapp.controller;
 
 import java.util.List;
 import attendanceapp.customstatus.Status;
-import attendanceapp.model.requestobject.DeleteSelectedSubjectRequestObject;
+import attendanceapp.model.requestobject.DeleteSubjectsRequestObject;
 import attendanceapp.model.requestobject.SubjectCreateRequestObject;
 import attendanceapp.model.requestobject.SubjectUpdateRequestObject;
 import attendanceapp.model.responseobject.SubjectResponseObject;
@@ -16,7 +16,7 @@ public interface SubjectController {
 	public Status delete(final long schoolId, final long subjectId);
 
 	public Status delete(final long schoolId,
-			final DeleteSelectedSubjectRequestObject deleteSelectedSubjectRequestObject);
+			final DeleteSubjectsRequestObject deleteSelectedSubjectRequestObject);
 
 	public SubjectResponseObject create(final long schoolId,
 			final SubjectCreateRequestObject subjectCreateRequestObject);
