@@ -69,7 +69,7 @@ public class SubjectControllerdeleteIT extends TestConfigurerIT {
 				.andExpect(content().string(responseJsonString));
 	}
 
-	/*@Test()
+	@Test()
 	public void delete_subject_with_valid_school_id_1_and_valid_subjectId_10_that_does_not_exist() throws Exception {
 		final long validSchoolId = 1L;
 		final long invalidSubjectId = 10L;
@@ -107,6 +107,6 @@ public class SubjectControllerdeleteIT extends TestConfigurerIT {
 				.andExpect(status().isNotFound())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));
-	}*/
+	}
 
 }

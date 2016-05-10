@@ -70,7 +70,6 @@ public class SchoolServiceImpl implements SchoolService {
 		} catch (ObjectNotFoundException | NullPointerException ex) {
 			throw new SchoolNotFoundException();
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			throw new UnknownException();
 		}
 	}
