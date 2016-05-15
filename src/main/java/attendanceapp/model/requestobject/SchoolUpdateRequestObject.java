@@ -7,6 +7,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import attendanceapp.util.AttendanceAppUtils;
 
 public class SchoolUpdateRequestObject {
@@ -14,20 +16,24 @@ public class SchoolUpdateRequestObject {
 	private static final int INITIAL_NONZERO_ODD_NUM = 17;
 	private static final int MULTIPLIER_NONZERO_ODD_NUM = 157;
 
+	@JsonProperty(value = "id")
 	private long id;
 
 	@NotBlank()
 	@Length(max = 250)
+	@JsonProperty(value = "name")
 	private String name;
 
 	@NotBlank()
 	@Length(max = 250)
 	@Pattern(regexp = AttendanceAppUtils.TELEPHONE_VALIDATOR_REGEX)
+	@JsonProperty(value = "telephone")
 	private String telephone;
 
 	@NotBlank()
 	@Length(max = 250)
 	@Pattern(regexp = AttendanceAppUtils.EMAIL_VALIDATOR_REGEX)
+	@JsonProperty(value = "email")
 	private String email;
 
 	public long getId() {

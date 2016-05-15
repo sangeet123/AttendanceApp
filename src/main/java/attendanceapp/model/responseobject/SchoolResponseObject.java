@@ -3,17 +3,23 @@ package attendanceapp.model.responseobject;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class SchoolResponseObject extends CreatedAndUpdatedDate {
 
 	private static final int INITIAL_NONZERO_ODD_NUM = 17;
 	private static final int MULTIPLIER_NONZERO_ODD_NUM = 157;
 
+	@JsonProperty(value = "id")
 	private long id;
 
+	@JsonProperty(value = "name")
 	private String name;
 
+	@JsonProperty(value = "telephone")
 	private String telephone;
 
+	@JsonProperty(value = "email")
 	private String email;
 
 	public long getId() {

@@ -6,6 +6,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import attendanceapp.util.AttendanceAppUtils;
 
 public class DeleteSelectedSchoolRequestObject {
@@ -15,6 +17,7 @@ public class DeleteSelectedSchoolRequestObject {
 
 	@NotBlank()
 	@Pattern(regexp = AttendanceAppUtils.COMMA_SEPERATED_IDS_REGEX)
+	@JsonProperty(value = "commaSeparatedIds")
 	private String commaSeparatedIds;
 
 	public String getCommaSeparatedIds() {

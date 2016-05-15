@@ -4,19 +4,25 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class SubjectCreateRequestObject {
 
 	private static final int INITIAL_NONZERO_ODD_NUM = 17;
 	private static final int MULTIPLIER_NONZERO_ODD_NUM = 157;
 
+	@JsonProperty(value = "id")
 	private long id;
 
 	@NotBlank()
+	@JsonProperty(value = "shortName")
 	private String shortName;
 
 	@NotBlank()
+	@JsonProperty(value = "name")
 	private String name;
 
+	@JsonProperty(value = "credit")
 	private int credit;
 
 	public long getId() {
