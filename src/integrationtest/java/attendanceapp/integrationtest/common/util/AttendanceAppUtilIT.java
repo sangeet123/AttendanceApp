@@ -17,7 +17,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibatis.common.jdbc.ScriptRunner;
 
-public class AttendanceAppUtilIT {
+public final class AttendanceAppUtilIT {
 
 	private static final String DATABASEPROPERTIESFILE = "it-database.properties";
 	private static final String JDBCDRIVERCLASS = "jdbc.driverClassName";
@@ -28,6 +28,13 @@ public class AttendanceAppUtilIT {
 
 	public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(),
 			MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
+
+	// Header for authorization
+	public static final String AUTHORIZATION = "Authorization";
+
+	private AttendanceAppUtilIT() throws InstantiationException {
+		throw new InstantiationException();
+	}
 
 	public static String convertObjectToJsonString(Object object) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
@@ -42,8 +49,7 @@ public class AttendanceAppUtilIT {
 	}
 
 	public static String resourceToString(String fileName) {
-		String url = Thread.currentThread().getContextClassLoader().getResource(fileName).getPath();
-		return url;
+		return Thread.currentThread().getContextClassLoader().getResource(fileName).getPath();
 	}
 
 	public static Properties readDatabaseProperties(String fileName) {

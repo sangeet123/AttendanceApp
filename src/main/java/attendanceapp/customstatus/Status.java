@@ -16,7 +16,9 @@ public class Status {
 	private List<String> messages = new ArrayList<>();
 
 	public Status() {
-
+		/*
+		 * can create Status with no message
+		 */
 	}
 
 	public Status(List<String> message, int code) {

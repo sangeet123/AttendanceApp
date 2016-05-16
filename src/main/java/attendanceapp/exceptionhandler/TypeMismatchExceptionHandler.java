@@ -1,5 +1,7 @@
 package attendanceapp.exceptionhandler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -21,12 +23,14 @@ import attendanceapp.util.StatusCodeUtil;
  */
 @ControllerAdvice()
 public class TypeMismatchExceptionHandler {
+
+	private final Logger logger = LoggerFactory.getLogger(TypeMismatchExceptionHandler.class);
+
 	@ResponseBody()
 	@ExceptionHandler(TypeMismatchException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public Status processSchoolNotFoundException(Exception ex) {
-		Status status = AttendanceAppUtils.createStatus(Constant.RESOURSE_DOES_NOT_EXIST,
-				StatusCodeUtil.ITEM_NOT_FOUND_CODE);
-		return status;
+	public Status processSchoolNotFoundException(TypeMismatchException ex) {
+		logger.error("", ex);
+		return AttendanceAppUtils.createStatus(Constant.RESOURSE_DOES_NOT_EXIST, StatusCodeUtil.ITEM_NOT_FOUND_CODE);
 	}
 }

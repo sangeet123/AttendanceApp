@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import attendanceapp.model.School;
 import attendanceapp.model.Subject;
 import attendanceapp.model.requestobject.SubjectCreateRequestObject;
 import attendanceapp.model.requestobject.SubjectUpdateRequestObject;
@@ -15,6 +16,10 @@ import attendanceapp.requestobjecttomodelmapper.SubjectUpdateRequestToSubjectMap
 
 public final class SubjectServiceUtil {
 
+	private SubjectServiceUtil() throws InstantiationException {
+		throw new InstantiationException();
+	}
+
 	public static SubjectResponseObject createSubjectResponseObjectFromSubject(final Subject subject) {
 		return new SubjectToSubjectResponseMapper.SubjectResponseBuilder().createdOn(subject.getCreatedOn())
 				.updatedOn(subject.getUpdatedOn()).shortName(subject.getShortName()).id(subject.getId())
@@ -23,7 +28,7 @@ public final class SubjectServiceUtil {
 
 	public static List<SubjectResponseObject> createSubjectResponseObjectListFromSubjectList(
 			final List<Subject> subjects) {
-		List<SubjectResponseObject> subjectResponseObjectLists = new ArrayList<SubjectResponseObject>();
+		List<SubjectResponseObject> subjectResponseObjectLists = new ArrayList<>();
 		subjects.forEach(subject -> subjectResponseObjectLists.add(createSubjectResponseObjectFromSubject(subject)));
 		return subjectResponseObjectLists;
 	}
@@ -36,12 +41,17 @@ public final class SubjectServiceUtil {
 				.shortName(subjectRequestObject.getShortName()).updatedOn(utcNow).build();
 	}
 
-	public static Subject creaSubjectFromSubjectCreateRequestObject(
+	public static Subject creaSubjectFromSubjectCreateRequestObject(final long schoolId,
 			final SubjectCreateRequestObject subjectCreateRequestObject) {
 		LocalDateTime utcNow = LocalDateTime.now(Clock.systemUTC());
-		return new SubjectCreateRequestToSubjectMapper.SubjectBuilder().id(subjectCreateRequestObject.getId())
-				.credit(subjectCreateRequestObject.getCredit()).name(subjectCreateRequestObject.getName())
-				.shortName(subjectCreateRequestObject.getShortName()).updatedOn(utcNow).CreatedOn(utcNow).build();
+		Subject subject = new SubjectCreateRequestToSubjectMapper.SubjectBuilder()
+				.id(subjectCreateRequestObject.getId()).credit(subjectCreateRequestObject.getCredit())
+				.name(subjectCreateRequestObject.getName()).shortName(subjectCreateRequestObject.getShortName())
+				.updatedOn(utcNow).CreatedOn(utcNow).build();
+		School school = new School();
+		school.setId(schoolId);
+		subject.setSchool(school);
+		return subject;
 	}
 
 }

@@ -1,5 +1,7 @@
 package attendanceapp.exceptionhandler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import attendanceapp.util.StatusCodeUtil;
 public class DuplicateUserNameExceptionHandler {
 
 	private MessageSource messageSource;
+	private final Logger logger = LoggerFactory.getLogger(DuplicateUserNameExceptionHandler.class);
 
 	@Autowired()
 	public DuplicateUserNameExceptionHandler(MessageSource messageSource) {
@@ -27,6 +30,7 @@ public class DuplicateUserNameExceptionHandler {
 	@ExceptionHandler(DuplicateUserNameException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)
 	public Status processDuplicateUserNameException(DuplicateUserNameException ex) {
+		logger.error("Duplicate user name", ex);
 		Status status = AttendanceAppUtils.createStatus(ex.getMessage(), StatusCodeUtil.DUPLICATE_ITEM_EXIST_CODE);
 		return status;
 	}

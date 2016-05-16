@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.security.crypto.codec.Base64;
 
 import attendanceapp.integrationtest.common.util.AttendanceAppUtilIT;
 import attendanceapp.integrationtest.common.util.TestConfigurerIT;
@@ -19,29 +18,27 @@ import attendanceapp.integrationtest.utils.SchoolControllerUtilIT;
 import attendanceapp.model.requestobject.SchoolUpdateRequestObject;
 
 public class SchoolControllerupdateIT extends TestConfigurerIT {
-	public static final String insertSchoolQuerySQLScriptFilePath = "it-insert-school-queries.sql";
-	public static final String clearSchoolQuerySQLScriptFilePath = "it-delete-school-queries.sql";
-	public static boolean isSettedUp = false;
-	public static final String basicDigestHeaderValue = "Basic "
-			+ new String(Base64.encode(("admin:password").getBytes()));
+
+	private static boolean hasBeenSet = false;
 
 	@Before()
+	@Override()
 	public void setUp() {
 		super.setUp();
-		if (!isSettedUp) {
+		if (!hasBeenSet) {
 			try {
-				AttendanceAppUtilIT.mysqlScriptRunner(insertSchoolQuerySQLScriptFilePath);
+				AttendanceAppUtilIT.mysqlScriptRunner(SchoolControllerUtilIT.INSERT_SCHOOL_QUERY_SQL_SCRIPT_FILE_PATH);
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
 			}
-			isSettedUp = true;
+			hasBeenSet = true;
 		}
 	}
 
 	@AfterClass()
 	public static void tearDown() {
 		try {
-			AttendanceAppUtilIT.mysqlScriptRunner(clearSchoolQuerySQLScriptFilePath);
+			AttendanceAppUtilIT.mysqlScriptRunner(SchoolControllerUtilIT.CLEAR_SCHOOL_QUERY_SQL_SCRIPT_FILE_PATH);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
@@ -57,7 +54,8 @@ public class SchoolControllerupdateIT extends TestConfigurerIT {
 		SchoolUpdateRequestObject schoolUpdateRequestObject = SchoolControllerUtilIT.getSchoolUpdateRequestObject(1L,
 				updateSchoolName, "testemail@email.com", "2453469123");
 		getMockMvc()
-				.perform(put(SchoolControllerUtilIT.UPDATESCHOOL).header("Authorization", basicDigestHeaderValue)
+				.perform(put(SchoolControllerUtilIT.UPDATESCHOOL)
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SchoolControllerUtilIT.BASIC_DIGEST_HEADER_VALUE)
 						.contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)
 						.content(AttendanceAppUtilIT.convertObjectToJsonBytes(schoolUpdateRequestObject)))
 				.andExpect(status().isOk()).andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
@@ -73,7 +71,8 @@ public class SchoolControllerupdateIT extends TestConfigurerIT {
 				schoolThatExistInDatabase, "testemail@email.com", "2453469123");
 		final String responseJsonString = "{\"statusCode\":3,\"messages\":[\"School with given name already exists. Please enter different name.\"]}";
 		getMockMvc()
-				.perform(put(SchoolControllerUtilIT.UPDATESCHOOL).header("Authorization", basicDigestHeaderValue)
+				.perform(put(SchoolControllerUtilIT.UPDATESCHOOL)
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SchoolControllerUtilIT.BASIC_DIGEST_HEADER_VALUE)
 						.contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)
 						.content(AttendanceAppUtilIT.convertObjectToJsonBytes(schoolUpdateRequestObject)))
 				.andExpect(status().isConflict())
@@ -87,7 +86,8 @@ public class SchoolControllerupdateIT extends TestConfigurerIT {
 				"test100", "testemail@email.com", "2453469123");
 		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"School does not exist.\"]}";
 		getMockMvc()
-				.perform(put(SchoolControllerUtilIT.UPDATESCHOOL).header("Authorization", basicDigestHeaderValue)
+				.perform(put(SchoolControllerUtilIT.UPDATESCHOOL)
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SchoolControllerUtilIT.BASIC_DIGEST_HEADER_VALUE)
 						.contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)
 						.content(AttendanceAppUtilIT.convertObjectToJsonBytes(schoolUpdateRequestObject)))
 				.andExpect(status().isNotFound())

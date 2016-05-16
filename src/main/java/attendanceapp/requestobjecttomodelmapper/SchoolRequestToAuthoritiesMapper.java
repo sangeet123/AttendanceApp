@@ -6,9 +6,9 @@ public class SchoolRequestToAuthoritiesMapper {
 
 	public static class AuthorityBuilder {
 
-		public String username;
+		private String username;
 
-		public String authority;
+		private String authority;
 
 		public AuthorityBuilder username(String username) {
 			this.username = username;
@@ -21,10 +21,10 @@ public class SchoolRequestToAuthoritiesMapper {
 		}
 
 		public Authority build() {
-			Authority authority = new Authority();
-			authority.setAuthority(this.authority);
-			authority.setUsername(this.username);
-			return authority;
+			Authority authorityToReturn = new Authority();
+			authorityToReturn.setAuthority(this.authority);
+			authorityToReturn.setUsername(this.username);
+			return authorityToReturn;
 		}
 	}
 

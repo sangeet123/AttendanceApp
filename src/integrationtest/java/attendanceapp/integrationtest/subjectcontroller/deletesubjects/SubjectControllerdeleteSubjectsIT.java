@@ -7,8 +7,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.sql.SQLException;
 
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.Test;
-import org.springframework.security.crypto.codec.Base64;
 
 import attendanceapp.integrationtest.common.util.AttendanceAppUtilIT;
 import attendanceapp.integrationtest.common.util.TestConfigurerIT;
@@ -17,29 +17,28 @@ import attendanceapp.model.requestobject.DeleteSubjectsRequestObject;
 
 public class SubjectControllerdeleteSubjectsIT extends TestConfigurerIT {
 
-	public static final String basicDigestHeaderValue = "Basic "
-			+ new String(Base64.encode(("subjecttestuser:password").getBytes()));
-	public static final String insertSubjectQuerySQLScriptFilePath = "it-insert-subject-queries.sql";
-	public static final String clearSubjectQuerySQLScriptFilePath = "it-delete-subject-queries.sql";
-	public static boolean isSettedUp = false;
+	private static boolean hasBeenSet = false;
+	public static final String RESPONSE_JSON_STRING = "{\"statusCode\":1,\"messages\":[\"Subjects have been deleted successfully.\"]}";
 
-	// @Before()
+	@Before()
+	@Override()
 	public void setUp() {
 		super.setUp();
-		if (!isSettedUp) {
+		if (!hasBeenSet) {
 			try {
-				AttendanceAppUtilIT.mysqlScriptRunner(insertSubjectQuerySQLScriptFilePath);
+				AttendanceAppUtilIT
+						.mysqlScriptRunner(SubjectControllerUtilIT.INSERT_SUBJECT_QUERY_SQL_SCRIPT_FILE_PATH);
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
 			}
-			isSettedUp = true;
+			hasBeenSet = true;
 		}
 	}
 
 	@AfterClass()
 	public static void tearDown() {
 		try {
-			AttendanceAppUtilIT.mysqlScriptRunner(clearSubjectQuerySQLScriptFilePath);
+			AttendanceAppUtilIT.mysqlScriptRunner(SubjectControllerUtilIT.CLEAR_SUBJECT_QUERY_SQL_SCRIPT_FILE_PATH);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
@@ -55,14 +54,16 @@ public class SubjectControllerdeleteSubjectsIT extends TestConfigurerIT {
 		final String commaSeparatedIds = "1,10";
 		DeleteSubjectsRequestObject deleteSelectedSubjectRequestObject = new DeleteSubjectsRequestObject();
 		deleteSelectedSubjectRequestObject.setCommaSeparatedIds(commaSeparatedIds);
-		final String responseJsonString = "{\"statusCode\":1,\"messages\":[\"Subjects have been deleted successfully.\"]}";
 		getMockMvc()
-				.perform(delete(SubjectControllerUtilIT.DELETE_SUBJECTS, schoolId)
-						.header("Authorization", basicDigestHeaderValue)
-						.contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)
-						.content(AttendanceAppUtilIT.convertObjectToJsonBytes(deleteSelectedSubjectRequestObject)))
+				.perform(
+						delete(SubjectControllerUtilIT.DELETE_SUBJECTS, schoolId)
+								.header(AttendanceAppUtilIT.AUTHORIZATION,
+										SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE)
+								.contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)
+								.content(AttendanceAppUtilIT
+										.convertObjectToJsonBytes(deleteSelectedSubjectRequestObject)))
 				.andExpect(status().isOk()).andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(content().string(responseJsonString));
+				.andExpect(content().string(RESPONSE_JSON_STRING));
 	}
 
 	/*
@@ -75,14 +76,16 @@ public class SubjectControllerdeleteSubjectsIT extends TestConfigurerIT {
 		final long schoolId = 1L;
 		DeleteSubjectsRequestObject deleteSelectedSubjectRequestObject = new DeleteSubjectsRequestObject();
 		deleteSelectedSubjectRequestObject.setCommaSeparatedIds(commaSeparatedIds);
-		final String responseJsonString = "{\"statusCode\":1,\"messages\":[\"Subjects have been deleted successfully.\"]}";
 		getMockMvc()
-				.perform(delete(SubjectControllerUtilIT.DELETE_SUBJECTS, schoolId)
-						.header("Authorization", basicDigestHeaderValue)
-						.contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)
-						.content(AttendanceAppUtilIT.convertObjectToJsonBytes(deleteSelectedSubjectRequestObject)))
+				.perform(
+						delete(SubjectControllerUtilIT.DELETE_SUBJECTS, schoolId)
+								.header(AttendanceAppUtilIT.AUTHORIZATION,
+										SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE)
+								.contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)
+								.content(AttendanceAppUtilIT
+										.convertObjectToJsonBytes(deleteSelectedSubjectRequestObject)))
 				.andExpect(status().isOk()).andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(content().string(responseJsonString));
+				.andExpect(content().string(RESPONSE_JSON_STRING));
 	}
 
 	/*
@@ -95,13 +98,15 @@ public class SubjectControllerdeleteSubjectsIT extends TestConfigurerIT {
 		final long schoolId = 1L;
 		DeleteSubjectsRequestObject deleteSelectedSubjectRequestObject = new DeleteSubjectsRequestObject();
 		deleteSelectedSubjectRequestObject.setCommaSeparatedIds(commaSeparatedIds);
-		final String responseJsonString = "{\"statusCode\":1,\"messages\":[\"Subjects have been deleted successfully.\"]}";
 		getMockMvc()
-				.perform(delete(SubjectControllerUtilIT.DELETE_SUBJECTS, schoolId)
-						.header("Authorization", basicDigestHeaderValue)
-						.contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)
-						.content(AttendanceAppUtilIT.convertObjectToJsonBytes(deleteSelectedSubjectRequestObject)))
+				.perform(
+						delete(SubjectControllerUtilIT.DELETE_SUBJECTS, schoolId)
+								.header(AttendanceAppUtilIT.AUTHORIZATION,
+										SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE)
+								.contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)
+								.content(AttendanceAppUtilIT
+										.convertObjectToJsonBytes(deleteSelectedSubjectRequestObject)))
 				.andExpect(status().isOk()).andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(content().string(responseJsonString));
+				.andExpect(content().string(RESPONSE_JSON_STRING));
 	}
 }

@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.security.crypto.codec.Base64;
 
 import attendanceapp.integrationtest.common.util.AttendanceAppUtilIT;
 import attendanceapp.integrationtest.common.util.TestConfigurerIT;
@@ -17,29 +16,27 @@ import attendanceapp.integrationtest.utils.SubjectControllerUtilIT;
 
 public class SubjectControllerdeleteIT extends TestConfigurerIT {
 
-	public static final String basicDigestHeaderValue = "Basic "
-			+ new String(Base64.encode(("subjecttestuser:password").getBytes()));
-	public static final String insertSchoolQuerySQLScriptFilePath = "it-insert-subject-queries.sql";
-	public static final String clearSchoolQuerySQLScriptFilePath = "it-delete-subject-queries.sql";
-	public static boolean isSettedUp = false;
+	private static boolean hasBeenSet = false;
 
 	@Before()
+	@Override()
 	public void setUp() {
 		super.setUp();
-		if (!isSettedUp) {
+		if (!hasBeenSet) {
 			try {
-				AttendanceAppUtilIT.mysqlScriptRunner(insertSchoolQuerySQLScriptFilePath);
+				AttendanceAppUtilIT
+						.mysqlScriptRunner(SubjectControllerUtilIT.INSERT_SUBJECT_QUERY_SQL_SCRIPT_FILE_PATH);
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
 			}
-			isSettedUp = true;
+			hasBeenSet = true;
 		}
 	}
 
 	@AfterClass()
 	public static void tearDown() {
 		try {
-			AttendanceAppUtilIT.mysqlScriptRunner(clearSchoolQuerySQLScriptFilePath);
+			AttendanceAppUtilIT.mysqlScriptRunner(SubjectControllerUtilIT.CLEAR_SUBJECT_QUERY_SQL_SCRIPT_FILE_PATH);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
@@ -52,7 +49,7 @@ public class SubjectControllerdeleteIT extends TestConfigurerIT {
 		final String responseJsonString = "{\"statusCode\":1,\"messages\":[\"Subject has been deleted successfully.\"]}";
 		getMockMvc()
 				.perform(delete(SubjectControllerUtilIT.DELETESUBJECT, validSchoolId, validSubjectId)
-						.header("Authorization", basicDigestHeaderValue))
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
 				.andExpect(status().isOk()).andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));
 	}
@@ -64,7 +61,7 @@ public class SubjectControllerdeleteIT extends TestConfigurerIT {
 		final String responseJsonString = "{\"statusCode\":1,\"messages\":[\"Subject has been deleted successfully.\"]}";
 		getMockMvc()
 				.perform(delete(SubjectControllerUtilIT.DELETESUBJECT, validSchoolId, validSubjectId)
-						.header("Authorization", basicDigestHeaderValue))
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
 				.andExpect(status().isOk()).andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));
 	}
@@ -76,7 +73,7 @@ public class SubjectControllerdeleteIT extends TestConfigurerIT {
 		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Subject does not exist.\"]}";
 		getMockMvc()
 				.perform(delete(SubjectControllerUtilIT.DELETESUBJECT, validSchoolId, invalidSubjectId)
-						.header("Authorization", basicDigestHeaderValue))
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
 				.andExpect(status().isNotFound())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));
@@ -90,7 +87,7 @@ public class SubjectControllerdeleteIT extends TestConfigurerIT {
 		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Subject does not exist.\"]}";
 		getMockMvc()
 				.perform(delete(SubjectControllerUtilIT.DELETESUBJECT, validSchoolId, invalidSubjectId)
-						.header("Authorization", basicDigestHeaderValue))
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
 				.andExpect(status().isNotFound())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));
@@ -103,7 +100,7 @@ public class SubjectControllerdeleteIT extends TestConfigurerIT {
 		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Resource does not exist.\"]}";
 		getMockMvc()
 				.perform(delete(SubjectControllerUtilIT.DELETESUBJECT, validSchoolId, invalidSubjectId)
-						.header("Authorization", basicDigestHeaderValue))
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
 				.andExpect(status().isNotFound())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));

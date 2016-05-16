@@ -4,52 +4,41 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 public class ValidationError implements Serializable {
 
 	private static final long serialVersionUID = -18202280331077017L;
 
-	private List<CustomFieldError> fieldErrors = new ArrayList<>();
-
-	public ValidationError() {
-
-	}
+	private static final int INITIAL_NONZERO_ODD_NUM = 17;
+	private static final int MULTIPLIER_NONZERO_ODD_NUM = 157;
+	private final List<CustomFieldError> fieldErrors = new ArrayList<>();
 
 	public List<CustomFieldError> getFieldErrors() {
 		return fieldErrors;
 	}
 
-	public void setFieldErrors(List<CustomFieldError> fieldErrors) {
-		this.fieldErrors = fieldErrors;
-	}
-
-	public void addFieldError(String path, String message) {
+	public void addFieldError(final String path, final String message) {
 		CustomFieldError error = new CustomFieldError(path, message);
 		fieldErrors.add(error);
 	}
 
 	@Override()
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((fieldErrors == null) ? 0 : fieldErrors.hashCode());
-		return result;
+		return new HashCodeBuilder(INITIAL_NONZERO_ODD_NUM, MULTIPLIER_NONZERO_ODD_NUM).append(fieldErrors)
+				.toHashCode();
 	}
 
 	@Override()
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (obj == null || getClass() != obj.getClass()) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		}
 		ValidationError other = (ValidationError) obj;
-		if (fieldErrors == null) {
-			if (other.fieldErrors != null)
-				return false;
-		} else if (!fieldErrors.equals(other.fieldErrors))
-			return false;
-		return true;
+		return new EqualsBuilder().append(fieldErrors, other.getFieldErrors()).isEquals();
 	}
 
 	@Override

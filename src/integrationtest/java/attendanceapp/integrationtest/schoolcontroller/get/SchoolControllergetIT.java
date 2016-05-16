@@ -12,36 +12,32 @@ import java.sql.SQLException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.security.crypto.codec.Base64;
 
 import attendanceapp.integrationtest.common.util.AttendanceAppUtilIT;
 import attendanceapp.integrationtest.common.util.TestConfigurerIT;
 import attendanceapp.integrationtest.utils.SchoolControllerUtilIT;
 
 public class SchoolControllergetIT extends TestConfigurerIT {
-	public static final String insertSchoolQuerySQLScriptFilePath = "it-insert-school-queries.sql";
-	public static final String clearSchoolQuerySQLScriptFilePath = "it-delete-school-queries.sql";
-	public static boolean isSettedUp = false;
-	public static final String basicDigestHeaderValue = "Basic "
-			+ new String(Base64.encode(("admin:password").getBytes()));
+	private static boolean hasBeenSet = false;
 
 	@Before()
+	@Override()
 	public void setUp() {
 		super.setUp();
-		if (!isSettedUp) {
+		if (!hasBeenSet) {
 			try {
-				AttendanceAppUtilIT.mysqlScriptRunner(insertSchoolQuerySQLScriptFilePath);
+				AttendanceAppUtilIT.mysqlScriptRunner(SchoolControllerUtilIT.INSERT_SCHOOL_QUERY_SQL_SCRIPT_FILE_PATH);
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
 			}
-			isSettedUp = true;
+			hasBeenSet = true;
 		}
 	}
 
 	@AfterClass()
 	public static void tearDown() {
 		try {
-			AttendanceAppUtilIT.mysqlScriptRunner(clearSchoolQuerySQLScriptFilePath);
+			AttendanceAppUtilIT.mysqlScriptRunner(SchoolControllerUtilIT.CLEAR_SCHOOL_QUERY_SQL_SCRIPT_FILE_PATH);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
@@ -49,7 +45,9 @@ public class SchoolControllergetIT extends TestConfigurerIT {
 
 	@Test()
 	public void get_all_schools_that_exist_in_database() throws Exception {
-		getMockMvc().perform(get(SchoolControllerUtilIT.GETALLSCHOOLS).header("Authorization", basicDigestHeaderValue))
+		getMockMvc()
+				.perform(get(SchoolControllerUtilIT.GETALLSCHOOLS).header(AttendanceAppUtilIT.AUTHORIZATION,
+						SchoolControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
 				.andExpect(status().isOk()).andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$", hasSize(2))).andExpect(jsonPath("$[0].id", is(1)))
 				.andExpect(jsonPath("$[0].name", is("test1"))).andExpect(jsonPath("$[0].telephone", is("123456789")))

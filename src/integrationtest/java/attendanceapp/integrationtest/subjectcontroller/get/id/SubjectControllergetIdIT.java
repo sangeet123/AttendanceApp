@@ -11,36 +11,34 @@ import java.sql.SQLException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.security.crypto.codec.Base64;
 
 import attendanceapp.integrationtest.common.util.AttendanceAppUtilIT;
 import attendanceapp.integrationtest.common.util.TestConfigurerIT;
 import attendanceapp.integrationtest.utils.SubjectControllerUtilIT;
 
 public class SubjectControllergetIdIT extends TestConfigurerIT {
-	public static final String insertSubjectQuerySQLScriptFilePath = "it-insert-subject-queries.sql";
-	public static final String clearSubjectQuerySQLScriptFilePath = "it-delete-subject-queries.sql";
-	public static final String basicDigestHeaderValue = "Basic "
-			+ new String(Base64.encode(("subjecttestuser:password").getBytes()));
-	public static boolean isSettedUp = false;
+
+	public static boolean hasBeenSet = false;
 
 	@Before()
+	@Override()
 	public void setUp() {
 		super.setUp();
-		if (!isSettedUp) {
+		if (!hasBeenSet) {
 			try {
-				AttendanceAppUtilIT.mysqlScriptRunner(insertSubjectQuerySQLScriptFilePath);
+				AttendanceAppUtilIT
+						.mysqlScriptRunner(SubjectControllerUtilIT.INSERT_SUBJECT_QUERY_SQL_SCRIPT_FILE_PATH);
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
 			}
-			isSettedUp = true;
+			hasBeenSet = true;
 		}
 	}
 
 	@AfterClass()
 	public static void tearDown() {
 		try {
-			AttendanceAppUtilIT.mysqlScriptRunner(clearSubjectQuerySQLScriptFilePath);
+			AttendanceAppUtilIT.mysqlScriptRunner(SubjectControllerUtilIT.CLEAR_SUBJECT_QUERY_SQL_SCRIPT_FILE_PATH);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
@@ -52,7 +50,7 @@ public class SubjectControllergetIdIT extends TestConfigurerIT {
 		final long validSubjectId = 1L;
 		getMockMvc()
 				.perform(get(SubjectControllerUtilIT.GETSUBJECTWITHID, validSchoolId, validSubjectId)
-						.header("Authorization", basicDigestHeaderValue))
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
 				.andExpect(status().isOk()).andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$.id", is(1))).andExpect(jsonPath("$.name", is("Computer Programming")))
 				.andExpect(jsonPath("$.shortName", is("CP101"))).andExpect(jsonPath("$.credit", is(5)));
@@ -64,7 +62,7 @@ public class SubjectControllergetIdIT extends TestConfigurerIT {
 		final long validSubjectId = 2L;
 		getMockMvc()
 				.perform(get(SubjectControllerUtilIT.GETSUBJECTWITHID, validSchoolId, validSubjectId)
-						.header("Authorization", basicDigestHeaderValue))
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
 				.andExpect(status().isOk()).andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$.id", is(2))).andExpect(jsonPath("$.name", is("Java Programming")))
 				.andExpect(jsonPath("$.shortName", is("JP301"))).andExpect(jsonPath("$.credit", is(5)));
@@ -77,7 +75,7 @@ public class SubjectControllergetIdIT extends TestConfigurerIT {
 		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Subject does not exist.\"]}";
 		getMockMvc()
 				.perform(get(SubjectControllerUtilIT.GETSUBJECTWITHID, validSchoolId, invalidSubjectId)
-						.header("Authorization", basicDigestHeaderValue))
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
 				.andExpect(status().isNotFound())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));
@@ -91,7 +89,7 @@ public class SubjectControllergetIdIT extends TestConfigurerIT {
 		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Subject does not exist.\"]}";
 		getMockMvc()
 				.perform(get(SubjectControllerUtilIT.GETSUBJECTWITHID, validSchoolId, invalidSubjectId)
-						.header("Authorization", basicDigestHeaderValue))
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
 				.andExpect(status().isNotFound())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));
@@ -104,7 +102,7 @@ public class SubjectControllergetIdIT extends TestConfigurerIT {
 		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Resource does not exist.\"]}";
 		getMockMvc()
 				.perform(get(SubjectControllerUtilIT.GETSUBJECTWITHID, validSchoolId, invalidSubjectId)
-						.header("Authorization", basicDigestHeaderValue))
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
 				.andExpect(status().isNotFound())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));

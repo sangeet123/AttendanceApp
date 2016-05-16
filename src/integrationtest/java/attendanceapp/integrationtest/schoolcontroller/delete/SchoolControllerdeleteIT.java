@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.security.crypto.codec.Base64;
 
 import attendanceapp.integrationtest.common.util.AttendanceAppUtilIT;
 import attendanceapp.integrationtest.common.util.TestConfigurerIT;
@@ -17,29 +16,26 @@ import attendanceapp.integrationtest.utils.SchoolControllerUtilIT;
 
 public class SchoolControllerdeleteIT extends TestConfigurerIT {
 
-	public static final String basicDigestHeaderValue = "Basic "
-			+ new String(Base64.encode(("admin:password").getBytes()));
-	public static final String insertSchoolQuerySQLScriptFilePath = "it-insert-school-queries.sql";
-	public static final String clearSchoolQuerySQLScriptFilePath = "it-delete-school-queries.sql";
-	public static boolean isSettedUp = false;
+	private static boolean hasBeenSet = false;
 
 	@Before()
+	@Override()
 	public void setUp() {
 		super.setUp();
-		if (!isSettedUp) {
+		if (!hasBeenSet) {
 			try {
-				AttendanceAppUtilIT.mysqlScriptRunner(insertSchoolQuerySQLScriptFilePath);
+				AttendanceAppUtilIT.mysqlScriptRunner(SchoolControllerUtilIT.INSERT_SCHOOL_QUERY_SQL_SCRIPT_FILE_PATH);
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
 			}
-			isSettedUp = true;
+			hasBeenSet = true;
 		}
 	}
 
 	@AfterClass()
 	public static void tearDown() {
 		try {
-			AttendanceAppUtilIT.mysqlScriptRunner(clearSchoolQuerySQLScriptFilePath);
+			AttendanceAppUtilIT.mysqlScriptRunner(SchoolControllerUtilIT.CLEAR_SCHOOL_QUERY_SQL_SCRIPT_FILE_PATH);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
@@ -50,8 +46,8 @@ public class SchoolControllerdeleteIT extends TestConfigurerIT {
 		final long validSchoolId = 1L;
 		final String responseJsonString = "{\"statusCode\":1,\"messages\":[\"School has been deleted successfully.\"]}";
 		getMockMvc()
-				.perform(delete(SchoolControllerUtilIT.DELETESCHOOL, validSchoolId).header("Authorization",
-						basicDigestHeaderValue))
+				.perform(delete(SchoolControllerUtilIT.DELETESCHOOL, validSchoolId)
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SchoolControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
 				.andExpect(status().isOk()).andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));
 	}
@@ -61,8 +57,8 @@ public class SchoolControllerdeleteIT extends TestConfigurerIT {
 		final long validSchoolId = 10L;
 		final String responseJsonString = "{\"statusCode\":1,\"messages\":[\"School has been deleted successfully.\"]}";
 		getMockMvc()
-				.perform(delete(SchoolControllerUtilIT.DELETESCHOOL, validSchoolId).header("Authorization",
-						basicDigestHeaderValue))
+				.perform(delete(SchoolControllerUtilIT.DELETESCHOOL, validSchoolId)
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SchoolControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
 				.andExpect(status().isOk()).andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));
 	}
@@ -72,8 +68,8 @@ public class SchoolControllerdeleteIT extends TestConfigurerIT {
 		final long validIdThatDoesNotExist = 15L;
 		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"School does not exist.\"]}";
 		getMockMvc()
-				.perform(delete(SchoolControllerUtilIT.DELETESCHOOL, validIdThatDoesNotExist).header("Authorization",
-						basicDigestHeaderValue))
+				.perform(delete(SchoolControllerUtilIT.DELETESCHOOL, validIdThatDoesNotExist)
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SchoolControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
 				.andExpect(status().isNotFound())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));
@@ -85,8 +81,8 @@ public class SchoolControllerdeleteIT extends TestConfigurerIT {
 		final long invalidId = -1L;
 		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"School does not exist.\"]}";
 		getMockMvc()
-				.perform(delete(SchoolControllerUtilIT.DELETESCHOOL, invalidId).header("Authorization",
-						basicDigestHeaderValue))
+				.perform(delete(SchoolControllerUtilIT.DELETESCHOOL, invalidId)
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SchoolControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
 				.andExpect(status().isNotFound())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));
@@ -97,8 +93,8 @@ public class SchoolControllerdeleteIT extends TestConfigurerIT {
 		final String invalidStringId = "one";
 		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Resource does not exist.\"]}";
 		getMockMvc()
-				.perform(delete(SchoolControllerUtilIT.DELETESCHOOL, invalidStringId).header("Authorization",
-						basicDigestHeaderValue))
+				.perform(delete(SchoolControllerUtilIT.DELETESCHOOL, invalidStringId)
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SchoolControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
 				.andExpect(status().isNotFound())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));

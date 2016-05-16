@@ -25,7 +25,7 @@ public class Subject extends CreatedAndUpdatedDate implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(name = "short_name", nullable = false, length = 250)
+	@Column(name = "short_name", unique = true, nullable = false, length = 250)
 	private String shortName;
 
 	@Column(name = "name", nullable = false, length = 250)
@@ -41,7 +41,7 @@ public class Subject extends CreatedAndUpdatedDate implements Serializable {
 		return school;
 	}
 
-	public void setSchool(School school) {
+	public void setSchool(final School school) {
 		this.school = school;
 	}
 
@@ -49,7 +49,7 @@ public class Subject extends CreatedAndUpdatedDate implements Serializable {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(final long id) {
 		this.id = id;
 	}
 
@@ -57,7 +57,7 @@ public class Subject extends CreatedAndUpdatedDate implements Serializable {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -65,7 +65,7 @@ public class Subject extends CreatedAndUpdatedDate implements Serializable {
 		return shortName;
 	}
 
-	public void setShortName(String shortName) {
+	public void setShortName(final String shortName) {
 		this.shortName = shortName;
 	}
 
@@ -73,7 +73,7 @@ public class Subject extends CreatedAndUpdatedDate implements Serializable {
 		return credit;
 	}
 
-	public void setCredit(int credit) {
+	public void setCredit(final int credit) {
 		this.credit = credit;
 	}
 

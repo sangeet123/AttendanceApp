@@ -32,19 +32,22 @@ public class SchoolControllerImpl implements SchoolController {
 
 	@Override()
 	@RequestMapping(value = SchoolRestControllerConstants.GET_SCHOOL, method = RequestMethod.GET)
-	public @ResponseBody SchoolResponseObject getSchool(@PathVariable final long id) {
+	@ResponseBody()
+	public SchoolResponseObject getSchool(@PathVariable final long id) {
 		return schoolService.getSchool(id);
 	}
 
 	@Override()
 	@RequestMapping(value = SchoolRestControllerConstants.GET_SCHOOL_LIST, method = RequestMethod.GET)
-	public @ResponseBody List<SchoolResponseObject> getSchoolList() {
+	@ResponseBody()
+	public List<SchoolResponseObject> getSchoolList() {
 		return schoolService.getSchoolList();
 	}
 
 	@Override()
 	@RequestMapping(value = SchoolRestControllerConstants.DELETE_SCHOOL, method = RequestMethod.DELETE)
-	public @ResponseBody Status delete(@PathVariable final long id) {
+	@ResponseBody()
+	public Status delete(@PathVariable final long id) {
 		schoolService.delete(id);
 		return new Status(AttendanceAppUtils.messageToList(SchoolRestControllerConstants.DELETE_SUCCESS),
 				StatusCodeUtil.OPERATION_SUCCESS);
@@ -52,7 +55,8 @@ public class SchoolControllerImpl implements SchoolController {
 
 	@Override()
 	@RequestMapping(value = SchoolRestControllerConstants.DELETE_SCHOOL_LIST, method = RequestMethod.DELETE)
-	public @ResponseBody Status delete(
+	@ResponseBody()
+	public Status delete(
 			@Valid @RequestBody final DeleteSelectedSchoolRequestObject deleteSelectedSchoolRequestObject) {
 		schoolService.delete(deleteSelectedSchoolRequestObject);
 		return new Status(
@@ -62,7 +66,8 @@ public class SchoolControllerImpl implements SchoolController {
 
 	@Override()
 	@RequestMapping(value = SchoolRestControllerConstants.CREATE_SCHOOL, method = RequestMethod.POST)
-	public @ResponseBody Status create(@Valid @RequestBody final SchoolCreateRequestObject schoolRequestObject) {
+	@ResponseBody()
+	public Status create(@Valid @RequestBody final SchoolCreateRequestObject schoolRequestObject) {
 		schoolService.create(schoolRequestObject);
 		return new Status(AttendanceAppUtils.messageToList(SchoolRestControllerConstants.CREATE_SUCCESS),
 				StatusCodeUtil.OPERATION_SUCCESS);
@@ -70,8 +75,8 @@ public class SchoolControllerImpl implements SchoolController {
 
 	@Override()
 	@RequestMapping(value = SchoolRestControllerConstants.UPDATE_SCHOOL, method = RequestMethod.PUT)
-	public @ResponseBody SchoolResponseObject update(
-			@Valid @RequestBody final SchoolUpdateRequestObject schoolUpdateRequestObject) {
+	@ResponseBody()
+	public SchoolResponseObject update(@Valid @RequestBody final SchoolUpdateRequestObject schoolUpdateRequestObject) {
 		return schoolService.update(schoolUpdateRequestObject);
 	}
 

@@ -32,20 +32,22 @@ public class SubjectControllerImpl implements SubjectController {
 
 	@Override()
 	@RequestMapping(value = SubjectRestControllerConstants.GET_SUBJECT, method = RequestMethod.GET)
-	public @ResponseBody SubjectResponseObject getSubject(@PathVariable final long schoolId,
-			@PathVariable final long subjectId) {
+	@ResponseBody()
+	public SubjectResponseObject getSubject(@PathVariable final long schoolId, @PathVariable final long subjectId) {
 		return subjectService.getSubject(schoolId, subjectId);
 	}
 
 	@Override()
 	@RequestMapping(value = SubjectRestControllerConstants.GET_SUBJECT_LIST, method = RequestMethod.GET)
-	public @ResponseBody List<SubjectResponseObject> getSubjectList(@PathVariable final long schoolId) {
+	@ResponseBody()
+	public List<SubjectResponseObject> getSubjectList(@PathVariable final long schoolId) {
 		return subjectService.getSubjectList(schoolId);
 	}
 
 	@Override()
 	@RequestMapping(value = SubjectRestControllerConstants.DELETE_SUBJECT, method = RequestMethod.DELETE)
-	public @ResponseBody Status delete(@PathVariable final long schoolId, @PathVariable final long subjectId) {
+	@ResponseBody()
+	public Status delete(@PathVariable final long schoolId, @PathVariable final long subjectId) {
 		subjectService.delete(schoolId, subjectId);
 		return new Status(AttendanceAppUtils.messageToList(SubjectRestControllerConstants.DELETE_SUCCESS),
 				StatusCodeUtil.OPERATION_SUCCESS);
@@ -53,24 +55,26 @@ public class SubjectControllerImpl implements SubjectController {
 
 	@Override()
 	@RequestMapping(value = SubjectRestControllerConstants.DELETE_SUBJECT_LIST, method = RequestMethod.DELETE)
-	public @ResponseBody Status delete(@PathVariable final long schoolId,
+	@ResponseBody()
+	public Status delete(@PathVariable final long schoolId,
 			@Valid @RequestBody final DeleteSubjectsRequestObject deleteSelectedSubjectRequestObject) {
 		subjectService.delete(schoolId, deleteSelectedSubjectRequestObject);
-		return new Status(
-				AttendanceAppUtils.messageToList(SubjectRestControllerConstants.SUBJECTS_DELETE_SUCCESS),
+		return new Status(AttendanceAppUtils.messageToList(SubjectRestControllerConstants.SUBJECTS_DELETE_SUCCESS),
 				StatusCodeUtil.OPERATION_SUCCESS);
 	}
 
 	@Override()
 	@RequestMapping(value = SubjectRestControllerConstants.CREATE_SUBJECT, method = RequestMethod.POST)
-	public @ResponseBody SubjectResponseObject create(@PathVariable final long schoolId,
+	@ResponseBody()
+	public SubjectResponseObject create(@PathVariable final long schoolId,
 			@Valid @RequestBody final SubjectCreateRequestObject subjectCreateRequestObject) {
 		return subjectService.create(schoolId, subjectCreateRequestObject);
 	}
 
 	@Override()
 	@RequestMapping(value = SubjectRestControllerConstants.UPDATE_SUBJECT, method = RequestMethod.PUT)
-	public @ResponseBody SubjectResponseObject update(@PathVariable final long schoolId,
+	@ResponseBody()
+	public SubjectResponseObject update(@PathVariable final long schoolId,
 			@Valid @RequestBody final SubjectUpdateRequestObject subjectUpdateRequestObject) {
 		return subjectService.update(schoolId, subjectUpdateRequestObject);
 	}

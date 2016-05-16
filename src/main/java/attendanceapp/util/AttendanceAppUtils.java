@@ -11,10 +11,6 @@ import attendanceapp.customstatus.Status;
 
 public final class AttendanceAppUtils {
 
-	public AttendanceAppUtils() {
-		throw new Error();
-	}
-
 	public static final String EXCEPTION_MESSAGE_DELIMITER = ",";
 	public static final String EMAIL_VALIDATOR_REGEX = "^(.+)@(.+)$";
 	public static final String TELEPHONE_VALIDATOR_REGEX = "^(?:(?:\\+?1\\s*(?:[.-]\\s*)?)?(?:\\(\\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\\s*\\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\\s*(?:[.-]\\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\\s*(?:[.-]\\s*)?([0-9]{4})(?:\\s*(?:#|x\\.?|ext\\.?|extension)\\s*(\\d+))?$";
@@ -24,6 +20,10 @@ public final class AttendanceAppUtils {
 	public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(),
 			MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 	private static final String SPLITTER = "\\s*" + AttendanceAppUtils.EXCEPTION_MESSAGE_DELIMITER + "\\s*";
+
+	private AttendanceAppUtils() throws InstantiationException {
+		throw new InstantiationException();
+	}
 
 	public static List<String> messageToList(String mesg) {
 		List<String> messages = new ArrayList<>();

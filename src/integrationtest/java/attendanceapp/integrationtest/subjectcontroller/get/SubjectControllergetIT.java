@@ -12,36 +12,33 @@ import java.sql.SQLException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.security.crypto.codec.Base64;
 
 import attendanceapp.integrationtest.common.util.AttendanceAppUtilIT;
 import attendanceapp.integrationtest.common.util.TestConfigurerIT;
 import attendanceapp.integrationtest.utils.SubjectControllerUtilIT;
 
 public class SubjectControllergetIT extends TestConfigurerIT {
-	public static final String insertSubjectQuerySQLScriptFilePath = "it-insert-subject-queries.sql";
-	public static final String clearSubjectQuerySQLScriptFilePath = "it-delete-subject-queries.sql";
-	public static final String basicDigestHeaderValue = "Basic "
-			+ new String(Base64.encode(("subjecttestuser:password").getBytes()));
-	public static boolean isSettedUp = false;
+	public static boolean hasBeenSet = false;
 
 	@Before()
+	@Override()
 	public void setUp() {
 		super.setUp();
-		if (!isSettedUp) {
+		if (!hasBeenSet) {
 			try {
-				AttendanceAppUtilIT.mysqlScriptRunner(insertSubjectQuerySQLScriptFilePath);
+				AttendanceAppUtilIT
+						.mysqlScriptRunner(SubjectControllerUtilIT.INSERT_SUBJECT_QUERY_SQL_SCRIPT_FILE_PATH);
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
 			}
-			isSettedUp = true;
+			hasBeenSet = true;
 		}
 	}
 
 	@AfterClass()
 	public static void tearDown() {
 		try {
-			AttendanceAppUtilIT.mysqlScriptRunner(clearSubjectQuerySQLScriptFilePath);
+			AttendanceAppUtilIT.mysqlScriptRunner(SubjectControllerUtilIT.CLEAR_SUBJECT_QUERY_SQL_SCRIPT_FILE_PATH);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
@@ -51,8 +48,8 @@ public class SubjectControllergetIT extends TestConfigurerIT {
 	public void get_all_schools_that_exist_in_database() throws Exception {
 		final long schoolIdForCourses = 1L;
 		getMockMvc()
-				.perform(get(SubjectControllerUtilIT.GETALLSUBJECTS, schoolIdForCourses).header("Authorization",
-						basicDigestHeaderValue))
+				.perform(get(SubjectControllerUtilIT.GETALLSUBJECTS, schoolIdForCourses)
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
 				.andExpect(status().isOk()).andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$", hasSize(2))).andExpect(jsonPath("$[0].id", is(1)))
 				.andExpect(jsonPath("$[0].name", is("Computer Programming")))

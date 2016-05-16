@@ -1,5 +1,7 @@
 package attendanceapp.exceptionhandler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,11 +15,14 @@ import attendanceapp.util.StatusCodeUtil;
 
 @ControllerAdvice()
 public class UnknownExceptionHandler {
+
+	private final Logger logger = LoggerFactory.getLogger(UnknownExceptionHandler.class);
+
 	@ResponseBody()
 	@ExceptionHandler(UnknownException.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public Status processUnknownException(UnknownException ex) {
-		Status status = AttendanceAppUtils.createStatus(ex.getMessage(), StatusCodeUtil.INTERNAL_ERROR_CODE);
-		return status;
+		logger.error("", ex);
+		return AttendanceAppUtils.createStatus(ex.getMessage(), StatusCodeUtil.INTERNAL_ERROR_CODE);
 	}
 }

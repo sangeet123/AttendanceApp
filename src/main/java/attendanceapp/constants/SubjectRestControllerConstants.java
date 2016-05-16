@@ -2,10 +2,6 @@ package attendanceapp.constants;
 
 public final class SubjectRestControllerConstants {
 
-	public SubjectRestControllerConstants() {
-		throw new Error();
-	}
-
 	// URI Constants
 	public static final String ROOT = "/school/{schoolId}/subject";
 	public static final String GET_SUBJECT = "/{subjectId}";
@@ -21,8 +17,14 @@ public final class SubjectRestControllerConstants {
 	public static final String DELETE_FAILURE = "Subject could not be deleted.";
 	public static final String SUBJECT_DOES_NOT_EXIST = "Subject does not exist.";
 	public static final String CREATE_SUCCESS = "School created sucessfully.";
+	public static final String DUPLICATE_SUBJECT_SHORT_NAME = "Subject with given short name already exists. Please enter different short name.";
 
 	// validation constants
 	public static final String SUBJECT_NAME_REQUIRED = "Subject name cannot be empty.";
 	public static final String SCHOOL_SHORTNAME_REQUIRED = "Subject short name cannot be empty";
+
+	private SubjectRestControllerConstants() throws InstantiationException {
+		throw new InstantiationException();
+	}
+
 }

@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.security.crypto.codec.Base64;
 
 import attendanceapp.integrationtest.common.util.AttendanceAppUtilIT;
 import attendanceapp.integrationtest.common.util.TestConfigurerIT;
@@ -18,29 +17,26 @@ import attendanceapp.model.requestobject.DeleteSelectedSchoolRequestObject;
 
 public class SchoolControllerdeleteSchoolsIT extends TestConfigurerIT {
 
-	public static final String basicDigestHeaderValue = "Basic "
-			+ new String(Base64.encode(("admin:password").getBytes()));
-	public static final String insertSchoolQuerySQLScriptFilePath = "it-insert-school-queries.sql";
-	public static final String clearSchoolQuerySQLScriptFilePath = "it-delete-school-queries.sql";
-	public static boolean isSettedUp = false;
+	private static boolean hasBeenSet = false;
 
 	@Before()
+	@Override()
 	public void setUp() {
 		super.setUp();
-		if (!isSettedUp) {
+		if (!hasBeenSet) {
 			try {
-				AttendanceAppUtilIT.mysqlScriptRunner(insertSchoolQuerySQLScriptFilePath);
+				AttendanceAppUtilIT.mysqlScriptRunner(SchoolControllerUtilIT.INSERT_SCHOOL_QUERY_SQL_SCRIPT_FILE_PATH);
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
 			}
-			isSettedUp = true;
+			hasBeenSet = true;
 		}
 	}
 
 	@AfterClass()
 	public static void tearDown() {
 		try {
-			AttendanceAppUtilIT.mysqlScriptRunner(clearSchoolQuerySQLScriptFilePath);
+			AttendanceAppUtilIT.mysqlScriptRunner(SchoolControllerUtilIT.CLEAR_SCHOOL_QUERY_SQL_SCRIPT_FILE_PATH);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
@@ -57,10 +53,13 @@ public class SchoolControllerdeleteSchoolsIT extends TestConfigurerIT {
 		deleteSelectedSchoolRequestObject.setCommaSeparatedIds(commaSeparatedIds);
 		final String responseJsonString = "{\"statusCode\":1,\"messages\":[\"Schools have been deleted successfully.\"]}";
 		getMockMvc()
-				.perform(delete(SchoolControllerUtilIT.DELETE_SELECTED_SCHOOL)
-						.header("Authorization", basicDigestHeaderValue)
-						.contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)
-						.content(AttendanceAppUtilIT.convertObjectToJsonBytes(deleteSelectedSchoolRequestObject)))
+				.perform(
+						delete(SchoolControllerUtilIT.DELETE_SELECTED_SCHOOL)
+								.header(AttendanceAppUtilIT.AUTHORIZATION,
+										SchoolControllerUtilIT.BASIC_DIGEST_HEADER_VALUE)
+								.contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)
+								.content(AttendanceAppUtilIT
+										.convertObjectToJsonBytes(deleteSelectedSchoolRequestObject)))
 				.andExpect(status().isOk()).andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));
 	}
@@ -76,10 +75,13 @@ public class SchoolControllerdeleteSchoolsIT extends TestConfigurerIT {
 		deleteSelectedSchoolRequestObject.setCommaSeparatedIds(commaSeparatedIds);
 		final String responseJsonString = "{\"statusCode\":1,\"messages\":[\"Schools have been deleted successfully.\"]}";
 		getMockMvc()
-				.perform(delete(SchoolControllerUtilIT.DELETE_SELECTED_SCHOOL)
-						.header("Authorization", basicDigestHeaderValue)
-						.contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)
-						.content(AttendanceAppUtilIT.convertObjectToJsonBytes(deleteSelectedSchoolRequestObject)))
+				.perform(
+						delete(SchoolControllerUtilIT.DELETE_SELECTED_SCHOOL)
+								.header(AttendanceAppUtilIT.AUTHORIZATION,
+										SchoolControllerUtilIT.BASIC_DIGEST_HEADER_VALUE)
+								.contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)
+								.content(AttendanceAppUtilIT
+										.convertObjectToJsonBytes(deleteSelectedSchoolRequestObject)))
 				.andExpect(status().isOk()).andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));
 	}
@@ -95,10 +97,13 @@ public class SchoolControllerdeleteSchoolsIT extends TestConfigurerIT {
 		deleteSelectedSchoolRequestObject.setCommaSeparatedIds(commaSeparatedIds);
 		final String responseJsonString = "{\"statusCode\":1,\"messages\":[\"Schools have been deleted successfully.\"]}";
 		getMockMvc()
-				.perform(delete(SchoolControllerUtilIT.DELETE_SELECTED_SCHOOL)
-						.header("Authorization", basicDigestHeaderValue)
-						.contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)
-						.content(AttendanceAppUtilIT.convertObjectToJsonBytes(deleteSelectedSchoolRequestObject)))
+				.perform(
+						delete(SchoolControllerUtilIT.DELETE_SELECTED_SCHOOL)
+								.header(AttendanceAppUtilIT.AUTHORIZATION,
+										SchoolControllerUtilIT.BASIC_DIGEST_HEADER_VALUE)
+								.contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)
+								.content(AttendanceAppUtilIT
+										.convertObjectToJsonBytes(deleteSelectedSchoolRequestObject)))
 				.andExpect(status().isOk()).andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));
 	}

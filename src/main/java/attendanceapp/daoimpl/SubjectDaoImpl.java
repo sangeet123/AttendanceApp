@@ -10,18 +10,25 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import attendanceapp.dao.SubjectDao;
+import attendanceapp.exceptions.DuplicateSubjectShortNameException;
 import attendanceapp.exceptions.SubjectNotFoundException;
+import attendanceapp.exceptions.UnknownException;
 import attendanceapp.model.Subject;
 
 @Repository()
 public class SubjectDaoImpl implements SubjectDao {
 
-	final String deleteSubjectById = "delete attendanceapp.model.Subject where id= :subjectId and school.id= :schoolId";
-	final String deleteSubjectsByIds = "delete attendanceapp.model.Subject where id in (:subjectIds) and school.id= :schoolId";
+	private final Logger logger = LoggerFactory.getLogger(SubjectDaoImpl.class);
+
+	static final String DELETE_SUBJECT_BY_ID = "delete attendanceapp.model.Subject where id= :subjectId and school.id= :schoolId";
+	static final String DELETE_SUBJECTS_BY_IDS = "delete attendanceapp.model.Subject where id in (:subjectIds) and school.id= :schoolId";
+	static final String SELECT_SUBJECT_BY_SHORT_NAME = "from attendanceapp.model.Subject where short_name= :shortname and school.id= :schoolId";
 
 	@Autowired()
 	SessionFactory sessionFactory;
@@ -36,7 +43,7 @@ public class SubjectDaoImpl implements SubjectDao {
 	}
 
 	@Override()
-	public Subject getSubject(long schoolId, long subjectId) {
+	public Subject getSubject(final long schoolId, final long subjectId) {
 		try {
 			session = sessionFactory.openSession();
 			Criteria criteria = session.createCriteria(Subject.class);
@@ -47,6 +54,11 @@ public class SubjectDaoImpl implements SubjectDao {
 				throw new SubjectNotFoundException();
 			}
 			return (Subject) subjects.get(0);
+		} catch (SubjectNotFoundException ex) {
+			throw ex;
+		} catch (Exception ex) {
+			logger.error("", ex);
+			throw new UnknownException();
 		} finally {
 			closeSession();
 		}
@@ -55,45 +67,56 @@ public class SubjectDaoImpl implements SubjectDao {
 
 	@SuppressWarnings("unchecked")
 	@Override()
-	public List<Subject> getSubjects(long schoolId) {
+	public List<Subject> getSubjects(final long schoolId) {
 		try {
 			session = sessionFactory.openSession();
 			Criteria criteria = session.createCriteria(Subject.class);
 			criteria.add(Restrictions.eq("school.id", schoolId));
 			return criteria.list();
+		} catch (Exception ex) {
+			logger.error("", ex);
+			throw new UnknownException();
 		} finally {
 			closeSession();
 		}
 	}
 
 	@Override()
-	public void update(long schoolId, Subject subject) {
+	public void update(final long schoolId, final Subject subject) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override()
-	public void delete(long schoolId, long subjectId) {
+	public void delete(final long schoolId, final long subjectId) {
 		try {
 			session = sessionFactory.openSession();
-			Query query = session.createQuery(deleteSubjectById).setParameter("subjectId", subjectId)
+			Query query = session.createQuery(DELETE_SUBJECT_BY_ID).setParameter("subjectId", subjectId)
 					.setParameter("schoolId", schoolId);
 			if (query.executeUpdate() == 0) {
 				throw new SubjectNotFoundException();
 			}
+		} catch (SubjectNotFoundException ex) {
+			throw ex;
+		} catch (Exception ex) {
+			logger.error("", ex);
+			throw new UnknownException();
 		} finally {
 			closeSession();
 		}
 	}
 
 	@Override()
-	public void delete(long schoolId, String ids) {
+	public void delete(final long schoolId, final String ids) {
 		try {
 			List<Long> numbers = Stream.of(ids.split(",")).map(Long::parseLong).collect(Collectors.toList());
 			session = sessionFactory.openSession();
-			Query query = session.createQuery(deleteSubjectsByIds).setParameter("schoolId", schoolId)
+			Query query = session.createQuery(DELETE_SUBJECTS_BY_IDS).setParameter("schoolId", schoolId)
 					.setParameterList("subjectIds", numbers);
 			query.executeUpdate();
+		} catch (Exception ex) {
+			logger.error("", ex);
+			throw new UnknownException();
 		} finally {
 			closeSession();
 		}
@@ -101,9 +124,25 @@ public class SubjectDaoImpl implements SubjectDao {
 	}
 
 	@Override()
-	public void create(Subject subject) {
-		// TODO Auto-generated method stub
-
+	public void create(final Subject subject) {
+		try {
+			session = sessionFactory.openSession();
+			Query query = session.createQuery(SELECT_SUBJECT_BY_SHORT_NAME)
+					.setParameter("shortname", subject.getShortName())
+					.setParameter("schoolId", subject.getSchool().getId());
+			if (query.uniqueResult() == null) {
+				session.save(subject);
+			} else {
+				throw new DuplicateSubjectShortNameException();
+			}
+		} catch (DuplicateSubjectShortNameException ex) {
+			throw ex;
+		} catch (Exception ex) {
+			logger.error("", ex);
+			throw new UnknownException();
+		} finally {
+			closeSession();
+		}
 	}
 
 }

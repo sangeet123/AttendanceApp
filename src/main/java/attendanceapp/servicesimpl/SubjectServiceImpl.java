@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import attendanceapp.dao.SubjectDao;
-import attendanceapp.exceptions.SubjectNotFoundException;
-import attendanceapp.exceptions.UnknownException;
 import attendanceapp.model.Subject;
 import attendanceapp.model.requestobject.DeleteSubjectsRequestObject;
 import attendanceapp.model.requestobject.SubjectCreateRequestObject;
@@ -24,69 +22,42 @@ public class SubjectServiceImpl implements SubjectService {
 
 	@Override()
 	public SubjectResponseObject getSubject(final long schoolId, final long subjectId) {
-		try {
-			Subject subject = subjectDao.getSubject(schoolId, subjectId);
-			return SubjectServiceUtil.createSubjectResponseObjectFromSubject(subject);
-		} catch (SubjectNotFoundException ex) {
-			throw ex;
-		} catch (Exception ex) {
-			throw new UnknownException();
-		}
+		Subject subject = subjectDao.getSubject(schoolId, subjectId);
+		return SubjectServiceUtil.createSubjectResponseObjectFromSubject(subject);
 	}
 
 	@Override()
 	public List<SubjectResponseObject> getSubjectList(final long schoolId) {
-		try {
-			List<Subject> subjects = subjectDao.getSubjects(schoolId);
-			return SubjectServiceUtil.createSubjectResponseObjectListFromSubjectList(subjects);
-		} catch (Exception ex) {
-			throw new UnknownException();
-		}
+		List<Subject> subjects = subjectDao.getSubjects(schoolId);
+		return SubjectServiceUtil.createSubjectResponseObjectListFromSubjectList(subjects);
 	}
 
 	@Override()
 	public SubjectResponseObject update(final long schoolId,
 			final SubjectUpdateRequestObject subjectUpdateRequestObject) {
-		try {
-			Subject subject = SubjectServiceUtil.creaSubjectFromSubjectUpdateRequestObject(subjectUpdateRequestObject);
-			subjectDao.update(schoolId, subject);
-			return SubjectServiceUtil.createSubjectResponseObjectFromSubject(subject);
-		} catch (Exception ex) {
-			throw new UnknownException();
-		}
+
+		Subject subject = SubjectServiceUtil.creaSubjectFromSubjectUpdateRequestObject(subjectUpdateRequestObject);
+		subjectDao.update(schoolId, subject);
+		return SubjectServiceUtil.createSubjectResponseObjectFromSubject(subject);
 	}
 
 	@Override()
 	public void delete(final long schoolId, final long subjectId) {
-		try {
-			subjectDao.delete(schoolId, subjectId);
-		} catch (SubjectNotFoundException ex) {
-			throw ex;
-		} catch (Exception ex) {
-			throw new UnknownException();
-		}
+		subjectDao.delete(schoolId, subjectId);
 	}
 
 	@Override()
 	public SubjectResponseObject create(final long schoolId,
 			final SubjectCreateRequestObject subjectCreateRequestObject) {
-		try {
-			Subject subject = SubjectServiceUtil.creaSubjectFromSubjectCreateRequestObject(subjectCreateRequestObject);
-			subjectDao.update(schoolId, subject);
-			return SubjectServiceUtil.createSubjectResponseObjectFromSubject(subject);
-		} catch (Exception ex) {
-			throw new UnknownException();
-		}
-
+		Subject subject = SubjectServiceUtil.creaSubjectFromSubjectCreateRequestObject(schoolId,
+				subjectCreateRequestObject);
+		subjectDao.create(subject);
+		return SubjectServiceUtil.createSubjectResponseObjectFromSubject(subject);
 	}
 
 	@Override()
 	public void delete(long schoolId, DeleteSubjectsRequestObject deleteSelectedSchoolRequestObject) {
-		try {
-			subjectDao.delete(schoolId, deleteSelectedSchoolRequestObject.getCommaSeparatedIds());
-		} catch (Exception ex) {
-			throw new UnknownException();
-		}
+		subjectDao.delete(schoolId, deleteSelectedSchoolRequestObject.getCommaSeparatedIds());
 	}
 
 }

@@ -20,8 +20,8 @@ import attendanceapp.util.Role;
 
 public final class SchoolServiceUtils {
 
-	public SchoolServiceUtils() {
-		throw new Error();
+	private SchoolServiceUtils() throws InstantiationException {
+		throw new InstantiationException();
 	}
 
 	public static School createSchoolFromSchoolResponseObject(final SchoolCreateRequestObject schoolRequestObject) {
@@ -59,9 +59,7 @@ public final class SchoolServiceUtils {
 
 	public static List<SchoolResponseObject> createListOfSchoolResponseFromListOfSchool(List<School> schools) {
 		List<SchoolResponseObject> schoolsResponseObject = new ArrayList<SchoolResponseObject>();
-		schools.forEach(school -> {
-			schoolsResponseObject.add(createSchoolResponseFromSchool(school));
-		});
+		schools.forEach(school -> schoolsResponseObject.add(createSchoolResponseFromSchool(school)));
 		return schoolsResponseObject;
 	}
 

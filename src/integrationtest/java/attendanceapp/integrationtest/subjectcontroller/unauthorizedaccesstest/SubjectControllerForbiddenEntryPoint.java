@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.security.crypto.codec.Base64;
 
 import attendanceapp.integrationtest.common.util.AttendanceAppUtilIT;
 import attendanceapp.integrationtest.common.util.TestConfigurerIT;
@@ -18,29 +17,27 @@ import attendanceapp.integrationtest.utils.SubjectControllerUtilIT;
 import attendanceapp.model.requestobject.DeleteSubjectsRequestObject;
 
 public class SubjectControllerForbiddenEntryPoint extends TestConfigurerIT {
-	public static final String basicDigestHeaderValue = "Basic "
-			+ new String(Base64.encode(("subjecttestuser:password").getBytes()));
-	public static final String insertSubjectQuerySQLScriptFilePath = "it-insert-subject-queries.sql";
-	public static final String clearSubjectQuerySQLScriptFilePath = "it-delete-subject-queries.sql";
-	public static boolean isSettedUp = false;
+
+	public static boolean hasBeenSet = false;
 
 	@Before()
 	public void setUp() {
 		super.setUp();
-		if (!isSettedUp) {
+		if (!hasBeenSet) {
 			try {
-				AttendanceAppUtilIT.mysqlScriptRunner(insertSubjectQuerySQLScriptFilePath);
+				AttendanceAppUtilIT
+						.mysqlScriptRunner(SubjectControllerUtilIT.INSERT_SUBJECT_QUERY_SQL_SCRIPT_FILE_PATH);
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
 			}
-			isSettedUp = true;
+			hasBeenSet = true;
 		}
 	}
 
 	@AfterClass()
 	public static void tearDown() {
 		try {
-			AttendanceAppUtilIT.mysqlScriptRunner(clearSubjectQuerySQLScriptFilePath);
+			AttendanceAppUtilIT.mysqlScriptRunner(SubjectControllerUtilIT.CLEAR_SUBJECT_QUERY_SQL_SCRIPT_FILE_PATH);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
@@ -52,7 +49,7 @@ public class SubjectControllerForbiddenEntryPoint extends TestConfigurerIT {
 		final String invalidSubjectId = "one";
 		getMockMvc()
 				.perform(get(SubjectControllerUtilIT.GETSUBJECTWITHID, invalidSchoolId, invalidSubjectId)
-						.header("Authorization", basicDigestHeaderValue))
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
 				.andExpect(status().isForbidden()).andExpect(content().string(""));
 	}
 
@@ -62,22 +59,26 @@ public class SubjectControllerForbiddenEntryPoint extends TestConfigurerIT {
 		final String invalidSubjectId = "one";
 		getMockMvc()
 				.perform(get(SubjectControllerUtilIT.GETSUBJECTWITHID, invalidSchoolId, invalidSubjectId)
-						.header("Authorization", basicDigestHeaderValue))
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
 				.andExpect(status().isForbidden()).andExpect(content().string(""));
 	}
 
 	@Test()
 	public void get_all_subjects_for_unauthorized_schoolId_10() throws Exception {
 		final long invalidSchoolId = 10L;
-		getMockMvc().perform(get(SubjectControllerUtilIT.GETALLSUBJECTS, invalidSchoolId).header("Authorization",
-				basicDigestHeaderValue)).andExpect(status().isForbidden()).andExpect(content().string(""));
+		getMockMvc()
+				.perform(get(SubjectControllerUtilIT.GETALLSUBJECTS, invalidSchoolId)
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
+				.andExpect(status().isForbidden()).andExpect(content().string(""));
 	}
 
 	@Test()
 	public void get_all_subjects_for_invalid_schoolId_two() throws Exception {
 		final String invalidSchoolId = "two";
-		getMockMvc().perform(get(SubjectControllerUtilIT.GETALLSUBJECTS, invalidSchoolId).header("Authorization",
-				basicDigestHeaderValue)).andExpect(status().isForbidden()).andExpect(content().string(""));
+		getMockMvc()
+				.perform(get(SubjectControllerUtilIT.GETALLSUBJECTS, invalidSchoolId)
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
+				.andExpect(status().isForbidden()).andExpect(content().string(""));
 	}
 
 	@Test()
@@ -86,8 +87,10 @@ public class SubjectControllerForbiddenEntryPoint extends TestConfigurerIT {
 		final long schoolId = 10L;
 		DeleteSubjectsRequestObject deleteSelectedSubjectRequestObject = new DeleteSubjectsRequestObject();
 		deleteSelectedSubjectRequestObject.setCommaSeparatedIds(commaSeparatedIds);
-		getMockMvc().perform(delete(SubjectControllerUtilIT.DELETE_SUBJECTS, schoolId).header("Authorization",
-				basicDigestHeaderValue)).andExpect(status().isForbidden()).andExpect(content().string(""));
+		getMockMvc()
+				.perform(delete(SubjectControllerUtilIT.DELETE_SUBJECTS, schoolId)
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
+				.andExpect(status().isForbidden()).andExpect(content().string(""));
 	}
 
 	@Test()
@@ -96,8 +99,10 @@ public class SubjectControllerForbiddenEntryPoint extends TestConfigurerIT {
 		final String schoolId = "two";
 		DeleteSubjectsRequestObject deleteSelectedSubjectRequestObject = new DeleteSubjectsRequestObject();
 		deleteSelectedSubjectRequestObject.setCommaSeparatedIds(commaSeparatedIds);
-		getMockMvc().perform(delete(SubjectControllerUtilIT.DELETE_SUBJECTS, schoolId).header("Authorization",
-				basicDigestHeaderValue)).andExpect(status().isForbidden()).andExpect(content().string(""));
+		getMockMvc()
+				.perform(delete(SubjectControllerUtilIT.DELETE_SUBJECTS, schoolId)
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
+				.andExpect(status().isForbidden()).andExpect(content().string(""));
 	}
 
 	@Test()
@@ -106,7 +111,7 @@ public class SubjectControllerForbiddenEntryPoint extends TestConfigurerIT {
 		final String invalidSubjectId = "one";
 		getMockMvc()
 				.perform(delete(SubjectControllerUtilIT.DELETESUBJECT, invalidSchoolId, invalidSubjectId)
-						.header("Authorization", basicDigestHeaderValue))
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
 				.andExpect(status().isForbidden()).andExpect(content().string(""));
 	}
 
@@ -116,7 +121,7 @@ public class SubjectControllerForbiddenEntryPoint extends TestConfigurerIT {
 		final String invalidSubjectId = "one";
 		getMockMvc()
 				.perform(delete(SubjectControllerUtilIT.DELETESUBJECT, invalidSchoolId, invalidSubjectId)
-						.header("Authorization", basicDigestHeaderValue))
+						.header(AttendanceAppUtilIT.AUTHORIZATION, SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
 				.andExpect(status().isForbidden()).andExpect(content().string(""));
 	}
 

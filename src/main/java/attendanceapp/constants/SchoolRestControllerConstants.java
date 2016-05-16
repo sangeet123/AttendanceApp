@@ -2,10 +2,6 @@ package attendanceapp.constants;
 
 public final class SchoolRestControllerConstants {
 
-	public SchoolRestControllerConstants() {
-		throw new Error();
-	}
-
 	// URI Constants
 	public static final String ROOT = "/admin/school";
 	public static final String GET_SCHOOL = "/{id}";
@@ -31,5 +27,9 @@ public final class SchoolRestControllerConstants {
 	public static final String SCHOOL_EMAIL_REQUIRED = "School email is required";
 	public static final String SCHOOL_NAME_LENGTH_CANNOT_EXCEED_250 = "School name length should be less than 250 characters";
 	public static final String SCHOOL_EMAIL_INVALID = "School email is not a valid email. Please enter the valid email address";
+
+	private SchoolRestControllerConstants() throws InstantiationException {
+		throw new InstantiationException();
+	}
 
 }

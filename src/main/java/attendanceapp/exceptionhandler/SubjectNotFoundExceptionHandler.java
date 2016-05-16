@@ -1,5 +1,7 @@
 package attendanceapp.exceptionhandler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import attendanceapp.util.StatusCodeUtil;
 public class SubjectNotFoundExceptionHandler {
 
 	private MessageSource messageSource;
+	private final Logger logger = LoggerFactory.getLogger(SubjectNotFoundExceptionHandler.class);
 
 	@Autowired()
 	public SubjectNotFoundExceptionHandler(MessageSource messageSource) {
@@ -27,6 +30,7 @@ public class SubjectNotFoundExceptionHandler {
 	@ExceptionHandler(SubjectNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public Status processSchoolNotFoundException(SubjectNotFoundException ex) {
+		logger.error("Subject not found", ex);
 		Status status = AttendanceAppUtils.createStatus(ex.getMessage(), StatusCodeUtil.ITEM_NOT_FOUND_CODE);
 		return status;
 	}
