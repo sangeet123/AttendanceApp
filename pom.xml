@@ -517,7 +517,13 @@
 			<version>4.1.0.RELEASE</version>
 			<scope>test</scope>
 		</dependency>
-
+		<!-- add this dependency to your local maven repository to generate wadl 
+			file for the spring rest -->
+		<dependency>
+			<groupId>com.autentia.web.rest</groupId>
+			<artifactId>spring-wadl-generator</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 
 	<profiles>

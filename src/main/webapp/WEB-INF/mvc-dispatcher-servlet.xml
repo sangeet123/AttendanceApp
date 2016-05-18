@@ -17,4 +17,7 @@
 			<value>validation-message-source</value>
 		</property>
 	</bean>
+
+	<mvc:annotation-driven />
+
 </beans>
