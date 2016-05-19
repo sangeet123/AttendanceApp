@@ -2,8 +2,8 @@ package attendanceapp.integrationtest.utils;
 
 import org.springframework.security.crypto.codec.Base64;
 
-import attendanceapp.model.requestobject.SchoolUpdateRequestObject;
 import attendanceapp.model.requestobject.SubjectCreateRequestObject;
+import attendanceapp.model.requestobject.SubjectUpdateRequestObject;
 
 public final class SubjectControllerUtilIT {
 
@@ -12,7 +12,7 @@ public final class SubjectControllerUtilIT {
 	public static final String GETALLSUBJECTS = "/school/{schoolId}/subject";
 	public static final String CREATESUBJECT = "/school/{schoolId}/subject/create";
 	public static final String DELETESUBJECT = "/school/{schoolId}/subject/delete/{subjectId}";
-	public static final String UPDATESCHOOL = "/school/update";
+	public static final String UPDATESUBJECT = "/school/{schoolId}/subject/update";
 	public static final String DELETE_SUBJECTS = "/school/{schoolId}/subject/delete";
 
 	// sql script file for testing school controller.
@@ -28,7 +28,7 @@ public final class SubjectControllerUtilIT {
 		throw new InstantiationException();
 	}
 
-	public static SubjectCreateRequestObject getSchoolRequestObject(final String name, final String shortName,
+	public static SubjectCreateRequestObject getSubjectRequestObject(final String name, final String shortName,
 			final int credit) {
 		SubjectCreateRequestObject createObject = new SubjectCreateRequestObject();
 		createObject.setName(name);
@@ -37,14 +37,14 @@ public final class SubjectControllerUtilIT {
 		return createObject;
 	}
 
-	public static SchoolUpdateRequestObject getSchoolUpdateRequestObject(long id, String name, String email,
-			String telephone) {
-		SchoolUpdateRequestObject schoolUpdateRequestObject = new SchoolUpdateRequestObject();
-		schoolUpdateRequestObject.setId(id);
-		schoolUpdateRequestObject.setName(name);
-		schoolUpdateRequestObject.setEmail(email);
-		schoolUpdateRequestObject.setTelephone(telephone);
-		return schoolUpdateRequestObject;
+	public static SubjectUpdateRequestObject getSubjectUpdateRequestObject(final String name, final String shortName,
+			final int credit, final int id) {
+		SubjectUpdateRequestObject subjectUpdateRequestObject = new SubjectUpdateRequestObject();
+		subjectUpdateRequestObject.setName(name);
+		subjectUpdateRequestObject.setCredit(credit);
+		subjectUpdateRequestObject.setShortName(shortName);
+		subjectUpdateRequestObject.setId(id);
+		return subjectUpdateRequestObject;
 	}
 
 }

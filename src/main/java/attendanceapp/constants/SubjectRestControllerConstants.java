@@ -3,7 +3,7 @@ package attendanceapp.constants;
 public final class SubjectRestControllerConstants {
 
 	// URI Constants
-	public static final String ROOT = "/school/{schoolId}/subject";
+	public static final String ROOT = "school/{schoolId}/subject";
 	public static final String GET_SUBJECT = "/{subjectId}";
 	public static final String GET_SUBJECT_LIST = "";
 	public static final String DELETE_SUBJECT = "/delete/{subjectId}";

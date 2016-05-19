@@ -33,12 +33,14 @@ public final class SubjectServiceUtil {
 		return subjectResponseObjectLists;
 	}
 
-	public static Subject creaSubjectFromSubjectUpdateRequestObject(
+	public static Subject creaSubjectFromSubjectUpdateRequestObject(final long schoolId,
 			final SubjectUpdateRequestObject subjectRequestObject) {
 		LocalDateTime utcNow = LocalDateTime.now(Clock.systemUTC());
-		return new SubjectUpdateRequestToSubjectMapper.SubjectBuilder().id(subjectRequestObject.getId())
+		Subject subject = new SubjectUpdateRequestToSubjectMapper.SubjectBuilder().id(subjectRequestObject.getId())
 				.credit(subjectRequestObject.getCredit()).name(subjectRequestObject.getName())
 				.shortName(subjectRequestObject.getShortName()).updatedOn(utcNow).build();
+		subject.setSchool(createSchoolWithId(schoolId));
+		return subject;
 	}
 
 	public static Subject creaSubjectFromSubjectCreateRequestObject(final long schoolId,
@@ -48,10 +50,14 @@ public final class SubjectServiceUtil {
 				.id(subjectCreateRequestObject.getId()).credit(subjectCreateRequestObject.getCredit())
 				.name(subjectCreateRequestObject.getName()).shortName(subjectCreateRequestObject.getShortName())
 				.updatedOn(utcNow).CreatedOn(utcNow).build();
-		School school = new School();
-		school.setId(schoolId);
-		subject.setSchool(school);
+		subject.setSchool(createSchoolWithId(schoolId));
 		return subject;
+	}
+
+	private static School createSchoolWithId(final long id) {
+		School school = new School();
+		school.setId(id);
+		return school;
 	}
 
 }

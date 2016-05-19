@@ -45,7 +45,7 @@ public class SubjectControllercreateIT extends TestConfigurerIT {
 	public void create_valid_subject() throws Exception {
 		final long schoolId = 1L;
 		SubjectCreateRequestObject createObject = SubjectControllerUtilIT
-				.getSchoolRequestObject("Computer Architecture", "CA 606", 5);
+				.getSubjectRequestObject("Computer Architecture", "CA 606", 5);
 		getMockMvc()
 				.perform(post(SubjectControllerUtilIT.CREATESUBJECT, schoolId)
 						.header(AttendanceAppUtilIT.AUTHORIZATION, SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE)
@@ -61,7 +61,7 @@ public class SubjectControllercreateIT extends TestConfigurerIT {
 		final long schoolId = 1L;
 		final String responseJsonString = "{\"statusCode\":3,\"messages\":[\"Subject with given short name already exists. Please enter different short name.\"]}";
 		SubjectCreateRequestObject createObject = SubjectControllerUtilIT
-				.getSchoolRequestObject("Computer Architecture", "CA 606", 5);
+				.getSubjectRequestObject("Computer Architecture", "CA 606", 5);
 		getMockMvc()
 				.perform(post(SubjectControllerUtilIT.CREATESUBJECT, schoolId)
 						.header(AttendanceAppUtilIT.AUTHORIZATION, SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE)

@@ -17,7 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-@RequestMapping(value = "/rest", produces = { "application/xml" })
+@RequestMapping(value = "", produces = { "application/xml" })
 public class WadlController {
 
 	private final ApplicationBuilder applicationBuilder;
@@ -31,7 +31,7 @@ public class WadlController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "wadl", method = RequestMethod.GET)
+	@RequestMapping(value = "", method = RequestMethod.GET)
 	public Application generateWadl(HttpServletRequest request) {
 		return applicationBuilder.build(request);
 	}

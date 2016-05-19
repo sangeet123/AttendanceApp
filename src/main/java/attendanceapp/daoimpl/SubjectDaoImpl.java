@@ -29,6 +29,7 @@ public class SubjectDaoImpl implements SubjectDao {
 	static final String DELETE_SUBJECT_BY_ID = "delete attendanceapp.model.Subject where id= :subjectId and school.id= :schoolId";
 	static final String DELETE_SUBJECTS_BY_IDS = "delete attendanceapp.model.Subject where id in (:subjectIds) and school.id= :schoolId";
 	static final String SELECT_SUBJECT_BY_SHORT_NAME = "from attendanceapp.model.Subject where short_name= :shortname and school.id= :schoolId";
+	static final String SELECT_SUBJECT_BY_SHORT_NAME_IF_ALREADY_EXIST = "from attendanceapp.model.Subject where short_name= :shortname and school.id= :schoolId and id!= :subjectId";
 
 	@Autowired()
 	SessionFactory sessionFactory;
@@ -37,13 +38,12 @@ public class SubjectDaoImpl implements SubjectDao {
 	Transaction transaction = null;
 
 	private void closeSession() {
-		if (session != null) {
+		if (session != null && session.isConnected()) {
 			session.close();
 		}
 	}
 
-	@Override()
-	public Subject getSubject(final long schoolId, final long subjectId) {
+	private Subject findSubject(final long schoolId, final long subjectId) {
 		try {
 			session = sessionFactory.openSession();
 			Criteria criteria = session.createCriteria(Subject.class);
@@ -54,15 +54,21 @@ public class SubjectDaoImpl implements SubjectDao {
 				throw new SubjectNotFoundException();
 			}
 			return (Subject) subjects.get(0);
+		} finally {
+			closeSession();
+		}
+	}
+
+	@Override()
+	public Subject getSubject(final long schoolId, final long subjectId) {
+		try {
+			return findSubject(schoolId, subjectId);
 		} catch (SubjectNotFoundException ex) {
 			throw ex;
 		} catch (Exception ex) {
 			logger.error("", ex);
 			throw new UnknownException();
-		} finally {
-			closeSession();
 		}
-
 	}
 
 	@SuppressWarnings("unchecked")
@@ -83,8 +89,24 @@ public class SubjectDaoImpl implements SubjectDao {
 
 	@Override()
 	public void update(final long schoolId, final Subject subject) {
-		// TODO Auto-generated method stub
-
+		try {
+			findSubject(schoolId, subject.getId());
+			session = sessionFactory.openSession();
+			Query query = session.createQuery(SELECT_SUBJECT_BY_SHORT_NAME_IF_ALREADY_EXIST)
+					.setParameter("shortname", subject.getShortName())
+					.setParameter("schoolId", subject.getSchool().getId()).setParameter("subjectId", subject.getId());
+			if (query.uniqueResult() == null) {
+				session.save(subject);
+			} else {
+				throw new DuplicateSubjectShortNameException();
+			}
+		} catch (DuplicateSubjectShortNameException | SubjectNotFoundException ex) {
+			throw ex;
+		} catch (Exception ex) {
+			logger.error("", ex);
+		} finally {
+			closeSession();
+		}
 	}
 
 	@Override()
