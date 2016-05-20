@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import attendanceapp.dao.SchoolDao;
 import attendanceapp.model.School;
-import attendanceapp.model.requestobject.DeleteSelectedSchoolRequestObject;
+import attendanceapp.model.requestobject.DeleteSchoolsRequestObject;
 import attendanceapp.model.requestobject.SchoolCreateRequestObject;
 import attendanceapp.model.requestobject.SchoolUpdateRequestObject;
 import attendanceapp.model.responseobject.SchoolResponseObject;
@@ -50,7 +50,7 @@ public class SchoolServiceImpl implements SchoolService {
 	}
 
 	@Override()
-	public void delete(final DeleteSelectedSchoolRequestObject deleteSelectedSchoolRequestObject) {
+	public void delete(final DeleteSchoolsRequestObject deleteSelectedSchoolRequestObject) {
 		schoolDao.delete(deleteSelectedSchoolRequestObject.getCommaSeparatedIds());
 	}
 }

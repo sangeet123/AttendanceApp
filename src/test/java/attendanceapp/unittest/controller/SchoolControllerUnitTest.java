@@ -31,7 +31,7 @@ import attendanceapp.controller.SchoolController;
 import attendanceapp.controllerimpl.SchoolControllerImpl;
 import attendanceapp.exceptions.DuplicateSchoolNameException;
 import attendanceapp.exceptions.SchoolNotFoundException;
-import attendanceapp.model.requestobject.DeleteSelectedSchoolRequestObject;
+import attendanceapp.model.requestobject.DeleteSchoolsRequestObject;
 import attendanceapp.model.requestobject.SchoolCreateRequestObject;
 import attendanceapp.model.requestobject.SchoolUpdateRequestObject;
 import attendanceapp.model.responseobject.SchoolResponseObject;
@@ -318,12 +318,12 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	@Test
 	public void delete_selected_school_should_return_validation_errors_for_invalid_format_input() throws Exception {
 		final String commaSeparatedIds = "20,10,";
-		DeleteSelectedSchoolRequestObject deleteSelectedSchoolRequestObject = new DeleteSelectedSchoolRequestObject();
-		deleteSelectedSchoolRequestObject.setCommaSeparatedIds(commaSeparatedIds);
+		DeleteSchoolsRequestObject deleteSchoolsRequestObject = new DeleteSchoolsRequestObject();
+		deleteSchoolsRequestObject.setCommaSeparatedIds(commaSeparatedIds);
 		getMockMvc()
-				.perform(delete(SchoolControllerUnitTestUtil.DELETE_SELECTED_SCHOOL)
+				.perform(delete(SchoolControllerUnitTestUtil.DELETE_SCHOOLS)
 						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8)
-						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(deleteSelectedSchoolRequestObject)))
+						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(deleteSchoolsRequestObject)))
 				.andExpect(status().isBadRequest())
 				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$.fieldErrors", hasSize(1)))
@@ -335,11 +335,11 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 
 	@Test
 	public void delete_selected_school_should_return_validation_errors_for_invalid_empty_input() throws Exception {
-		DeleteSelectedSchoolRequestObject deleteSelectedSchoolRequestObject = new DeleteSelectedSchoolRequestObject();
+		DeleteSchoolsRequestObject deleteSchoolsRequestObject = new DeleteSchoolsRequestObject();
 		getMockMvc()
-				.perform(delete(SchoolControllerUnitTestUtil.DELETE_SELECTED_SCHOOL)
+				.perform(delete(SchoolControllerUnitTestUtil.DELETE_SCHOOLS)
 						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8)
-						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(deleteSelectedSchoolRequestObject)))
+						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(deleteSchoolsRequestObject)))
 				.andExpect(status().isBadRequest())
 				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$.fieldErrors", hasSize(1)))
@@ -352,18 +352,18 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	@Test
 	public void delete_selected_school_should_return_success_message_for_valid_input() throws Exception {
 		final String commaSeparatedIds = "20,10";
-		DeleteSelectedSchoolRequestObject deleteSelectedSchoolRequestObject = new DeleteSelectedSchoolRequestObject();
-		deleteSelectedSchoolRequestObject.setCommaSeparatedIds(commaSeparatedIds);
-		doNothing().when(schoolServiceMock).delete(deleteSelectedSchoolRequestObject);
+		DeleteSchoolsRequestObject deleteSchoolsRequestObject = new DeleteSchoolsRequestObject();
+		deleteSchoolsRequestObject.setCommaSeparatedIds(commaSeparatedIds);
+		doNothing().when(schoolServiceMock).delete(deleteSchoolsRequestObject);
 		final String responseJsonString = "{\"statusCode\":1,\"messages\":[\"Schools have been deleted successfully.\"]}";
 		getMockMvc()
-				.perform(delete(SchoolControllerUnitTestUtil.DELETE_SELECTED_SCHOOL)
+				.perform(delete(SchoolControllerUnitTestUtil.DELETE_SCHOOLS)
 						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8)
-						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(deleteSelectedSchoolRequestObject)))
+						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(deleteSchoolsRequestObject)))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));
-		verify(schoolServiceMock, atLeast(1)).delete(deleteSelectedSchoolRequestObject);
+		verify(schoolServiceMock, atLeast(1)).delete(deleteSchoolsRequestObject);
 		verifyNoMoreInteractions(schoolServiceMock);
 	}
 

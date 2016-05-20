@@ -70,7 +70,7 @@ public class SubjectUpdateRequestObject {
 		if (obj == null || getClass() != obj.getClass()) {
 			return false;
 		}
-		SubjectCreateRequestObject other = (SubjectCreateRequestObject) obj;
+		SubjectUpdateRequestObject other = (SubjectUpdateRequestObject) obj;
 		return new EqualsBuilder().append(id, other.getId()).append(shortName, other.getShortName())
 				.append(name, other.getName()).append(credit, other.getCredit()).isEquals();
 	}

@@ -19,7 +19,7 @@ public final class SchoolControllerUnitTestUtil {
 	public static final String CREATESCHOOL = "/admin/school/create";
 	public static final String DELETESCHOOL = "/admin/school/delete/{id}";
 	public static final String UPDATESCHOOL = "/admin/school/update";
-	public static final String DELETE_SELECTED_SCHOOL = "/admin/school/delete";
+	public static final String DELETE_SCHOOLS = "/admin/school/delete";
 
 	// Key for school model
 	public static final String ID = "id";

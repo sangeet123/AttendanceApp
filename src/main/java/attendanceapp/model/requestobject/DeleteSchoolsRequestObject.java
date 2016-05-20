@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import attendanceapp.util.AttendanceAppUtils;
 
-public class DeleteSelectedSchoolRequestObject {
+public class DeleteSchoolsRequestObject {
 
 	private static final int INITIAL_NONZERO_ODD_NUM = 17;
 	private static final int MULTIPLIER_NONZERO_ODD_NUM = 157;
@@ -41,7 +41,7 @@ public class DeleteSelectedSchoolRequestObject {
 		if (obj == null || getClass() != obj.getClass()) {
 			return false;
 		}
-		DeleteSelectedSchoolRequestObject other = (DeleteSelectedSchoolRequestObject) obj;
+		DeleteSchoolsRequestObject other = (DeleteSchoolsRequestObject) obj;
 		return new EqualsBuilder().append(commaSeparatedIds, other.getCommaSeparatedIds()).isEquals();
 	}
 

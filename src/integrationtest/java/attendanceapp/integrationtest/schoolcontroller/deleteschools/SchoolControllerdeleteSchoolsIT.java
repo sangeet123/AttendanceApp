@@ -13,7 +13,7 @@ import org.junit.Test;
 import attendanceapp.integrationtest.common.util.AttendanceAppUtilIT;
 import attendanceapp.integrationtest.common.util.TestConfigurerIT;
 import attendanceapp.integrationtest.utils.SchoolControllerUtilIT;
-import attendanceapp.model.requestobject.DeleteSelectedSchoolRequestObject;
+import attendanceapp.model.requestobject.DeleteSchoolsRequestObject;
 
 public class SchoolControllerdeleteSchoolsIT extends TestConfigurerIT {
 
@@ -49,7 +49,7 @@ public class SchoolControllerdeleteSchoolsIT extends TestConfigurerIT {
 	@Test()
 	public void deleted_valid_selected_schoolid_1_that_exist_in_database() throws Exception {
 		final String commaSeparatedIds = "1,15";
-		DeleteSelectedSchoolRequestObject deleteSelectedSchoolRequestObject = new DeleteSelectedSchoolRequestObject();
+		DeleteSchoolsRequestObject deleteSelectedSchoolRequestObject = new DeleteSchoolsRequestObject();
 		deleteSelectedSchoolRequestObject.setCommaSeparatedIds(commaSeparatedIds);
 		final String responseJsonString = "{\"statusCode\":1,\"messages\":[\"Schools have been deleted successfully.\"]}";
 		getMockMvc()
@@ -71,7 +71,7 @@ public class SchoolControllerdeleteSchoolsIT extends TestConfigurerIT {
 	@Test()
 	public void deleted_selected_schoolids_10_that_exist_in_database() throws Exception {
 		final String commaSeparatedIds = "20,10";
-		DeleteSelectedSchoolRequestObject deleteSelectedSchoolRequestObject = new DeleteSelectedSchoolRequestObject();
+		DeleteSchoolsRequestObject deleteSelectedSchoolRequestObject = new DeleteSchoolsRequestObject();
 		deleteSelectedSchoolRequestObject.setCommaSeparatedIds(commaSeparatedIds);
 		final String responseJsonString = "{\"statusCode\":1,\"messages\":[\"Schools have been deleted successfully.\"]}";
 		getMockMvc()
@@ -93,7 +93,7 @@ public class SchoolControllerdeleteSchoolsIT extends TestConfigurerIT {
 	@Test()
 	public void deleted_selected_schoolids_that_does_not_exist_in_database() throws Exception {
 		final String commaSeparatedIds = "20,10";
-		DeleteSelectedSchoolRequestObject deleteSelectedSchoolRequestObject = new DeleteSelectedSchoolRequestObject();
+		DeleteSchoolsRequestObject deleteSelectedSchoolRequestObject = new DeleteSchoolsRequestObject();
 		deleteSelectedSchoolRequestObject.setCommaSeparatedIds(commaSeparatedIds);
 		final String responseJsonString = "{\"statusCode\":1,\"messages\":[\"Schools have been deleted successfully.\"]}";
 		getMockMvc()
