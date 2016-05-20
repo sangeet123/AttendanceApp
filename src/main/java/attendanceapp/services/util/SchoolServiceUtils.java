@@ -24,7 +24,8 @@ public final class SchoolServiceUtils {
 		throw new InstantiationException();
 	}
 
-	public static School createSchoolFromSchoolResponseObject(final SchoolCreateRequestObject schoolRequestObject) {
+	public static School createSchoolFromSchoolCreateRequestObject(
+			final SchoolCreateRequestObject schoolRequestObject) {
 		LocalDateTime createdTime = LocalDateTime.now(Clock.systemUTC());
 		return new SchoolRequestToSchoolMapper.SchoolBuilder().id(schoolRequestObject.getId())
 				.email(schoolRequestObject.getEmail()).name(schoolRequestObject.getName())

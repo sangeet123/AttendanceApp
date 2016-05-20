@@ -59,7 +59,7 @@ public class SchoolDaoImpl implements SchoolDao {
 
 	private void createSchool(final SchoolCreateRequestObject schoolRequestObject) {
 		try {
-			School school = SchoolServiceUtils.createSchoolFromSchoolResponseObject(schoolRequestObject);
+			School school = SchoolServiceUtils.createSchoolFromSchoolCreateRequestObject(schoolRequestObject);
 			long schoolId = (long) session.save(school);
 			schoolRequestObject.setId(schoolId);
 			session.flush();
@@ -71,7 +71,7 @@ public class SchoolDaoImpl implements SchoolDao {
 
 	private void createUser(final SchoolCreateRequestObject schoolRequestObject) {
 		try {
-			School school = SchoolServiceUtils.createSchoolFromSchoolResponseObject(schoolRequestObject);
+			School school = SchoolServiceUtils.createSchoolFromSchoolCreateRequestObject(schoolRequestObject);
 			User user = SchoolServiceUtils.createUserFromSchoolResponseObject(schoolRequestObject);
 			user.setSchool(school);
 			session.save(user);
