@@ -10,15 +10,15 @@ import attendanceapp.model.responseobject.SchoolResponseObject;
 
 public interface SchoolController {
 
-	public SchoolResponseObject getSchool(final long id);
+	SchoolResponseObject getSchool(final long id);
 
-	public List<SchoolResponseObject> getSchoolList();
+	List<SchoolResponseObject> getSchoolList();
 
-	public Status delete(final long id);
+	Status delete(final long id);
 
-	public Status delete(final DeleteSchoolsRequestObject deleteSelectedSchoolRequestObject);
+	Status delete(final DeleteSchoolsRequestObject deleteSelectedSchoolRequestObject);
 
-	public Status create(final SchoolCreateRequestObject schoolRequestObject);
+	Status create(final SchoolCreateRequestObject schoolRequestObject);
 
-	public SchoolResponseObject update(final SchoolUpdateRequestObject schoolRequestObject);
+	SchoolResponseObject update(final SchoolUpdateRequestObject schoolRequestObject);
 }

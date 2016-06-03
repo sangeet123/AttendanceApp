@@ -6,15 +6,15 @@ import attendanceapp.model.School;
 import attendanceapp.model.requestobject.SchoolCreateRequestObject;
 
 public interface SchoolDao {
-	public School getSchool(final long id);
+	School getSchool(final long id);
 
-	public List<School> getSchoolList();
+	List<School> getSchoolList();
 
-	public void update(final School school);
+	void update(final School school);
 
-	public void delete(final long id);
+	void delete(final long id);
 
-	public void delete(final String ids);
+	void delete(final String ids);
 
 	void create(final SchoolCreateRequestObject schoolRequestObject);
 }

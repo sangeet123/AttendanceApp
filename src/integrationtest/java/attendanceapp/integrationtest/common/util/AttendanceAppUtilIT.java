@@ -55,7 +55,7 @@ public final class AttendanceAppUtilIT {
 	public static Properties readDatabaseProperties(String fileName) {
 
 		Properties prop = new Properties();
-		File file = new File(resourceToString(DATABASEPROPERTIESFILE));
+		File file = new File(resourceToString(fileName));
 		InputStream inputStream = null;
 
 		try {
