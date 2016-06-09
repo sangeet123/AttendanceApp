@@ -8,22 +8,44 @@ public class StaffResponseObject extends CreatedAndUpdatedDate {
 	private static final int INITIAL_NONZERO_ODD_NUM = 17;
 	private static final int MULTIPLIER_NONZERO_ODD_NUM = 157;
 
-	private String name;
+	private long id;
+
+	private String firstName;
+
+	private String lastName;
 
 	private String shortName;
 
 	private String telephone;
 
+	private String role;
+
 	private String email;
 
 	private String comment;
 
-	public String getName() {
-		return name;
+	public long getId() {
+		return id;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public String getShortName() {
@@ -42,6 +64,14 @@ public class StaffResponseObject extends CreatedAndUpdatedDate {
 		this.telephone = telephone;
 	}
 
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -58,16 +88,18 @@ public class StaffResponseObject extends CreatedAndUpdatedDate {
 		this.comment = comment;
 	}
 
-	@Override
+	@Override()
 	public String toString() {
-		return "StaffCreateRequestObject [" + "name=" + name + ", shortName=" + shortName + ", telephone=" + telephone
-				+ ", email=" + email + ", comment=" + comment + "]";
+		return "StaffResponseObject [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", shortName="
+				+ shortName + ", telephone=" + telephone + ", role=" + role + ", email=" + email + ", comment="
+				+ comment + "]";
 	}
 
 	@Override()
 	public int hashCode() {
-		return new HashCodeBuilder(INITIAL_NONZERO_ODD_NUM, MULTIPLIER_NONZERO_ODD_NUM).append(email).append(name)
-				.append(shortName).append(telephone).append(comment).toHashCode();
+		return new HashCodeBuilder(INITIAL_NONZERO_ODD_NUM, MULTIPLIER_NONZERO_ODD_NUM).append(id).append(email)
+				.append(firstName).append(lastName).append(shortName).append(role).append(telephone).append(comment)
+				.toHashCode();
 	}
 
 	@Override()
@@ -78,8 +110,9 @@ public class StaffResponseObject extends CreatedAndUpdatedDate {
 			return false;
 		}
 		StaffResponseObject other = (StaffResponseObject) obj;
-		return new EqualsBuilder().append(email, other.getEmail()).append(name, other.getName())
-				.append(shortName, other.getShortName()).append(telephone, other.getTelephone())
-				.append(comment, other.getComment()).isEquals();
+		return new EqualsBuilder().append(id, other.getId()).append(email, other.getEmail())
+				.append(firstName, other.getFirstName()).append(lastName, other.getLastName())
+				.append(role, other.getRole()).append(shortName, other.getShortName())
+				.append(telephone, other.getTelephone()).append(comment, other.getComment()).isEquals();
 	}
 }

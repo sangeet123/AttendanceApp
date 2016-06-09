@@ -50,7 +50,7 @@ public class SubjectServiceImpl implements SubjectService {
 	@Override()
 	public SubjectResponseObject create(final long schoolId,
 			final SubjectCreateRequestObject subjectCreateRequestObject) {
-		Subject subject = SubjectServiceUtil.creaSubjectFromSubjectCreateRequestObject(schoolId,
+		Subject subject = SubjectServiceUtil.createSubjectFromSubjectCreateRequestObject(schoolId,
 				subjectCreateRequestObject);
 		subjectDao.create(subject);
 		return SubjectServiceUtil.createSubjectResponseObjectFromSubject(subject);

@@ -19,10 +19,6 @@ public final class SubjectRestControllerConstants {
 	public static final String CREATE_SUCCESS = "School created sucessfully.";
 	public static final String DUPLICATE_SUBJECT_SHORT_NAME = "Subject with given short name already exists. Please enter different short name.";
 
-	// validation constants
-	public static final String SUBJECT_NAME_REQUIRED = "Subject name cannot be empty.";
-	public static final String SCHOOL_SHORTNAME_REQUIRED = "Subject short name cannot be empty";
-
 	private SubjectRestControllerConstants() throws InstantiationException {
 		throw new InstantiationException();
 	}

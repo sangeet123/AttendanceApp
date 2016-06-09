@@ -43,7 +43,7 @@ public final class SubjectServiceUtil {
 		return subject;
 	}
 
-	public static Subject creaSubjectFromSubjectCreateRequestObject(final long schoolId,
+	public static Subject createSubjectFromSubjectCreateRequestObject(final long schoolId,
 			final SubjectCreateRequestObject subjectCreateRequestObject) {
 		LocalDateTime utcNow = LocalDateTime.now(Clock.systemUTC());
 		Subject subject = new SubjectCreateRequestToSubjectMapper.SubjectBuilder()

@@ -27,4 +27,35 @@
 		</authentication-provider>
 	</authentication-manager>
 
+
+	<!-- Authenticating staff -->
+	<authentication-manager alias="customAuthenticationManager"
+		xmlns="http://www.springframework.org/schema/security">
+		<authentication-provider ref="customAuthenticationProvider" />
+	</authentication-manager>
+
+	<bean id="customAuthenticationProvider"
+		class="attendanceapp.staff.authenticationprovider.UserAuthenticationProvider">
+	</bean>
+
+
+	<security:http entry-point-ref="basicAuthEntryPoint"
+		pattern="/schoolrealm/**">
+		<security:intercept-url pattern="/schoolrealm"
+			access="ROLE_STAFF" />
+		<security:custom-filter ref="basicAuthenticationFilter"
+			after="BASIC_AUTH_FILTER" />
+	</security:http>
+
+	<bean id="basicAuthEntryPoint"
+		class="org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint">
+		<property name="realmName" value="REST Realm" />
+	</bean>
+
+	<bean id="basicAuthenticationFilter"
+		class="org.springframework.security.web.authentication.www.BasicAuthenticationFilter">
+		<property name="authenticationManager" ref="customAuthenticationManager" />
+		<property name="authenticationEntryPoint" ref="basicAuthEntryPoint" />
+	</bean>
+
 </beans>

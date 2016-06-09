@@ -9,19 +9,16 @@ import attendanceapp.model.responseobject.SubjectResponseObject;
 
 public interface SubjectController {
 
-	public SubjectResponseObject getSubject(final long schoolId, final long subjectId);
+	SubjectResponseObject getSubject(final long schoolId, final long subjectId);
 
-	public List<SubjectResponseObject> getSubjectList(final long schoolId);
+	List<SubjectResponseObject> getSubjectList(final long schoolId);
 
-	public Status delete(final long schoolId, final long subjectId);
+	Status delete(final long schoolId, final long subjectId);
 
-	public Status delete(final long schoolId,
-			final DeleteSubjectsRequestObject deleteSelectedSubjectRequestObject);
+	Status delete(final long schoolId, final DeleteSubjectsRequestObject deleteSelectedSubjectRequestObject);
 
-	public SubjectResponseObject create(final long schoolId,
-			final SubjectCreateRequestObject subjectCreateRequestObject);
+	SubjectResponseObject create(final long schoolId, final SubjectCreateRequestObject subjectCreateRequestObject);
 
-	public SubjectResponseObject update(final long schoolId,
-			final SubjectUpdateRequestObject subjectUpdateRequestObject);
+	SubjectResponseObject update(final long schoolId, final SubjectUpdateRequestObject subjectUpdateRequestObject);
 
 }

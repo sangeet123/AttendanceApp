@@ -16,10 +16,17 @@ public class StaffCreateRequestObject {
 	private static final int INITIAL_NONZERO_ODD_NUM = 17;
 	private static final int MULTIPLIER_NONZERO_ODD_NUM = 157;
 
+	private long id;
+
 	@NotBlank()
 	@Length(max = 250)
-	@JsonProperty(value = "name")
-	private String name;
+	@JsonProperty(value = "firstname")
+	private String firstName;
+
+	@NotBlank()
+	@Length(max = 250)
+	@JsonProperty(value = "lastname")
+	private String lastName;
 
 	@NotBlank()
 	@Length(max = 250)
@@ -42,19 +49,44 @@ public class StaffCreateRequestObject {
 	@JsonProperty(value = "comment")
 	private String comment;
 
-	public String getName() {
-		return name;
+	@NotBlank()
+	@Length(max = 20)
+	@JsonProperty(value = "role")
+	private String role;
+
+	@NotBlank()
+	@Length(max = 250)
+	@Pattern(regexp = AttendanceAppUtils.USERNAME_REGEX)
+	@JsonProperty(value = "username")
+	private String username;
+
+	@NotBlank()
+	@Length(max = 250)
+	@Pattern(regexp = AttendanceAppUtils.PASSWORD_REGEX)
+	@JsonProperty(value = "password")
+	private String password;
+
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setName(final String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return firstName;
+	}
+
+	public void setLastName(final String lastName) {
+		this.lastName = lastName;
 	}
 
 	public String getShortName() {
 		return shortName;
 	}
 
-	public void setShortName(String shortName) {
+	public void setShortName(final String shortName) {
 		this.shortName = shortName;
 	}
 
@@ -62,7 +94,7 @@ public class StaffCreateRequestObject {
 		return telephone;
 	}
 
-	public void setTelephone(String telephone) {
+	public void setTelephone(final String telephone) {
 		this.telephone = telephone;
 	}
 
@@ -70,7 +102,7 @@ public class StaffCreateRequestObject {
 		return email;
 	}
 
-	public void setEmail(String email) {
+	public void setEmail(final String email) {
 		this.email = email;
 	}
 
@@ -78,20 +110,37 @@ public class StaffCreateRequestObject {
 		return comment;
 	}
 
-	public void setComment(String comment) {
+	public void setComment(final String comment) {
 		this.comment = comment;
 	}
 
-	@Override
+	public void setRole(final String role) {
+		this.role = role;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	@Override()
 	public String toString() {
-		return "StaffCreateRequestObject [" + "name=" + name + ", shortName=" + shortName + ", telephone=" + telephone
-				+ ", email=" + email + ", comment=" + comment + "]";
+		return "StaffCreateRequestObject [firstName=" + firstName + ", lastName=" + lastName + ", shortName="
+				+ shortName + ", telephone=" + telephone + ", email=" + email + ", comment=" + comment + "]";
 	}
 
 	@Override()
 	public int hashCode() {
-		return new HashCodeBuilder(INITIAL_NONZERO_ODD_NUM, MULTIPLIER_NONZERO_ODD_NUM).append(email).append(name)
-				.append(shortName).append(telephone).append(comment).toHashCode();
+		return new HashCodeBuilder(INITIAL_NONZERO_ODD_NUM, MULTIPLIER_NONZERO_ODD_NUM).append(id).append(email)
+				.append(firstName).append(lastName).append(shortName).append(telephone).append(comment).append(role)
+				.toHashCode();
 	}
 
 	@Override()
@@ -102,8 +151,9 @@ public class StaffCreateRequestObject {
 			return false;
 		}
 		StaffCreateRequestObject other = (StaffCreateRequestObject) obj;
-		return new EqualsBuilder().append(email, other.getEmail()).append(name, other.getName())
-				.append(shortName, other.getShortName()).append(telephone, other.getTelephone())
+		return new EqualsBuilder().append(email, other.getEmail()).append(firstName, other.getFirstName())
+				.append(id, other.getId()).append(lastName, other.getLastName()).append(shortName, other.getShortName())
+				.append(role, other.getRole()).append(telephone, other.getTelephone())
 				.append(comment, other.getComment()).isEquals();
 	}
 }
