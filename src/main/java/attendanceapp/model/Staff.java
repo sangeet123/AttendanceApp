@@ -30,19 +30,19 @@ public class Staff extends CreatedAndUpdatedDate implements Serializable {
 	@Column(name = "last_name", nullable = false, length = 50)
 	public String lastName;
 
-	@Column(name = "user_name", nullable = false, length = 50)
+	@Column(name = "user_name", unique = true, nullable = false, length = 50)
 	public String username;
 
 	@Column(name = "password", nullable = false, length = 250)
 	public String password;
 
-	@Column(name = "email", nullable = false, length = 250)
+	@Column(name = "email", unique = true, nullable = false, length = 250)
 	public String email;
 
 	@Column(name = "telephone")
 	public String telephone;
 
-	@Column(name = "short_name", nullable = false, length = 250)
+	@Column(name = "short_name", unique = true, nullable = false, length = 250)
 	public String shortName;
 
 	@Column(name = "role", nullable = false)

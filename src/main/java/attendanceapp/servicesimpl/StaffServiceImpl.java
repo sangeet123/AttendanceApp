@@ -3,6 +3,7 @@ package attendanceapp.servicesimpl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import attendanceapp.dao.StaffDao;
 import attendanceapp.model.Staff;
@@ -13,6 +14,7 @@ import attendanceapp.model.responseobject.StaffResponseObject;
 import attendanceapp.services.StaffService;
 import attendanceapp.services.util.StaffServiceUtil;
 
+@Service()
 public class StaffServiceImpl implements StaffService {
 
 	@Autowired()

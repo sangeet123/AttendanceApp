@@ -17,8 +17,9 @@ public final class StaffRestControllerConstants {
 	public static final String DELETE_FAILURE = "Staff could not be deleted.";
 	public static final String SUBJECT_DOES_NOT_EXIST = "Staff does not exist.";
 	public static final String CREATE_SUCCESS = "Staff created sucessfully.";
-	public static final String DUPLICATE_STAFF_SHORT_NAME = "Staff with given short name already exists. Please enter different short name.";
-	public static final String DUPLICATE_USERNAME = "Staff with given username already exists. Please enter different user name.";
+	public static final String DUPLICATE_STAFF_SHORT_NAME = "Staff with short name already exists. Please try with different short name.";
+	public static final String DUPLICATE_STAFF_USERNAME = "Staff with username already exists. Please try with different user name.";
+	public static final String DUPLICATE_STAFF_EMAIL = "Staff with email already exists. Please try with different email.";
 
 	private StaffRestControllerConstants() throws InstantiationException {
 		throw new InstantiationException();

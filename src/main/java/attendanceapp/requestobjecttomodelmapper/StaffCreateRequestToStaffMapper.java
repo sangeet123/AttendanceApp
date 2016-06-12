@@ -2,12 +2,19 @@ package attendanceapp.requestobjecttomodelmapper;
 
 import java.time.LocalDateTime;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import attendanceapp.model.Staff;
 
 public class StaffCreateRequestToStaffMapper {
 
 	public static class StaffResponseBuilder {
 		private long id;
+
+		private String username;
+
+		private String password;
 
 		private String firstName;
 
@@ -27,8 +34,22 @@ public class StaffCreateRequestToStaffMapper {
 
 		private LocalDateTime updatedOn;
 
+		private boolean enabled;
+
 		public StaffResponseBuilder id(final long id) {
 			this.id = id;
+			return this;
+		}
+
+		public StaffResponseBuilder username(final String username) {
+			this.username = username;
+			return this;
+		}
+
+		public StaffResponseBuilder password(final String password) {
+			PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+			String hashedPassword = passwordEncoder.encode(password);
+			this.password = hashedPassword;
 			return this;
 		}
 
@@ -72,8 +93,13 @@ public class StaffCreateRequestToStaffMapper {
 			return this;
 		}
 
-		public StaffResponseBuilder CreatedOn(final LocalDateTime createdOn) {
+		public StaffResponseBuilder createdOn(final LocalDateTime createdOn) {
 			this.createdOn = createdOn;
+			return this;
+		}
+
+		public StaffResponseBuilder enabled(final boolean enabled) {
+			this.enabled = enabled;
 			return this;
 		}
 
@@ -89,6 +115,9 @@ public class StaffCreateRequestToStaffMapper {
 			staff.setLastName(this.lastName);
 			staff.setShortName(this.shortName);
 			staff.setRole(this.role);
+			staff.setEnabled(enabled);
+			staff.setUsername(username);
+			staff.setPassword(password);
 			return staff;
 		}
 	}

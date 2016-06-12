@@ -9,17 +9,22 @@ import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+import attendanceapp.constants.StaffRestControllerConstants;
 import attendanceapp.dao.StaffDao;
-import attendanceapp.exceptions.DuplicateSubjectShortNameException;
+import attendanceapp.exceptions.ConflictException;
 import attendanceapp.exceptions.UnknownException;
 import attendanceapp.model.Staff;
 import attendanceapp.model.Subject;
 
+@Repository()
 public class StaffDaoImpl implements StaffDao {
 
-	static final String SELECT_STAFF_BY_SHORT_NAME_IF_ALREADY_EXIST = "from attendanceapp.model.Staff where short_name= :shortname and school.id= :schoolId";
-	static final String SELECT_STAFF_BY_USER_NAME_IF_ALREADY_EXIST = "from attendanceapp.model.Staff where user_name= :username and school.id= :schoolId";
+	private static final String SELECT_STAFF_BY_SHORT_NAME_IF_ALREADY_EXIST = "from attendanceapp.model.Staff where short_name= :shortname and school.id= :schoolId";
+	private static final String SELECT_STAFF_BY_USER_NAME_IF_ALREADY_EXIST = "from attendanceapp.model.Staff where user_name= :username and school.id= :schoolId";
+	private static final String SELECT_STAFF_BY_EMAIL_IF_ALREADY_EXIST = "from attendanceapp.model.Staff where email= :email and school.id= :schoolId";
+	private static final String SCHOOLID = "schoolId";
 	private final Logger logger = LoggerFactory.getLogger(StaffDaoImpl.class);
 
 	@Autowired()
@@ -34,42 +39,65 @@ public class StaffDaoImpl implements StaffDao {
 		}
 	}
 
-	private void validateUserName(String username, long schoolId) {
+	private void validateUserName(Staff staff, long schoolId) {
 		try {
 			session = sessionFactory.openSession();
 			Query query = session.createQuery(SELECT_STAFF_BY_USER_NAME_IF_ALREADY_EXIST)
-					.setParameter("username", username).setParameter("schoolId", schoolId);
+					.setParameter("username", staff.getUsername()).setParameter(SCHOOLID, schoolId);
 			if (query.uniqueResult() != null) {
-				throw new DuplicateSubjectShortNameException();
+				throw new ConflictException(StaffRestControllerConstants.DUPLICATE_STAFF_USERNAME);
 			}
-		} finally {
-			closeSession();
-		}
-	}
-
-	private void validateShortName(String shortName, long schoolId) {
-		try {
-			session = sessionFactory.openSession();
-			Query query = session.createQuery(SELECT_STAFF_BY_SHORT_NAME_IF_ALREADY_EXIST)
-					.setParameter("shortName", shortName).setParameter("schoolId", schoolId);
-			if (query.uniqueResult() != null) {
-				throw new DuplicateSubjectShortNameException();
-			}
-		} finally {
-			closeSession();
-		}
-
-	}
-
-	private void validateStaff(Staff staff) {
-		try {
-			long schoolId = staff.getSchool().getId();
-			validateUserName(staff.getUsername(), schoolId);
-			validateShortName(staff.getShortName(), schoolId);
+		} catch (ConflictException ex) {
+			throw ex;
 		} catch (Exception ex) {
 			logger.error("", ex);
 			throw new UnknownException();
+		} finally {
+			closeSession();
 		}
+	}
+
+	private void validateShortName(Staff staff, long schoolId) {
+		try {
+			session = sessionFactory.openSession();
+			Query query = session.createQuery(SELECT_STAFF_BY_SHORT_NAME_IF_ALREADY_EXIST)
+					.setParameter("shortname", staff.getShortName()).setParameter(SCHOOLID, schoolId);
+			if (query.uniqueResult() != null) {
+				throw new ConflictException(StaffRestControllerConstants.DUPLICATE_STAFF_SHORT_NAME);
+			}
+		} catch (ConflictException ex) {
+			throw ex;
+		} catch (Exception ex) {
+			logger.error("", ex);
+			throw new UnknownException();
+		} finally {
+			closeSession();
+		}
+	}
+
+	private void validateEmail(Staff staff, long schoolId) {
+		try {
+			session = sessionFactory.openSession();
+			Query query = session.createQuery(SELECT_STAFF_BY_EMAIL_IF_ALREADY_EXIST)
+					.setParameter("email", staff.getEmail()).setParameter(SCHOOLID, schoolId);
+			if (query.uniqueResult() != null) {
+				throw new ConflictException(StaffRestControllerConstants.DUPLICATE_STAFF_EMAIL);
+			}
+		} catch (ConflictException ex) {
+			throw ex;
+		} catch (Exception ex) {
+			logger.error("", ex);
+			throw new UnknownException();
+		} finally {
+			closeSession();
+		}
+	}
+
+	private void validateStaff(Staff staff) {
+		long schoolId = staff.getSchool().getId();
+		validateUserName(staff, schoolId);
+		validateShortName(staff, schoolId);
+		validateEmail(staff, schoolId);
 	}
 
 	@Override()

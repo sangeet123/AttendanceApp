@@ -20,12 +20,12 @@ public class StaffCreateRequestObject {
 
 	@NotBlank()
 	@Length(max = 250)
-	@JsonProperty(value = "firstname")
+	@JsonProperty(value = "firstName")
 	private String firstName;
 
 	@NotBlank()
 	@Length(max = 250)
-	@JsonProperty(value = "lastname")
+	@JsonProperty(value = "lastName")
 	private String lastName;
 
 	@NotBlank()
@@ -66,8 +66,28 @@ public class StaffCreateRequestObject {
 	@JsonProperty(value = "password")
 	private String password;
 
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	public String getFirstName() {
 		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
 	public void setName(final String firstName) {
@@ -75,7 +95,7 @@ public class StaffCreateRequestObject {
 	}
 
 	public String getLastName() {
-		return firstName;
+		return lastName;
 	}
 
 	public void setLastName(final String lastName) {
@@ -140,7 +160,7 @@ public class StaffCreateRequestObject {
 	public int hashCode() {
 		return new HashCodeBuilder(INITIAL_NONZERO_ODD_NUM, MULTIPLIER_NONZERO_ODD_NUM).append(id).append(email)
 				.append(firstName).append(lastName).append(shortName).append(telephone).append(comment).append(role)
-				.toHashCode();
+				.append(username).toHashCode();
 	}
 
 	@Override()
@@ -152,8 +172,8 @@ public class StaffCreateRequestObject {
 		}
 		StaffCreateRequestObject other = (StaffCreateRequestObject) obj;
 		return new EqualsBuilder().append(email, other.getEmail()).append(firstName, other.getFirstName())
-				.append(id, other.getId()).append(lastName, other.getLastName()).append(shortName, other.getShortName())
-				.append(role, other.getRole()).append(telephone, other.getTelephone())
-				.append(comment, other.getComment()).isEquals();
+				.append(username, other.getUsername()).append(id, other.getId()).append(lastName, other.getLastName())
+				.append(shortName, other.getShortName()).append(role, other.getRole())
+				.append(telephone, other.getTelephone()).append(comment, other.getComment()).isEquals();
 	}
 }

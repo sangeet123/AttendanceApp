@@ -3,6 +3,8 @@ package attendanceapp.model.responseobject;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class StaffResponseObject extends CreatedAndUpdatedDate {
 
 	private static final int INITIAL_NONZERO_ODD_NUM = 17;
@@ -10,18 +12,25 @@ public class StaffResponseObject extends CreatedAndUpdatedDate {
 
 	private long id;
 
+	@JsonProperty(value = "firstName")
 	private String firstName;
 
+	@JsonProperty(value = "lastName")
 	private String lastName;
 
+	@JsonProperty(value = "shortName")
 	private String shortName;
 
+	@JsonProperty(value = "telephone")
 	private String telephone;
 
+	@JsonProperty(value = "role")
 	private String role;
 
+	@JsonProperty(value = "email")
 	private String email;
 
+	@JsonProperty(value = "comment")
 	private String comment;
 
 	public long getId() {

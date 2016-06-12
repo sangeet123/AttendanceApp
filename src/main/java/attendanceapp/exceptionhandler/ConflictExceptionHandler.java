@@ -11,26 +11,27 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import attendanceapp.customstatus.Status;
-import attendanceapp.exceptions.DuplicateSubjectShortNameException;
+import attendanceapp.exceptions.ConflictException;
 import attendanceapp.util.AttendanceAppUtils;
 import attendanceapp.util.StatusCodeUtil;
 
 @ControllerAdvice()
-public class DuplicateSubjectShortNameExceptionHandler {
+public class ConflictExceptionHandler {
 
 	private MessageSource messageSource;
-	private final Logger logger = LoggerFactory.getLogger(DuplicateSubjectShortNameExceptionHandler.class);
+	private final Logger logger = LoggerFactory.getLogger(ConflictExceptionHandler.class);
 
 	@Autowired()
-	public DuplicateSubjectShortNameExceptionHandler(MessageSource messageSource) {
+	public ConflictExceptionHandler(MessageSource messageSource) {
 		this.messageSource = messageSource;
 	}
 
 	@ResponseBody()
-	@ExceptionHandler(DuplicateSubjectShortNameException.class)
+	@ExceptionHandler(ConflictException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)
-	public Status processDuplicateSchoolNameException(DuplicateSubjectShortNameException ex) {
-		logger.error("Duplicate subject short name", ex);
-		return AttendanceAppUtils.createStatus(ex.getMessage(), StatusCodeUtil.DUPLICATE_ITEM_EXIST_CODE);
+	public Status processDuplicateSchoolNameException(ConflictException ex) {
+		logger.error("", ex);
+		Status status = AttendanceAppUtils.createStatus(ex.getMessage(), StatusCodeUtil.DUPLICATE_ITEM_EXIST_CODE);
+		return status;
 	}
 }

@@ -44,13 +44,13 @@ public final class StaffServiceUtil {
 	}
 
 	public static Staff createStaffFromStaffCreateRequestObject(final long schoolId,
-			final StaffCreateRequestObject staffCreateRequestObject) {
+			final StaffCreateRequestObject request) {
 		LocalDateTime utcNow = LocalDateTime.now(Clock.systemUTC());
-		Staff staff = new StaffCreateRequestToStaffMapper.StaffResponseBuilder().id(staffCreateRequestObject.getId())
-				.firstName(staffCreateRequestObject.getFirstName()).lastName(staffCreateRequestObject.getLastName())
-				.email(staffCreateRequestObject.getEmail()).telephone(staffCreateRequestObject.getTelephone())
-				.shortName(staffCreateRequestObject.getShortName()).comment(staffCreateRequestObject.getComment())
-				.role(staffCreateRequestObject.getRole()).CreatedOn(utcNow).updatedOn(utcNow).build();
+		Staff staff = new StaffCreateRequestToStaffMapper.StaffResponseBuilder().id(request.getId())
+				.firstName(request.getFirstName()).lastName(request.getLastName()).email(request.getEmail())
+				.telephone(request.getTelephone()).shortName(request.getShortName()).comment(request.getComment())
+				.role(request.getRole()).createdOn(utcNow).updatedOn(utcNow).enabled(true)
+				.username(request.getUsername()).password(request.getPassword()).build();
 		staff.setSchool(createSchoolWithId(schoolId));
 		return staff;
 	}

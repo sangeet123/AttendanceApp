@@ -15,9 +15,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import attendanceapp.constants.SubjectRestControllerConstants;
 import attendanceapp.dao.SubjectDao;
-import attendanceapp.exceptions.DuplicateSubjectShortNameException;
-import attendanceapp.exceptions.SubjectNotFoundException;
+import attendanceapp.exceptions.ConflictException;
+import attendanceapp.exceptions.NotFoundException;
 import attendanceapp.exceptions.UnknownException;
 import attendanceapp.model.Subject;
 
@@ -51,7 +52,7 @@ public class SubjectDaoImpl implements SubjectDao {
 			@SuppressWarnings("rawtypes")
 			List subjects = criteria.list();
 			if (subjects.isEmpty()) {
-				throw new SubjectNotFoundException();
+				throw new NotFoundException(SubjectRestControllerConstants.SUBJECT_DOES_NOT_EXIST);
 			}
 			return (Subject) subjects.get(0);
 		} finally {
@@ -63,7 +64,7 @@ public class SubjectDaoImpl implements SubjectDao {
 	public Subject getSubject(final long schoolId, final long subjectId) {
 		try {
 			return findSubject(schoolId, subjectId);
-		} catch (SubjectNotFoundException ex) {
+		} catch (NotFoundException ex) {
 			throw ex;
 		} catch (Exception ex) {
 			logger.error("", ex);
@@ -98,9 +99,9 @@ public class SubjectDaoImpl implements SubjectDao {
 			if (query.uniqueResult() == null) {
 				session.save(subject);
 			} else {
-				throw new DuplicateSubjectShortNameException();
+				throw new ConflictException(SubjectRestControllerConstants.DUPLICATE_SUBJECT_SHORT_NAME);
 			}
-		} catch (DuplicateSubjectShortNameException | SubjectNotFoundException ex) {
+		} catch (ConflictException | NotFoundException ex) {
 			throw ex;
 		} catch (Exception ex) {
 			logger.error("", ex);
@@ -116,9 +117,9 @@ public class SubjectDaoImpl implements SubjectDao {
 			Query query = session.createQuery(DELETE_SUBJECT_BY_ID).setParameter("subjectId", subjectId)
 					.setParameter("schoolId", schoolId);
 			if (query.executeUpdate() == 0) {
-				throw new SubjectNotFoundException();
+				throw new NotFoundException(SubjectRestControllerConstants.SUBJECT_DOES_NOT_EXIST);
 			}
-		} catch (SubjectNotFoundException ex) {
+		} catch (NotFoundException ex) {
 			throw ex;
 		} catch (Exception ex) {
 			logger.error("", ex);
@@ -155,9 +156,9 @@ public class SubjectDaoImpl implements SubjectDao {
 			if (query.uniqueResult() == null) {
 				session.save(subject);
 			} else {
-				throw new DuplicateSubjectShortNameException();
+				throw new ConflictException(SubjectRestControllerConstants.DUPLICATE_SUBJECT_SHORT_NAME);
 			}
-		} catch (DuplicateSubjectShortNameException ex) {
+		} catch (ConflictException ex) {
 			throw ex;
 		} catch (Exception ex) {
 			logger.error("", ex);
