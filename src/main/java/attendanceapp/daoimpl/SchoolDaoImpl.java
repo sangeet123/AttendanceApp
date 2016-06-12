@@ -15,10 +15,10 @@ import org.springframework.stereotype.Repository;
 
 import com.google.common.base.Optional;
 
+import attendanceapp.constants.SchoolRestControllerConstants;
 import attendanceapp.dao.SchoolDao;
-import attendanceapp.exceptions.DuplicateSchoolNameException;
-import attendanceapp.exceptions.DuplicateUserNameException;
-import attendanceapp.exceptions.SchoolNotFoundException;
+import attendanceapp.exceptions.ConflictException;
+import attendanceapp.exceptions.NotFoundException;
 import attendanceapp.exceptions.UnknownException;
 import attendanceapp.model.Authority;
 import attendanceapp.model.School;
@@ -65,7 +65,7 @@ public class SchoolDaoImpl implements SchoolDao {
 			session.flush();
 		} catch (ConstraintViolationException ex) {
 			logger.error("", ex);
-			throw new DuplicateSchoolNameException();
+			throw new ConflictException(SchoolRestControllerConstants.DUPLICATE_SCHOOL_NAME);
 		}
 	}
 
@@ -81,7 +81,7 @@ public class SchoolDaoImpl implements SchoolDao {
 			session.flush();
 		} catch (ConstraintViolationException ex) {
 			logger.error("", ex);
-			throw new DuplicateUserNameException();
+			throw new ConflictException(SchoolRestControllerConstants.CREATE_USER_FAILURE_DUPLICATE_ENTRY);
 		}
 	}
 
@@ -108,7 +108,7 @@ public class SchoolDaoImpl implements SchoolDao {
 			return school.get();
 		} catch (ObjectNotFoundException | NullPointerException ex) {
 			logger.error("", ex);
-			throw new SchoolNotFoundException();
+			throw new NotFoundException(SchoolRestControllerConstants.SCHOOL_DOES_NOT_EXIST);
 		} catch (Exception ex) {
 			logger.error("", ex);
 			throw new UnknownException();
@@ -128,10 +128,10 @@ public class SchoolDaoImpl implements SchoolDao {
 			transaction.commit();
 		} catch (ObjectNotFoundException | NullPointerException ex) {
 			logger.error("", ex);
-			throw new SchoolNotFoundException();
+			throw new NotFoundException(SchoolRestControllerConstants.SCHOOL_DOES_NOT_EXIST);
 		} catch (ConstraintViolationException ex) {
 			logger.error("", ex);
-			throw new DuplicateSchoolNameException();
+			throw new ConflictException(SchoolRestControllerConstants.DUPLICATE_SCHOOL_NAME);
 		} catch (Exception ex) {
 			logger.error("", ex);
 			throw new UnknownException();
@@ -150,7 +150,7 @@ public class SchoolDaoImpl implements SchoolDao {
 			createUser(schoolRequestObject);
 			wasCreateSuccessFull = true;
 			transaction.commit();
-		} catch (DuplicateSchoolNameException | DuplicateUserNameException ex) {
+		} catch (ConflictException ex) {
 			throw ex;
 		} catch (Exception ex) {
 			logger.error("", ex);
@@ -173,7 +173,7 @@ public class SchoolDaoImpl implements SchoolDao {
 			transaction.commit();
 		} catch (ObjectNotFoundException | NullPointerException ex) {
 			logger.error("", ex);
-			throw new SchoolNotFoundException();
+			throw new NotFoundException(SchoolRestControllerConstants.SCHOOL_DOES_NOT_EXIST);
 		} catch (Exception ex) {
 			logger.error("", ex);
 			throw new UnknownException();

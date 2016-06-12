@@ -29,8 +29,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import attendanceapp.constants.SubjectRestControllerConstants;
 import attendanceapp.controller.SubjectController;
 import attendanceapp.controllerimpl.SubjectControllerImpl;
-import attendanceapp.exceptions.DuplicateSubjectShortNameException;
-import attendanceapp.exceptions.SubjectNotFoundException;
+import attendanceapp.exceptions.ConflictException;
+import attendanceapp.exceptions.NotFoundException;
 import attendanceapp.model.requestobject.DeleteSubjectsRequestObject;
 import attendanceapp.model.requestobject.SubjectCreateRequestObject;
 import attendanceapp.model.requestobject.SubjectUpdateRequestObject;
@@ -116,7 +116,7 @@ public class SubjectControllerUnitTest extends UnitTestConfigurer {
 		long validIdThatDoesNotExist = 11L;
 
 		when(subjectServiceMock.getSubject(SCHOOLID, validIdThatDoesNotExist))
-				.thenThrow(new SubjectNotFoundException(SubjectRestControllerConstants.SUBJECT_DOES_NOT_EXIST));
+				.thenThrow(new NotFoundException(SubjectRestControllerConstants.SUBJECT_DOES_NOT_EXIST));
 		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Subject does not exist.\"]}";
 		getMockMvc().perform(get(SubjectControllerUnitTestUtil.GETSUBJECTWITHID, SCHOOLID, validIdThatDoesNotExist))
 				.andExpect(status().isNotFound())
@@ -131,7 +131,7 @@ public class SubjectControllerUnitTest extends UnitTestConfigurer {
 		long validIdThatDoesNotExist = -1L;
 
 		when(subjectServiceMock.getSubject(SCHOOLID, validIdThatDoesNotExist))
-				.thenThrow(new SubjectNotFoundException(SubjectRestControllerConstants.SUBJECT_DOES_NOT_EXIST));
+				.thenThrow(new NotFoundException(SubjectRestControllerConstants.SUBJECT_DOES_NOT_EXIST));
 		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Subject does not exist.\"]}";
 		getMockMvc().perform(get(SubjectControllerUnitTestUtil.GETSUBJECTWITHID, SCHOOLID, validIdThatDoesNotExist))
 				.andExpect(status().isNotFound())
@@ -147,8 +147,8 @@ public class SubjectControllerUnitTest extends UnitTestConfigurer {
 			throws Exception {
 		long validSubjectIdThatDoesNotExist = 15L;
 		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Subject does not exist.\"]}";
-		doThrow(new SubjectNotFoundException(SubjectRestControllerConstants.SUBJECT_DOES_NOT_EXIST))
-				.when(subjectServiceMock).delete(SCHOOLID, validSubjectIdThatDoesNotExist);
+		doThrow(new NotFoundException(SubjectRestControllerConstants.SUBJECT_DOES_NOT_EXIST)).when(subjectServiceMock)
+				.delete(SCHOOLID, validSubjectIdThatDoesNotExist);
 		getMockMvc()
 				.perform(delete(SubjectControllerUnitTestUtil.DELETESUBJECT, SCHOOLID, validSubjectIdThatDoesNotExist))
 				.andExpect(status().isNotFound()).andExpect(content().string(responseJsonString));
@@ -160,8 +160,8 @@ public class SubjectControllerUnitTest extends UnitTestConfigurer {
 	public void delete_subject_by_id_should_return_http_status_code_404_for_id_that_is_invalid() throws Exception {
 		long invalidSubjectIdThatDoesNotExist = -1L;
 		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Subject does not exist.\"]}";
-		doThrow(new SubjectNotFoundException(SubjectRestControllerConstants.SUBJECT_DOES_NOT_EXIST))
-				.when(subjectServiceMock).delete(SCHOOLID, invalidSubjectIdThatDoesNotExist);
+		doThrow(new NotFoundException(SubjectRestControllerConstants.SUBJECT_DOES_NOT_EXIST)).when(subjectServiceMock)
+				.delete(SCHOOLID, invalidSubjectIdThatDoesNotExist);
 		getMockMvc()
 				.perform(
 						delete(SubjectControllerUnitTestUtil.DELETESUBJECT, SCHOOLID, invalidSubjectIdThatDoesNotExist))
@@ -247,7 +247,7 @@ public class SubjectControllerUnitTest extends UnitTestConfigurer {
 		final String duplicateSubjectShortName = "CP 101";
 		SubjectUpdateRequestObject subjectUpdateRequestObject = SubjectControllerUnitTestUtil
 				.getSubjectUpdateRequestObject(1, "Java Programming", duplicateSubjectShortName, 5);
-		doThrow(new DuplicateSubjectShortNameException(SubjectRestControllerConstants.DUPLICATE_SUBJECT_SHORT_NAME))
+		doThrow(new ConflictException(SubjectRestControllerConstants.DUPLICATE_SUBJECT_SHORT_NAME))
 				.when(subjectServiceMock).update(SCHOOLID, subjectUpdateRequestObject);
 		final String responseJsonString = "{\"statusCode\":3,\"messages\":[\"Subject with given short name already exists. Please enter different short name.\"]}";
 		getMockMvc()
@@ -267,8 +267,8 @@ public class SubjectControllerUnitTest extends UnitTestConfigurer {
 		final long nonExistantSubjectId = 50;
 		SubjectUpdateRequestObject subjectUpdateRequestObject = SubjectControllerUnitTestUtil
 				.getSubjectUpdateRequestObject(nonExistantSubjectId, "Java Programming", "JP 501", 5);
-		doThrow(new SubjectNotFoundException(SubjectRestControllerConstants.SUBJECT_DOES_NOT_EXIST))
-				.when(subjectServiceMock).update(SCHOOLID, subjectUpdateRequestObject);
+		doThrow(new NotFoundException(SubjectRestControllerConstants.SUBJECT_DOES_NOT_EXIST)).when(subjectServiceMock)
+				.update(SCHOOLID, subjectUpdateRequestObject);
 		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Subject does not exist.\"]}";
 		getMockMvc()
 				.perform(put(SubjectControllerUnitTestUtil.UPDATESUBJECT, SCHOOLID)
