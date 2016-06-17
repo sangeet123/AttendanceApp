@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import com.google.common.base.Optional;
 
+import attendanceapp.constants.Constant;
 import attendanceapp.constants.SchoolRestControllerConstants;
 import attendanceapp.dao.SchoolDao;
 import attendanceapp.exceptions.ConflictException;
@@ -108,7 +109,7 @@ public class SchoolDaoImpl implements SchoolDao {
 			return school.get();
 		} catch (ObjectNotFoundException | NullPointerException ex) {
 			logger.error("", ex);
-			throw new NotFoundException(SchoolRestControllerConstants.SCHOOL_DOES_NOT_EXIST);
+			throw new NotFoundException(Constant.RESOURSE_DOES_NOT_EXIST);
 		} catch (Exception ex) {
 			logger.error("", ex);
 			throw new UnknownException();
@@ -128,7 +129,7 @@ public class SchoolDaoImpl implements SchoolDao {
 			transaction.commit();
 		} catch (ObjectNotFoundException | NullPointerException ex) {
 			logger.error("", ex);
-			throw new NotFoundException(SchoolRestControllerConstants.SCHOOL_DOES_NOT_EXIST);
+			throw new NotFoundException(Constant.RESOURSE_DOES_NOT_EXIST);
 		} catch (ConstraintViolationException ex) {
 			logger.error("", ex);
 			throw new ConflictException(SchoolRestControllerConstants.DUPLICATE_SCHOOL_NAME);
@@ -173,7 +174,7 @@ public class SchoolDaoImpl implements SchoolDao {
 			transaction.commit();
 		} catch (ObjectNotFoundException | NullPointerException ex) {
 			logger.error("", ex);
-			throw new NotFoundException(SchoolRestControllerConstants.SCHOOL_DOES_NOT_EXIST);
+			throw new NotFoundException(Constant.RESOURSE_DOES_NOT_EXIST);
 		} catch (Exception ex) {
 			logger.error("", ex);
 			throw new UnknownException();

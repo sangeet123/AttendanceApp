@@ -15,7 +15,6 @@ public final class SubjectRestControllerConstants {
 	public static final String DELETE_SUCCESS = "Subject has been deleted successfully.";
 	public static final String SUBJECTS_DELETE_SUCCESS = "Subjects have been deleted successfully.";
 	public static final String DELETE_FAILURE = "Subject could not be deleted.";
-	public static final String SUBJECT_DOES_NOT_EXIST = "Subject does not exist.";
 	public static final String CREATE_SUCCESS = "School created sucessfully.";
 	public static final String DUPLICATE_SUBJECT_SHORT_NAME = "Subject with given short name already exists. Please enter different short name.";
 

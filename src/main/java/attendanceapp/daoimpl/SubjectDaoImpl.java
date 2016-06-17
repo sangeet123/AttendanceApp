@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import attendanceapp.constants.Constant;
 import attendanceapp.constants.SubjectRestControllerConstants;
 import attendanceapp.dao.SubjectDao;
 import attendanceapp.exceptions.ConflictException;
@@ -27,10 +28,10 @@ public class SubjectDaoImpl implements SubjectDao {
 
 	private final Logger logger = LoggerFactory.getLogger(SubjectDaoImpl.class);
 
-	static final String DELETE_SUBJECT_BY_ID = "delete attendanceapp.model.Subject where id= :subjectId and school.id= :schoolId";
-	static final String DELETE_SUBJECTS_BY_IDS = "delete attendanceapp.model.Subject where id in (:subjectIds) and school.id= :schoolId";
-	static final String SELECT_SUBJECT_BY_SHORT_NAME = "from attendanceapp.model.Subject where short_name= :shortname and school.id= :schoolId";
-	static final String SELECT_SUBJECT_BY_SHORT_NAME_IF_ALREADY_EXIST = "from attendanceapp.model.Subject where short_name= :shortname and school.id= :schoolId and id!= :subjectId";
+	private static final String DELETE_SUBJECT_BY_ID = "delete attendanceapp.model.Subject where id= :subjectId and school.id= :schoolId";
+	private static final String DELETE_SUBJECTS_BY_IDS = "delete attendanceapp.model.Subject where id in (:subjectIds) and school.id= :schoolId";
+	private static final String SELECT_SUBJECT_BY_SHORT_NAME = "from attendanceapp.model.Subject where short_name= :shortname and school.id= :schoolId";
+	private static final String SELECT_SUBJECT_BY_SHORT_NAME_IF_ALREADY_EXIST = "from attendanceapp.model.Subject where short_name= :shortname and school.id= :schoolId and id!= :subjectId";
 
 	@Autowired()
 	SessionFactory sessionFactory;
@@ -52,7 +53,7 @@ public class SubjectDaoImpl implements SubjectDao {
 			@SuppressWarnings("rawtypes")
 			List subjects = criteria.list();
 			if (subjects.isEmpty()) {
-				throw new NotFoundException(SubjectRestControllerConstants.SUBJECT_DOES_NOT_EXIST);
+				throw new NotFoundException(Constant.RESOURSE_DOES_NOT_EXIST);
 			}
 			return (Subject) subjects.get(0);
 		} finally {
@@ -117,7 +118,7 @@ public class SubjectDaoImpl implements SubjectDao {
 			Query query = session.createQuery(DELETE_SUBJECT_BY_ID).setParameter("subjectId", subjectId)
 					.setParameter("schoolId", schoolId);
 			if (query.executeUpdate() == 0) {
-				throw new NotFoundException(SubjectRestControllerConstants.SUBJECT_DOES_NOT_EXIST);
+				throw new NotFoundException(Constant.RESOURSE_DOES_NOT_EXIST);
 			}
 		} catch (NotFoundException ex) {
 			throw ex;

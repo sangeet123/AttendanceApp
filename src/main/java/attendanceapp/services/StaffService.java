@@ -12,13 +12,13 @@ public interface StaffService {
 
 	Staff getStaffByUserNameAndPassword(String userName, String password);
 
-	public StaffResponseObject getStaff(final long schoolId, final long id);
+	public StaffResponseObject getStaff(final long schoolId, final long staffId);
 
 	List<StaffResponseObject> getStaffList(final long schoolId);
 
 	StaffResponseObject update(final long schoolId, final StaffUpdateRequestObject staffUpdateRequest);
 
-	void delete(final long id);
+	void delete(final long schoolId, final long staffId);
 
 	StaffResponseObject create(final long schoolId, final StaffCreateRequestObject staffCreateRequestObject);
 

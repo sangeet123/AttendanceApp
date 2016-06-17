@@ -10,10 +10,10 @@ import attendanceapp.model.requestobject.SubjectUpdateRequestObject;
 public final class StaffControllerUtilIT {
 
 	// URI for school controller
-	public static final String GETSTAFFWITHID = "/school/{schoolId}/staff/{subjectId}";
+	public static final String GETSTAFFWITHID = "/school/{schoolId}/staff/{staffId}";
 	public static final String GETALLSTAFFS = "/school/{schoolId}/staff";
 	public static final String CREATESTAFF = "/school/{schoolId}/staff/create";
-	public static final String DELETESTAFF = "/school/{schoolId}/staff/delete/{subjectId}";
+	public static final String DELETESTAFF = "/school/{schoolId}/staff/delete/{staffId}";
 	public static final String UPDATESTAFF = "/school/{schoolId}/staff/update";
 	public static final String DELETE_STAFFS = "/school/{schoolId}/staff/delete";
 

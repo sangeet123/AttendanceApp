@@ -27,15 +27,15 @@ public class StaffServiceImpl implements StaffService {
 	}
 
 	@Override()
-	public StaffResponseObject getStaff(long schoolId, long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public StaffResponseObject getStaff(long schoolId, long staffId) {
+		Staff staff = staffDao.getStaff(schoolId, staffId);
+		return StaffServiceUtil.createStaffResponseObjectFromStaff(staff);
 	}
 
 	@Override()
 	public List<StaffResponseObject> getStaffList(long schoolId) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Staff> staffs = staffDao.getStaffs(schoolId);
+		return StaffServiceUtil.createStaffResponseObjectListFromStaffList(staffs);
 	}
 
 	@Override()
@@ -45,8 +45,8 @@ public class StaffServiceImpl implements StaffService {
 	}
 
 	@Override()
-	public void delete(long id) {
-		// TODO Auto-generated method stub
+	public void delete(final long schoolId, final long staffId) {
+		staffDao.delete(schoolId, staffId);
 
 	}
 
@@ -59,8 +59,7 @@ public class StaffServiceImpl implements StaffService {
 
 	@Override()
 	public void delete(long schoolId, DeleteStaffsRequestObject deleteStaffsRequestObject) {
-		// TODO Auto-generated method stub
-
+		staffDao.delete(schoolId, deleteStaffsRequestObject.getCommaSeparatedIds());
 	}
 
 }

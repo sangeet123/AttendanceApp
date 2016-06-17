@@ -1,11 +1,6 @@
 package attendanceapp.modeltoresponseobjectmapper;
 
-import java.time.LocalDateTime;
-
-import attendanceapp.model.Staff;
 import attendanceapp.model.responseobject.StaffResponseObject;
-import attendanceapp.model.responseobject.SubjectResponseObject;
-import attendanceapp.requestobjecttomodelmapper.StaffCreateRequestToStaffMapper.StaffResponseBuilder;
 
 public class StaffToStaffResponseMapper {
 
@@ -26,9 +21,9 @@ public class StaffToStaffResponseMapper {
 
 		private String role;
 
-		private LocalDateTime createdOn;
+		private String createdOn;
 
-		private LocalDateTime updatedOn;
+		private String updatedOn;
 
 		public StaffResponseBuilder id(final long id) {
 			this.id = id;
@@ -70,12 +65,12 @@ public class StaffToStaffResponseMapper {
 			return this;
 		}
 
-		public StaffResponseBuilder updatedOn(final LocalDateTime updatedOn) {
+		public StaffResponseBuilder updatedOn(final String updatedOn) {
 			this.updatedOn = updatedOn;
 			return this;
 		}
 
-		public StaffResponseBuilder CreatedOn(final LocalDateTime createdOn) {
+		public StaffResponseBuilder CreatedOn(final String createdOn) {
 			this.createdOn = createdOn;
 			return this;
 		}

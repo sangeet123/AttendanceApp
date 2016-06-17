@@ -66,7 +66,7 @@ public class SchoolControllerdeleteIT extends TestConfigurerIT {
 	@Test()
 	public void delete_school_with_valid_id_15_that_does_not_exist() throws Exception {
 		final long validIdThatDoesNotExist = 15L;
-		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"School does not exist.\"]}";
+		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Resource does not exist.\"]}";
 		getMockMvc()
 				.perform(delete(SchoolControllerUtilIT.DELETESCHOOL, validIdThatDoesNotExist)
 						.header(AttendanceAppUtilIT.AUTHORIZATION, SchoolControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
@@ -79,7 +79,7 @@ public class SchoolControllerdeleteIT extends TestConfigurerIT {
 	@Test()
 	public void delete_school_with_invalid_id_negative_1() throws Exception {
 		final long invalidId = -1L;
-		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"School does not exist.\"]}";
+		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Resource does not exist.\"]}";
 		getMockMvc()
 				.perform(delete(SchoolControllerUtilIT.DELETESCHOOL, invalidId)
 						.header(AttendanceAppUtilIT.AUTHORIZATION, SchoolControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))

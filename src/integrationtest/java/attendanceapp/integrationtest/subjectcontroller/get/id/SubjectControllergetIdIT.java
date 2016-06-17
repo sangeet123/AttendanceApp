@@ -72,7 +72,7 @@ public class SubjectControllergetIdIT extends TestConfigurerIT {
 	public void get_subject_with_valid_school_id_1_and_invalid_subjectId_10_that_does_not_exist() throws Exception {
 		final long validSchoolId = 1L;
 		final long invalidSubjectId = 10L;
-		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Subject does not exist.\"]}";
+		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Resource does not exist.\"]}";
 		getMockMvc()
 				.perform(get(SubjectControllerUtilIT.GETSUBJECTWITHID, validSchoolId, invalidSubjectId)
 						.header(AttendanceAppUtilIT.AUTHORIZATION, SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
@@ -86,7 +86,7 @@ public class SubjectControllergetIdIT extends TestConfigurerIT {
 			throws Exception {
 		final long validSchoolId = 1L;
 		final long invalidSubjectId = -1L;
-		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Subject does not exist.\"]}";
+		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Resource does not exist.\"]}";
 		getMockMvc()
 				.perform(get(SubjectControllerUtilIT.GETSUBJECTWITHID, validSchoolId, invalidSubjectId)
 						.header(AttendanceAppUtilIT.AUTHORIZATION, SubjectControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))

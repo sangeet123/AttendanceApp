@@ -80,7 +80,7 @@ public class SubjectControllerupdateIT extends TestConfigurerIT {
 	@Test()
 	public void updating_subject_that_does_not_exist() throws Exception {
 		final long schoolId = 1L;
-		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Subject does not exist.\"]}";
+		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Resource does not exist.\"]}";
 		SubjectUpdateRequestObject updateObject = SubjectControllerUtilIT
 				.getSubjectUpdateRequestObject("Computer Programming", "JP301", 5, 10);
 		getMockMvc()

@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class StaffResponseObject extends CreatedAndUpdatedDate {
+public class StaffResponseObject extends CreatedAndUpdatedDateResponse {
 
 	private static final int INITIAL_NONZERO_ODD_NUM = 17;
 	private static final int MULTIPLIER_NONZERO_ODD_NUM = 157;

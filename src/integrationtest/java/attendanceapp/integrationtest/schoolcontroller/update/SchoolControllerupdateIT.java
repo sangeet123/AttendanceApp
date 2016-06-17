@@ -84,7 +84,7 @@ public class SchoolControllerupdateIT extends TestConfigurerIT {
 	public void updating_school_that_does_not_exist() throws Exception {
 		SchoolUpdateRequestObject schoolUpdateRequestObject = SchoolControllerUtilIT.getSchoolUpdateRequestObject(100L,
 				"test100", "testemail@email.com", "2453469123");
-		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"School does not exist.\"]}";
+		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Resource does not exist.\"]}";
 		getMockMvc()
 				.perform(put(SchoolControllerUtilIT.UPDATESCHOOL)
 						.header(AttendanceAppUtilIT.AUTHORIZATION, SchoolControllerUtilIT.BASIC_DIGEST_HEADER_VALUE)

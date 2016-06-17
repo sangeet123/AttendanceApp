@@ -7,11 +7,10 @@ import attendanceapp.model.requestobject.DeleteStaffsRequestObject;
 import attendanceapp.model.requestobject.StaffCreateRequestObject;
 import attendanceapp.model.requestobject.StaffUpdateRequestObject;
 import attendanceapp.model.responseobject.StaffResponseObject;
-import attendanceapp.model.responseobject.SubjectResponseObject;
 
 public interface StaffController {
 
-	public SubjectResponseObject getStaff(final long schoolId, final long staffId);
+	public StaffResponseObject getStaff(final long schoolId, final long staffId);
 
 	public List<StaffResponseObject> getStaffList(final long schoolId);
 

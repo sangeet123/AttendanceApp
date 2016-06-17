@@ -27,6 +27,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import attendanceapp.constants.Constant;
 import attendanceapp.constants.SchoolRestControllerConstants;
 import attendanceapp.controller.SchoolController;
 import attendanceapp.controllerimpl.SchoolControllerImpl;
@@ -112,8 +113,8 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 			throws Exception {
 		long validIdThatDoesNotExist = 11L;
 		when(schoolServiceMock.getSchool(validIdThatDoesNotExist))
-				.thenThrow(new NotFoundException(SchoolRestControllerConstants.SCHOOL_DOES_NOT_EXIST));
-		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"School does not exist.\"]}";
+				.thenThrow(new NotFoundException(Constant.RESOURSE_DOES_NOT_EXIST));
+		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Resource does not exist.\"]}";
 		getMockMvc().perform(get(SchoolControllerUnitTestUtil.GETSCHOOLWITHID, validIdThatDoesNotExist))
 				.andExpect(status().isNotFound())
 				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
@@ -127,7 +128,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	public void get_school_by_id_should_return_http_status_code_404_for_id_that_is_invalid() throws Exception {
 		long invalidSchoolId = -1L;
 		when(schoolServiceMock.getSchool(invalidSchoolId))
-				.thenThrow(new NotFoundException(SchoolRestControllerConstants.SCHOOL_DOES_NOT_EXIST));
+				.thenThrow(new NotFoundException(Constant.RESOURSE_DOES_NOT_EXIST));
 		getMockMvc().perform(get(SchoolControllerUnitTestUtil.GETSCHOOLWITHID, invalidSchoolId))
 				.andExpect(status().isNotFound());
 		verify(schoolServiceMock, atLeast(1)).getSchool(invalidSchoolId);
@@ -138,7 +139,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	public void delete_school_by_id_should_return_http_status_code_404_for_id_that_is_valid_but_does_not_exist()
 			throws Exception {
 		long validSchoolIdThatDoesNotExist = 15L;
-		doThrow(new NotFoundException(SchoolRestControllerConstants.SCHOOL_DOES_NOT_EXIST)).when(schoolServiceMock)
+		doThrow(new NotFoundException(Constant.RESOURSE_DOES_NOT_EXIST)).when(schoolServiceMock)
 				.delete(validSchoolIdThatDoesNotExist);
 		getMockMvc().perform(delete(SchoolControllerUnitTestUtil.DELETESCHOOL, validSchoolIdThatDoesNotExist))
 				.andExpect(status().isNotFound());
@@ -149,7 +150,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	@Test()
 	public void delete_school_by_id_should_return_http_status_code_404_for_id_that_is_invalid() throws Exception {
 		long invalidSchoolId = -1L;
-		doThrow(new NotFoundException(SchoolRestControllerConstants.SCHOOL_DOES_NOT_EXIST)).when(schoolServiceMock)
+		doThrow(new NotFoundException(Constant.RESOURSE_DOES_NOT_EXIST)).when(schoolServiceMock)
 				.delete(invalidSchoolId);
 		getMockMvc().perform(delete(SchoolControllerUnitTestUtil.DELETESCHOOL, invalidSchoolId))
 				.andExpect(status().isNotFound());
@@ -302,9 +303,9 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 		final long nonExistantSchoolId = 10L;
 		SchoolUpdateRequestObject schoolUpdateRequestObject = SchoolControllerUnitTestUtil
 				.getSchoolUpdateRequestObject(nonExistantSchoolId, "Test School", "testemail@email.com", "2453469123");
-		doThrow(new NotFoundException(SchoolRestControllerConstants.SCHOOL_DOES_NOT_EXIST)).when(schoolServiceMock)
+		doThrow(new NotFoundException(Constant.RESOURSE_DOES_NOT_EXIST)).when(schoolServiceMock)
 				.update(schoolUpdateRequestObject);
-		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"School does not exist.\"]}";
+		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Resource does not exist.\"]}";
 		getMockMvc()
 				.perform(put(SchoolControllerUnitTestUtil.UPDATESCHOOL)
 						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8)

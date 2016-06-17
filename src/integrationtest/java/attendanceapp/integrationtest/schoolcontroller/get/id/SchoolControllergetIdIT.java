@@ -69,7 +69,7 @@ public class SchoolControllergetIdIT extends TestConfigurerIT {
 	@Test()
 	public void get_school_with_valid_id_15_that_does_not_exist() throws Exception {
 		final long validIdThatDoesNotExist = 15L;
-		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"School does not exist.\"]}";
+		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Resource does not exist.\"]}";
 		getMockMvc()
 				.perform(get(SchoolControllerUtilIT.GETSCHOOLWITHID, validIdThatDoesNotExist)
 						.header(AttendanceAppUtilIT.AUTHORIZATION, SchoolControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
@@ -81,7 +81,7 @@ public class SchoolControllergetIdIT extends TestConfigurerIT {
 	@Test()
 	public void get_school_with_invalid_id_negative_1() throws Exception {
 		final long invalidId = -1L;
-		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"School does not exist.\"]}";
+		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Resource does not exist.\"]}";
 		getMockMvc()
 				.perform(get(SchoolControllerUtilIT.GETSCHOOLWITHID, invalidId)
 						.header(AttendanceAppUtilIT.AUTHORIZATION, SchoolControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))

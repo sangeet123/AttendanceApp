@@ -2,6 +2,7 @@ package attendanceapp.services.util;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import attendanceapp.model.School;
@@ -10,7 +11,6 @@ import attendanceapp.model.Subject;
 import attendanceapp.model.requestobject.StaffCreateRequestObject;
 import attendanceapp.model.requestobject.SubjectUpdateRequestObject;
 import attendanceapp.model.responseobject.StaffResponseObject;
-import attendanceapp.model.responseobject.SubjectResponseObject;
 import attendanceapp.modeltoresponseobjectmapper.StaffToStaffResponseMapper;
 import attendanceapp.requestobjecttomodelmapper.StaffCreateRequestToStaffMapper;
 import attendanceapp.requestobjecttomodelmapper.SubjectUpdateRequestToSubjectMapper;
@@ -25,12 +25,13 @@ public final class StaffServiceUtil {
 		return new StaffToStaffResponseMapper.StaffResponseBuilder().id(staff.getId()).firstName(staff.getFirstName())
 				.lastName(staff.getLastName()).email(staff.getEmail()).telephone(staff.getTelephone())
 				.shortName(staff.getShortName()).comment(staff.getComment()).role(staff.getRole())
-				.CreatedOn(staff.getCreatedOn()).updatedOn(staff.getUpdatedOn()).build();
+				.CreatedOn(staff.getCreatedOn().toString()).updatedOn(staff.getUpdatedOn().toString()).build();
 	}
 
-	public static List<SubjectResponseObject> createStaffResponseObjectListFromSubjectList(
-			final List<Subject> subjects) {
-		return null;
+	public static List<StaffResponseObject> createStaffResponseObjectListFromStaffList(final List<Staff> staffs) {
+		List<StaffResponseObject> responseObjects = new ArrayList<>();
+		staffs.forEach(staff -> responseObjects.add(createStaffResponseObjectFromStaff(staff)));
+		return responseObjects;
 	}
 
 	public static Subject creaSubjectFromSubjectUpdateRequestObject(final long schoolId,

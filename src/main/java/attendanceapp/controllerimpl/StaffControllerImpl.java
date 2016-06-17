@@ -19,8 +19,9 @@ import attendanceapp.model.requestobject.DeleteStaffsRequestObject;
 import attendanceapp.model.requestobject.StaffCreateRequestObject;
 import attendanceapp.model.requestobject.StaffUpdateRequestObject;
 import attendanceapp.model.responseobject.StaffResponseObject;
-import attendanceapp.model.responseobject.SubjectResponseObject;
 import attendanceapp.services.StaffService;
+import attendanceapp.util.AttendanceAppUtils;
+import attendanceapp.util.StatusCodeUtil;
 
 @Controller()
 @RequestMapping(StaffRestControllerConstants.ROOT)
@@ -32,33 +33,34 @@ public class StaffControllerImpl implements StaffController {
 	@Override()
 	@RequestMapping(value = StaffRestControllerConstants.GET_STAFF, method = RequestMethod.GET)
 	@ResponseBody()
-	public SubjectResponseObject getStaff(long schoolId, long staffId) {
-		// TODO Auto-generated method stub
-		return null;
+	public StaffResponseObject getStaff(@PathVariable() long schoolId, @PathVariable() long staffId) {
+		return staffService.getStaff(schoolId, staffId);
 	}
 
 	@Override()
 	@RequestMapping(value = StaffRestControllerConstants.GET_STAFF_LIST, method = RequestMethod.GET)
 	@ResponseBody()
-	public List<StaffResponseObject> getStaffList(long schoolId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override()
-	@RequestMapping(value = StaffRestControllerConstants.DELETE_STAFF_LIST, method = RequestMethod.DELETE)
-	@ResponseBody()
-	public Status delete(long schoolId, long staffId) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<StaffResponseObject> getStaffList(@PathVariable() long schoolId) {
+		return staffService.getStaffList(schoolId);
 	}
 
 	@Override()
 	@RequestMapping(value = StaffRestControllerConstants.DELETE_STAFF, method = RequestMethod.DELETE)
 	@ResponseBody()
-	public Status delete(long schoolId, DeleteStaffsRequestObject deleteStaffsRequestObject) {
-		// TODO Auto-generated method stub
-		return null;
+	public Status delete(@PathVariable() long schoolId, @PathVariable() long staffId) {
+		staffService.delete(schoolId, staffId);
+		return new Status(AttendanceAppUtils.messageToList(StaffRestControllerConstants.DELETE_SUCCESS),
+				StatusCodeUtil.OPERATION_SUCCESS);
+	}
+
+	@Override()
+	@RequestMapping(value = StaffRestControllerConstants.DELETE_STAFF_LIST, method = RequestMethod.DELETE)
+	@ResponseBody()
+	public Status delete(@PathVariable() long schoolId,
+			@Valid() @RequestBody() DeleteStaffsRequestObject deleteStaffsRequestObject) {
+		staffService.delete(schoolId, deleteStaffsRequestObject);
+		return new Status(AttendanceAppUtils.messageToList(StaffRestControllerConstants.SUBJECTS_DELETE_SUCCESS),
+				StatusCodeUtil.OPERATION_SUCCESS);
 	}
 
 	@Override()
@@ -72,7 +74,8 @@ public class StaffControllerImpl implements StaffController {
 	@Override()
 	@RequestMapping(value = StaffRestControllerConstants.UPDATE_STAFF, method = RequestMethod.PUT)
 	@ResponseBody()
-	public StaffResponseObject update(long schoolId, StaffUpdateRequestObject staffUpdateRequestObject) {
+	public StaffResponseObject update(@PathVariable() long schoolId,
+			@Valid() @RequestBody() StaffUpdateRequestObject staffUpdateRequestObject) {
 		// TODO Auto-generated method stub
 		return null;
 	}
