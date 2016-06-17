@@ -22,7 +22,6 @@ public class StaffServiceImpl implements StaffService {
 
 	@Override()
 	public Staff getStaffByUserNameAndPassword(String userName, String password) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -40,8 +39,8 @@ public class StaffServiceImpl implements StaffService {
 
 	@Override()
 	public StaffResponseObject update(long schoolId, StaffUpdateRequestObject staffUpdateRequest) {
-		// TODO Auto-generated method stub
-		return null;
+		Staff staff = StaffServiceUtil.creaStaffFromStaffUpdateRequestObject(schoolId, staffUpdateRequest);
+		return StaffServiceUtil.createStaffResponseObjectFromStaff(staffDao.update(schoolId, staff));
 	}
 
 	@Override()

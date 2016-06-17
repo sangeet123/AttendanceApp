@@ -8,6 +8,10 @@ import attendanceapp.model.requestobject.StaffCreateRequestObject;
 import attendanceapp.model.requestobject.StaffUpdateRequestObject;
 import attendanceapp.model.responseobject.StaffResponseObject;
 
+/**
+ * @author sangeet
+ *
+ */
 public interface StaffService {
 
 	Staff getStaffByUserNameAndPassword(String userName, String password);

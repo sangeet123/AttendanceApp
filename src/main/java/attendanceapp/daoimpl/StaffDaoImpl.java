@@ -1,5 +1,7 @@
 package attendanceapp.daoimpl;
 
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -31,7 +33,11 @@ public class StaffDaoImpl implements StaffDao {
 	private static final String SELECT_STAFF_BY_EMAIL_IF_ALREADY_EXIST = "from attendanceapp.model.Staff where email= :email and school.id= :schoolId";
 	private static final String DELETE_STAFF_BY_ID = "delete attendanceapp.model.Staff where id= :staffId and school.id= :schoolId";
 	private static final String DELETE_STAFFS_BY_IDS = "delete attendanceapp.model.Staff where id in (:staffIds) and school.id= :schoolId";
+	private static final String SELECT_STAFF_BY_SHORT_NAME_IF_ALREADY_EXIST_EXCEPT_FOR_GIVEN_ID = "from attendanceapp.model.Subject where short_name= :shortname and school.id= :schoolId and id!= :staffId";
+	private static final String SELECT_STAFF_BY_USER_NAME_IF_ALREADY_EXIST_EXCEPT_FOR_GIVEN_ID = "from attendanceapp.model.Staff where user_name= :username and school.id= :schoolId and id!= :staffId";
+	private static final String SELECT_STAFF_BY_EMAIL_IF_ALREADY_EXIST_EXCEPT_FOR_GIVEN_ID = "from attendanceapp.model.Staff where email= :email and school.id= :schoolId and id!= :staffId";
 	private static final String SCHOOLID = "schoolId";
+	private static final String STAFFID = "staffId";
 	private final Logger logger = LoggerFactory.getLogger(StaffDaoImpl.class);
 
 	@Autowired()
@@ -44,6 +50,19 @@ public class StaffDaoImpl implements StaffDao {
 		if (session != null) {
 			session.close();
 		}
+	}
+
+	private void copyAttributes(final Staff original, final Staff updateObject) {
+		original.setComment(updateObject.getComment());
+		original.setFirstName(updateObject.getFirstName());
+		original.setLastName(updateObject.getLastName());
+		original.setComment(updateObject.getComment());
+		original.setEmail(updateObject.getEmail());
+		original.setRole(updateObject.getShortName());
+		original.setUpdatedOn(LocalDateTime.now(Clock.systemUTC()));
+		original.setRole(updateObject.getRole());
+		original.setShortName(updateObject.getShortName());
+		original.setTelephone(updateObject.getTelephone());
 	}
 
 	private Staff findStaff(final long schoolId, final long staffId) {
@@ -62,11 +81,18 @@ public class StaffDaoImpl implements StaffDao {
 		}
 	}
 
-	private void validateUserName(Staff staff, long schoolId) {
+	private void validateUserName(final Staff staff, final long schoolId, final boolean isCreateOperation) {
 		try {
 			session = sessionFactory.openSession();
-			Query query = session.createQuery(SELECT_STAFF_BY_USER_NAME_IF_ALREADY_EXIST)
-					.setParameter("username", staff.getUsername()).setParameter(SCHOOLID, schoolId);
+			Query query;
+			if (isCreateOperation) {
+				query = session.createQuery(SELECT_STAFF_BY_USER_NAME_IF_ALREADY_EXIST)
+						.setParameter("username", staff.getUsername()).setParameter(SCHOOLID, schoolId);
+			} else {
+				query = session.createQuery(SELECT_STAFF_BY_USER_NAME_IF_ALREADY_EXIST_EXCEPT_FOR_GIVEN_ID)
+						.setParameter("username", staff.getUsername()).setParameter(SCHOOLID, schoolId)
+						.setParameter(STAFFID, staff.getId());
+			}
 			if (query.uniqueResult() != null) {
 				throw new ConflictException(StaffRestControllerConstants.DUPLICATE_STAFF_USERNAME);
 			}
@@ -80,11 +106,18 @@ public class StaffDaoImpl implements StaffDao {
 		}
 	}
 
-	private void validateShortName(Staff staff, long schoolId) {
+	private void validateShortName(final Staff staff, final long schoolId, final boolean isCreateOperation) {
 		try {
 			session = sessionFactory.openSession();
-			Query query = session.createQuery(SELECT_STAFF_BY_SHORT_NAME_IF_ALREADY_EXIST)
-					.setParameter("shortname", staff.getShortName()).setParameter(SCHOOLID, schoolId);
+			Query query;
+			if (isCreateOperation) {
+				query = session.createQuery(SELECT_STAFF_BY_SHORT_NAME_IF_ALREADY_EXIST)
+						.setParameter("shortname", staff.getShortName()).setParameter(SCHOOLID, schoolId);
+			} else {
+				query = session.createQuery(SELECT_STAFF_BY_SHORT_NAME_IF_ALREADY_EXIST_EXCEPT_FOR_GIVEN_ID)
+						.setParameter("shortname", staff.getShortName()).setParameter(SCHOOLID, schoolId)
+						.setParameter(STAFFID, staff.getId());
+			}
 			if (query.uniqueResult() != null) {
 				throw new ConflictException(StaffRestControllerConstants.DUPLICATE_STAFF_SHORT_NAME);
 			}
@@ -98,11 +131,18 @@ public class StaffDaoImpl implements StaffDao {
 		}
 	}
 
-	private void validateEmail(Staff staff, long schoolId) {
+	private void validateEmail(final Staff staff, final long schoolId, final boolean isCreateOperation) {
 		try {
 			session = sessionFactory.openSession();
-			Query query = session.createQuery(SELECT_STAFF_BY_EMAIL_IF_ALREADY_EXIST)
-					.setParameter("email", staff.getEmail()).setParameter(SCHOOLID, schoolId);
+			Query query;
+			if (isCreateOperation) {
+				query = session.createQuery(SELECT_STAFF_BY_EMAIL_IF_ALREADY_EXIST)
+						.setParameter("email", staff.getEmail()).setParameter(SCHOOLID, schoolId);
+			} else {
+				query = session.createQuery(SELECT_STAFF_BY_EMAIL_IF_ALREADY_EXIST_EXCEPT_FOR_GIVEN_ID)
+						.setParameter("email", staff.getEmail()).setParameter(SCHOOLID, schoolId)
+						.setParameter(STAFFID, staff.getId());
+			}
 			if (query.uniqueResult() != null) {
 				throw new ConflictException(StaffRestControllerConstants.DUPLICATE_STAFF_EMAIL);
 			}
@@ -116,11 +156,11 @@ public class StaffDaoImpl implements StaffDao {
 		}
 	}
 
-	private void validateStaff(Staff staff) {
+	private void validateStaff(final Staff staff, final boolean isCreateOperation) {
 		long schoolId = staff.getSchool().getId();
-		validateUserName(staff, schoolId);
-		validateShortName(staff, schoolId);
-		validateEmail(staff, schoolId);
+		validateUserName(staff, schoolId, isCreateOperation);
+		validateShortName(staff, schoolId, isCreateOperation);
+		validateEmail(staff, schoolId, isCreateOperation);
 	}
 
 	@Override()
@@ -152,9 +192,22 @@ public class StaffDaoImpl implements StaffDao {
 	}
 
 	@Override()
-	public void update(long schoolId, Staff staff) {
-		// TODO Auto-generated method stub
-
+	public Staff update(long schoolId, final Staff staff) {
+		validateStaff(staff, false);
+		Staff originalStaff = this.getStaff(schoolId, staff.getId());
+		copyAttributes(originalStaff, staff);
+		try {
+			session = sessionFactory.openSession();
+			transaction = session.beginTransaction();
+			session.update(originalStaff);
+			transaction.commit();
+			return originalStaff;
+		} catch (Exception ex) {
+			logger.error("", ex);
+			throw new UnknownException();
+		} finally {
+			closeSession();
+		}
 	}
 
 	@Override()
@@ -194,7 +247,7 @@ public class StaffDaoImpl implements StaffDao {
 
 	@Override()
 	public void create(Staff staff) {
-		validateStaff(staff);
+		validateStaff(staff, true);
 		try {
 			session = sessionFactory.openSession();
 			transaction = session.beginTransaction();

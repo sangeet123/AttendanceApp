@@ -7,13 +7,12 @@ import java.util.List;
 
 import attendanceapp.model.School;
 import attendanceapp.model.Staff;
-import attendanceapp.model.Subject;
 import attendanceapp.model.requestobject.StaffCreateRequestObject;
-import attendanceapp.model.requestobject.SubjectUpdateRequestObject;
+import attendanceapp.model.requestobject.StaffUpdateRequestObject;
 import attendanceapp.model.responseobject.StaffResponseObject;
 import attendanceapp.modeltoresponseobjectmapper.StaffToStaffResponseMapper;
 import attendanceapp.requestobjecttomodelmapper.StaffCreateRequestToStaffMapper;
-import attendanceapp.requestobjecttomodelmapper.SubjectUpdateRequestToSubjectMapper;
+import attendanceapp.requestobjecttomodelmapper.StaffUpdateRequestToStaffMapper;
 
 public final class StaffServiceUtil {
 
@@ -34,14 +33,16 @@ public final class StaffServiceUtil {
 		return responseObjects;
 	}
 
-	public static Subject creaSubjectFromSubjectUpdateRequestObject(final long schoolId,
-			final SubjectUpdateRequestObject subjectRequestObject) {
+	public static Staff creaStaffFromStaffUpdateRequestObject(final long schoolId,
+			final StaffUpdateRequestObject staffRequestObject) {
 		LocalDateTime utcNow = LocalDateTime.now(Clock.systemUTC());
-		Subject subject = new SubjectUpdateRequestToSubjectMapper.SubjectBuilder().id(subjectRequestObject.getId())
-				.credit(subjectRequestObject.getCredit()).name(subjectRequestObject.getName())
-				.shortName(subjectRequestObject.getShortName()).updatedOn(utcNow).build();
-		subject.setSchool(createSchoolWithId(schoolId));
-		return subject;
+		Staff staff = new StaffUpdateRequestToStaffMapper.StaffBuilder().id(staffRequestObject.getId())
+				.firstName(staffRequestObject.getFirstName()).lastName(staffRequestObject.getLastName())
+				.email(staffRequestObject.getEmail()).telephone(staffRequestObject.getTelephone())
+				.shortName(staffRequestObject.getShortName()).comment(staffRequestObject.getComment())
+				.role(staffRequestObject.getRole()).updatedOn(utcNow).build();
+		staff.setSchool(createSchoolWithId(schoolId));
+		return staff;
 	}
 
 	public static Staff createStaffFromStaffCreateRequestObject(final long schoolId,
@@ -61,5 +62,4 @@ public final class StaffServiceUtil {
 		school.setId(id);
 		return school;
 	}
-
 }

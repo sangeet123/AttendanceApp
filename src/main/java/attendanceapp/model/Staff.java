@@ -25,34 +25,34 @@ public class Staff extends CreatedAndUpdatedDate implements Serializable {
 	private long id;
 
 	@Column(name = "first_name", nullable = false, length = 50)
-	public String firstName;
+	private String firstName;
 
 	@Column(name = "last_name", nullable = false, length = 50)
-	public String lastName;
+	private String lastName;
 
 	@Column(name = "user_name", unique = true, nullable = false, length = 50)
-	public String username;
+	private String username;
 
 	@Column(name = "password", nullable = false, length = 250)
-	public String password;
+	private String password;
 
 	@Column(name = "email", unique = true, nullable = false, length = 250)
-	public String email;
+	private String email;
 
 	@Column(name = "telephone")
-	public String telephone;
+	private String telephone;
 
 	@Column(name = "short_name", unique = true, nullable = false, length = 250)
-	public String shortName;
+	private String shortName;
 
 	@Column(name = "role", nullable = false)
-	public String role;
+	private String role;
 
 	@Column(name = "enabled", nullable = false)
-	public boolean enabled;
+	private boolean enabled;
 
 	@Column(name = "comment")
-	public String comment;
+	private String comment;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	private School school;

@@ -5,8 +5,6 @@ import java.util.Map;
 
 import org.springframework.security.crypto.codec.Base64;
 
-import attendanceapp.model.requestobject.SubjectUpdateRequestObject;
-
 public final class StaffControllerUtilIT {
 
 	// URI for school controller
@@ -17,7 +15,7 @@ public final class StaffControllerUtilIT {
 	public static final String UPDATESTAFF = "/school/{schoolId}/staff/update";
 	public static final String DELETE_STAFFS = "/school/{schoolId}/staff/delete";
 
-	// sql script file for testing school controller.
+	// sql script file for testing staff controller.
 	// pre-populate the necessary data
 	public static final String INSERT_STAFF_QUERY_SQL_SCRIPT_FILE_PATH = "it-insert-staff-queries.sql";
 	public static final String CLEAR_STAFF_QUERY_SQL_SCRIPT_FILE_PATH = "it-delete-staff-queries.sql";
@@ -46,14 +44,18 @@ public final class StaffControllerUtilIT {
 		return request;
 	}
 
-	public static SubjectUpdateRequestObject getSubjectUpdateRequestObject(final String name, final String shortName,
-			final int credit, final int id) {
-		SubjectUpdateRequestObject subjectUpdateRequestObject = new SubjectUpdateRequestObject();
-		subjectUpdateRequestObject.setName(name);
-		subjectUpdateRequestObject.setCredit(credit);
-		subjectUpdateRequestObject.setShortName(shortName);
-		subjectUpdateRequestObject.setId(id);
-		return subjectUpdateRequestObject;
+	public static Map<String, Object> getStaffUpdateRequestObject(final int id, final String firstName,
+			final String lastName, final String email, final String telephone, final String shortName,
+			final String role, final String comment) {
+		Map<String, Object> request = new HashMap<>();
+		request.put("id", id);
+		request.put("firstName", firstName);
+		request.put("lastName", lastName);
+		request.put("email", email);
+		request.put("telephone", telephone);
+		request.put("shortName", shortName);
+		request.put("role", role);
+		request.put("comment", comment);
+		return request;
 	}
-
 }

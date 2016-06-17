@@ -9,7 +9,7 @@ public interface StaffDao {
 
 	List<Staff> getStaffs(final long schoolId);
 
-	void update(final long schoolId, final Staff staff);
+	Staff update(final long schoolId, final Staff staff);
 
 	void delete(final long schoolId, final long staffId);
 

@@ -16,13 +16,17 @@ public class StaffUpdateRequestObject {
 	private static final int INITIAL_NONZERO_ODD_NUM = 17;
 	private static final int MULTIPLIER_NONZERO_ODD_NUM = 157;
 
-	@JsonProperty(value = "id")
 	private long id;
 
 	@NotBlank()
 	@Length(max = 250)
-	@JsonProperty(value = "name")
-	private String name;
+	@JsonProperty(value = "firstName")
+	private String firstName;
+
+	@NotBlank()
+	@Length(max = 250)
+	@JsonProperty(value = "lastName")
+	private String lastName;
 
 	@NotBlank()
 	@Length(max = 250)
@@ -45,6 +49,71 @@ public class StaffUpdateRequestObject {
 	@JsonProperty(value = "comment")
 	private String comment;
 
+	@NotBlank()
+	@Length(max = 20)
+	@JsonProperty(value = "role")
+	private String role;
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public void setName(final String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(final String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getShortName() {
+		return shortName;
+	}
+
+	public void setShortName(final String shortName) {
+		this.shortName = shortName;
+	}
+
+	public String getTelephone() {
+		return telephone;
+	}
+
+	public void setTelephone(final String telephone) {
+		this.telephone = telephone;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(final String email) {
+		this.email = email;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(final String comment) {
+		this.comment = comment;
+	}
+
+	public void setRole(final String role) {
+		this.role = role;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
 	public long getId() {
 		return id;
 	}
@@ -53,56 +122,17 @@ public class StaffUpdateRequestObject {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getShortName() {
-		return shortName;
-	}
-
-	public void setShortName(String shortName) {
-		this.shortName = shortName;
-	}
-
-	public String getTelephone() {
-		return telephone;
-	}
-
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getComment() {
-		return comment;
-	}
-
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
-
-	@Override
+	@Override()
 	public String toString() {
-		return "StaffUpdateRequestObject [id=" + id + ", name=" + name + ", shortName=" + shortName + ", telephone="
-				+ telephone + ", email=" + email + ", comment=" + comment + "]";
+		return "StaffCreateRequestObject [firstName=" + firstName + ", lastName=" + lastName + ", shortName="
+				+ shortName + ", telephone=" + telephone + ", email=" + email + ", comment=" + comment + "]";
 	}
 
 	@Override()
 	public int hashCode() {
-		return new HashCodeBuilder(INITIAL_NONZERO_ODD_NUM, MULTIPLIER_NONZERO_ODD_NUM).append(email).append(id)
-				.append(name).append(shortName).append(telephone).append(comment).toHashCode();
+		return new HashCodeBuilder(INITIAL_NONZERO_ODD_NUM, MULTIPLIER_NONZERO_ODD_NUM).append(id).append(email)
+				.append(firstName).append(lastName).append(shortName).append(telephone).append(comment).append(role)
+				.toHashCode();
 	}
 
 	@Override()
@@ -112,9 +142,10 @@ public class StaffUpdateRequestObject {
 		if (obj == null || getClass() != obj.getClass()) {
 			return false;
 		}
-		StaffUpdateRequestObject other = (StaffUpdateRequestObject) obj;
-		return new EqualsBuilder().append(id, other.getId()).append(email, other.getEmail())
-				.append(name, other.getName()).append(shortName, other.getShortName())
-				.append(telephone, other.getTelephone()).append(comment, other.getComment()).isEquals();
+		StaffCreateRequestObject other = (StaffCreateRequestObject) obj;
+		return new EqualsBuilder().append(email, other.getEmail()).append(firstName, other.getFirstName())
+				.append(id, other.getId()).append(lastName, other.getLastName()).append(shortName, other.getShortName())
+				.append(role, other.getRole()).append(telephone, other.getTelephone())
+				.append(comment, other.getComment()).isEquals();
 	}
 }

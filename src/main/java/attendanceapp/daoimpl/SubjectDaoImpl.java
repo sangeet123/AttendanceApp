@@ -98,7 +98,7 @@ public class SubjectDaoImpl implements SubjectDao {
 					.setParameter("shortname", subject.getShortName())
 					.setParameter("schoolId", subject.getSchool().getId()).setParameter("subjectId", subject.getId());
 			if (query.uniqueResult() == null) {
-				session.save(subject);
+				session.update(subject);
 			} else {
 				throw new ConflictException(SubjectRestControllerConstants.DUPLICATE_SUBJECT_SHORT_NAME);
 			}

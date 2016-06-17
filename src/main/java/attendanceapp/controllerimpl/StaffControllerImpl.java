@@ -76,8 +76,7 @@ public class StaffControllerImpl implements StaffController {
 	@ResponseBody()
 	public StaffResponseObject update(@PathVariable() long schoolId,
 			@Valid() @RequestBody() StaffUpdateRequestObject staffUpdateRequestObject) {
-		// TODO Auto-generated method stub
-		return null;
+		return staffService.update(schoolId, staffUpdateRequestObject);
 	}
 
 }
