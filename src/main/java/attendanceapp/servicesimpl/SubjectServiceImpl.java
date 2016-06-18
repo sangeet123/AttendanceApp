@@ -35,11 +35,8 @@ public class SubjectServiceImpl implements SubjectService {
 	@Override()
 	public SubjectResponseObject update(final long schoolId,
 			final SubjectUpdateRequestObject subjectUpdateRequestObject) {
-
-		Subject subject = SubjectServiceUtil.creaSubjectFromSubjectUpdateRequestObject(schoolId,
-				subjectUpdateRequestObject);
-		subjectDao.update(schoolId, subject);
-		return SubjectServiceUtil.createSubjectResponseObjectFromSubject(subject);
+		return SubjectServiceUtil
+				.createSubjectResponseObjectFromSubject(subjectDao.update(schoolId, subjectUpdateRequestObject));
 	}
 
 	@Override()

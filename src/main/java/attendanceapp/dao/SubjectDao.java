@@ -3,13 +3,14 @@ package attendanceapp.dao;
 import java.util.List;
 
 import attendanceapp.model.Subject;
+import attendanceapp.model.requestobject.SubjectUpdateRequestObject;
 
 public interface SubjectDao {
 	Subject getSubject(final long schoolId, final long subjectId);
 
 	List<Subject> getSubjects(final long schoolId);
 
-	void update(final long schoolId, final Subject subject);
+	Subject update(final long schoolId, final SubjectUpdateRequestObject subject);
 
 	void delete(final long schoolId, final long subjectId);
 

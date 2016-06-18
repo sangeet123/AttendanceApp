@@ -100,13 +100,13 @@ public class StaffDaoImpl implements StaffDao {
 			transaction = session.beginTransaction();
 			session.update(originalStaff);
 			transaction.commit();
-			return originalStaff;
 		} catch (Exception ex) {
 			logger.error("", ex);
 			throw new UnknownException();
 		} finally {
 			closeSession();
 		}
+		return originalStaff;
 	}
 
 	@Override()

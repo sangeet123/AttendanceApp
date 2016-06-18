@@ -46,10 +46,6 @@ public class StaffControllerupdateIT extends TestConfigurerIT {
 
 	@Test()
 	public void update_valid_staff_that_exist_in_database() throws Exception {
-		/*
-		 * There is no way to verify created and updated date therefore jsonPath
-		 * is used for the field that are known
-		 */
 		Map<String, Object> updateObject = StaffControllerUtilIT.getStaffUpdateRequestObject(1, "firstname", "lastname",
 				"staffupdate@email.com", "4433562344", "sta", "ROLE_TEACHER", "test update staff");
 		getMockMvc()
@@ -59,9 +55,28 @@ public class StaffControllerupdateIT extends TestConfigurerIT {
 						.content(AttendanceAppUtilIT.convertObjectToJsonBytes(updateObject)))
 				.andExpect(status().isOk()).andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$.firstName", is("firstname"))).andExpect(jsonPath("$.lastName", is("lastname")))
-				.andExpect(jsonPath("$.email", is("staffupdate@email.com"))).andExpect(jsonPath("$.role", is("ROLE_TEACHER")))
+				.andExpect(jsonPath("$.email", is("staffupdate@email.com")))
+				.andExpect(jsonPath("$.role", is("ROLE_TEACHER")))
 				.andExpect(jsonPath("$.comment", is("test update staff"))).andExpect(jsonPath("$.shortName", is("sta")))
 				.andExpect(jsonPath("$.telephone", is("4433562344")));
+	}
+
+	@Test()
+	public void updating_staff_that_does_not_exist() throws Exception {
+		int staffIdThatDoesNotExist = 2;
+		Map<String, Object> updateObject = StaffControllerUtilIT.getStaffUpdateRequestObject(staffIdThatDoesNotExist,
+				"firstname", "lastname", "staffupdate@email.com", "4433562344", "sta", "ROLE_TEACHER",
+				"test update staff");
+		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Resource does not exist.\"]}";
+		getMockMvc()
+				.perform(put(StaffControllerUtilIT.UPDATESTAFF, 1)
+						.header(AttendanceAppUtilIT.AUTHORIZATION, StaffControllerUtilIT.BASIC_DIGEST_HEADER_VALUE)
+						.contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)
+						.content(AttendanceAppUtilIT.convertObjectToJsonBytes(updateObject)))
+				.andExpect(status().isNotFound())
+				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
+				.andExpect(content().string(responseJsonString));
+
 	}
 
 }

@@ -8,7 +8,6 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,12 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import attendanceapp.constants.Constant;
-import attendanceapp.constants.SubjectRestControllerConstants;
 import attendanceapp.dao.SubjectDao;
-import attendanceapp.exceptions.ConflictException;
+import attendanceapp.dao.validator.SubjectDaoValidator;
 import attendanceapp.exceptions.NotFoundException;
 import attendanceapp.exceptions.UnknownException;
 import attendanceapp.model.Subject;
+import attendanceapp.model.requestobject.SubjectUpdateRequestObject;
+import attendanceapp.services.util.SubjectServiceUtil;
 
 @Repository()
 public class SubjectDaoImpl implements SubjectDao {
@@ -30,14 +30,12 @@ public class SubjectDaoImpl implements SubjectDao {
 
 	private static final String DELETE_SUBJECT_BY_ID = "delete attendanceapp.model.Subject where id= :subjectId and school.id= :schoolId";
 	private static final String DELETE_SUBJECTS_BY_IDS = "delete attendanceapp.model.Subject where id in (:subjectIds) and school.id= :schoolId";
-	private static final String SELECT_SUBJECT_BY_SHORT_NAME = "from attendanceapp.model.Subject where short_name= :shortname and school.id= :schoolId";
-	private static final String SELECT_SUBJECT_BY_SHORT_NAME_IF_ALREADY_EXIST = "from attendanceapp.model.Subject where short_name= :shortname and school.id= :schoolId and id!= :subjectId";
 
 	@Autowired()
-	SessionFactory sessionFactory;
-
-	Session session = null;
-	Transaction transaction = null;
+	private SessionFactory sessionFactory;
+	@Autowired()
+	private SubjectDaoValidator validator;
+	private Session session = null;
 
 	private void closeSession() {
 		if (session != null && session.isConnected()) {
@@ -90,25 +88,19 @@ public class SubjectDaoImpl implements SubjectDao {
 	}
 
 	@Override()
-	public void update(final long schoolId, final Subject subject) {
+	public Subject update(final long schoolId, final SubjectUpdateRequestObject request) {
+		Subject originalSubject = findSubject(schoolId, request.getId());
+		validator.validateShortName(schoolId, request.getShortName(), request.getId(), false);
+		SubjectServiceUtil.copyAttributes(originalSubject, request);
 		try {
-			findSubject(schoolId, subject.getId());
 			session = sessionFactory.openSession();
-			Query query = session.createQuery(SELECT_SUBJECT_BY_SHORT_NAME_IF_ALREADY_EXIST)
-					.setParameter("shortname", subject.getShortName())
-					.setParameter("schoolId", subject.getSchool().getId()).setParameter("subjectId", subject.getId());
-			if (query.uniqueResult() == null) {
-				session.update(subject);
-			} else {
-				throw new ConflictException(SubjectRestControllerConstants.DUPLICATE_SUBJECT_SHORT_NAME);
-			}
-		} catch (ConflictException | NotFoundException ex) {
-			throw ex;
+			session.update(originalSubject);
 		} catch (Exception ex) {
 			logger.error("", ex);
 		} finally {
 			closeSession();
 		}
+		return originalSubject;
 	}
 
 	@Override()
@@ -149,18 +141,10 @@ public class SubjectDaoImpl implements SubjectDao {
 
 	@Override()
 	public void create(final Subject subject) {
+		validator.validateShortName(subject.getSchool().getId(), subject.getShortName(), 0, true);
 		try {
 			session = sessionFactory.openSession();
-			Query query = session.createQuery(SELECT_SUBJECT_BY_SHORT_NAME)
-					.setParameter("shortname", subject.getShortName())
-					.setParameter("schoolId", subject.getSchool().getId());
-			if (query.uniqueResult() == null) {
-				session.save(subject);
-			} else {
-				throw new ConflictException(SubjectRestControllerConstants.DUPLICATE_SUBJECT_SHORT_NAME);
-			}
-		} catch (ConflictException ex) {
-			throw ex;
+			session.save(subject);
 		} catch (Exception ex) {
 			logger.error("", ex);
 			throw new UnknownException();

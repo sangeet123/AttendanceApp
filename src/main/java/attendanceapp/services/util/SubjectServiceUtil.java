@@ -12,7 +12,6 @@ import attendanceapp.model.requestobject.SubjectUpdateRequestObject;
 import attendanceapp.model.responseobject.SubjectResponseObject;
 import attendanceapp.modeltoresponseobjectmapper.SubjectToSubjectResponseMapper;
 import attendanceapp.requestobjecttomodelmapper.SubjectCreateRequestToSubjectMapper;
-import attendanceapp.requestobjecttomodelmapper.SubjectUpdateRequestToSubjectMapper;
 
 public final class SubjectServiceUtil {
 
@@ -33,16 +32,6 @@ public final class SubjectServiceUtil {
 		return subjectResponseObjectLists;
 	}
 
-	public static Subject creaSubjectFromSubjectUpdateRequestObject(final long schoolId,
-			final SubjectUpdateRequestObject subjectRequestObject) {
-		LocalDateTime utcNow = LocalDateTime.now(Clock.systemUTC());
-		Subject subject = new SubjectUpdateRequestToSubjectMapper.SubjectBuilder().id(subjectRequestObject.getId())
-				.credit(subjectRequestObject.getCredit()).name(subjectRequestObject.getName())
-				.shortName(subjectRequestObject.getShortName()).updatedOn(utcNow).build();
-		subject.setSchool(createSchoolWithId(schoolId));
-		return subject;
-	}
-
 	public static Subject createSubjectFromSubjectCreateRequestObject(final long schoolId,
 			final SubjectCreateRequestObject subjectCreateRequestObject) {
 		LocalDateTime utcNow = LocalDateTime.now(Clock.systemUTC());
@@ -58,6 +47,13 @@ public final class SubjectServiceUtil {
 		School school = new School();
 		school.setId(id);
 		return school;
+	}
+
+	public static void copyAttributes(final Subject originalSubject, final SubjectUpdateRequestObject request) {
+		originalSubject.setCredit(request.getCredit());
+		originalSubject.setName(request.getName());
+		originalSubject.setShortName(request.getShortName());
+		originalSubject.setUpdatedOn(LocalDateTime.now(Clock.systemUTC()));
 	}
 
 }
