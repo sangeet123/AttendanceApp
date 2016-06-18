@@ -6,6 +6,10 @@ import attendanceapp.model.School;
 
 public class SchoolUpdateRequestToSchoolMapper {
 
+	private SchoolUpdateRequestToSchoolMapper() throws InstantiationException {
+		throw new InstantiationException();
+	}
+
 	public static class SchoolBuilder {
 		private long id;
 

@@ -7,13 +7,17 @@ import attendanceapp.model.User;
 
 public class SchoolRequestToUserMapper {
 
+	private SchoolRequestToUserMapper() throws InstantiationException {
+		throw new InstantiationException();
+	}
+
 	public static class UserBuilder {
 
-		public String username;
+		private String username;
 
-		public String password;
+		private String password;
 
-		public boolean enabled;
+		private boolean enabled;
 
 		public UserBuilder username(String username) {
 			this.username = username;

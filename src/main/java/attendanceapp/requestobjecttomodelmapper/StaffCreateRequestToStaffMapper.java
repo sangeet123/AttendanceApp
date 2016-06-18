@@ -9,6 +9,10 @@ import attendanceapp.model.Staff;
 
 public class StaffCreateRequestToStaffMapper {
 
+	private StaffCreateRequestToStaffMapper() throws InstantiationException {
+		throw new InstantiationException();
+	}
+
 	public static class StaffResponseBuilder {
 		private long id;
 

@@ -4,6 +4,10 @@ import attendanceapp.model.Authority;
 
 public class SchoolRequestToAuthoritiesMapper {
 
+	private SchoolRequestToAuthoritiesMapper() throws InstantiationException {
+		throw new InstantiationException();
+	}
+
 	public static class AuthorityBuilder {
 
 		private String username;

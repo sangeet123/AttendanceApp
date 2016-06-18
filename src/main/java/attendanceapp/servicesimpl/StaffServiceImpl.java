@@ -39,8 +39,7 @@ public class StaffServiceImpl implements StaffService {
 
 	@Override()
 	public StaffResponseObject update(long schoolId, StaffUpdateRequestObject staffUpdateRequest) {
-		Staff staff = StaffServiceUtil.creaStaffFromStaffUpdateRequestObject(schoolId, staffUpdateRequest);
-		return StaffServiceUtil.createStaffResponseObjectFromStaff(staffDao.update(schoolId, staff));
+		return StaffServiceUtil.createStaffResponseObjectFromStaff(staffDao.update(schoolId, staffUpdateRequest));
 	}
 
 	@Override()

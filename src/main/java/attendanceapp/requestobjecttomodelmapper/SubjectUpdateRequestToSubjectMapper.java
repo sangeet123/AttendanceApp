@@ -6,6 +6,10 @@ import attendanceapp.model.Subject;
 
 public class SubjectUpdateRequestToSubjectMapper {
 
+	private SubjectUpdateRequestToSubjectMapper() throws InstantiationException {
+		throw new InstantiationException();
+	}
+
 	public static class SubjectBuilder {
 		private long id;
 
