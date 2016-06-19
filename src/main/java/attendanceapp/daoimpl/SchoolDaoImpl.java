@@ -7,7 +7,6 @@ import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +15,15 @@ import org.springframework.stereotype.Repository;
 import com.google.common.base.Optional;
 
 import attendanceapp.constants.Constant;
-import attendanceapp.constants.SchoolRestControllerConstants;
 import attendanceapp.dao.SchoolDao;
-import attendanceapp.exceptions.ConflictException;
+import attendanceapp.dao.validator.SchoolDaoValidator;
 import attendanceapp.exceptions.NotFoundException;
 import attendanceapp.exceptions.UnknownException;
 import attendanceapp.model.Authority;
 import attendanceapp.model.School;
 import attendanceapp.model.User;
 import attendanceapp.model.requestobject.SchoolCreateRequestObject;
+import attendanceapp.model.requestobject.SchoolUpdateRequestObject;
 import attendanceapp.services.util.SchoolServiceUtils;
 
 @Repository()
@@ -35,16 +34,13 @@ public class SchoolDaoImpl implements SchoolDao {
 	private final Logger logger = LoggerFactory.getLogger(SchoolDaoImpl.class);
 
 	@Autowired()
-	SessionFactory sessionFactory;
+	private SessionFactory sessionFactory;
 
-	Session session = null;
-	Transaction transaction = null;
+	@Autowired()
+	private SchoolDaoValidator validator;
 
-	private void copyAttributes(School to, final School from) {
-		to.setEmail(from.getEmail());
-		to.setName(from.getName());
-		to.setTelephone(from.getTelephone());
-	}
+	private Session session = null;
+	private Transaction transaction = null;
 
 	private void closeSession() {
 		if (session != null) {
@@ -59,31 +55,21 @@ public class SchoolDaoImpl implements SchoolDao {
 	}
 
 	private void createSchool(final SchoolCreateRequestObject schoolRequestObject) {
-		try {
-			School school = SchoolServiceUtils.createSchoolFromSchoolResponseObject(schoolRequestObject);
-			long schoolId = (long) session.save(school);
-			schoolRequestObject.setId(schoolId);
-			session.flush();
-		} catch (ConstraintViolationException ex) {
-			logger.error("", ex);
-			throw new ConflictException(SchoolRestControllerConstants.DUPLICATE_SCHOOL_NAME);
-		}
+		School school = SchoolServiceUtils.createSchoolFromSchoolResponseObject(schoolRequestObject);
+		long schoolId = (long) session.save(school);
+		schoolRequestObject.setId(schoolId);
+		session.flush();
 	}
 
 	private void createUser(final SchoolCreateRequestObject schoolRequestObject) {
-		try {
-			School school = SchoolServiceUtils.createSchoolFromSchoolResponseObject(schoolRequestObject);
-			User user = SchoolServiceUtils.createUserFromSchoolResponseObject(schoolRequestObject);
-			user.setSchool(school);
-			session.save(user);
-			Authority authority = SchoolServiceUtils.createAuthorityFromSchoolRequestObject(schoolRequestObject);
-			authority.setUser(user);
-			session.save(authority);
-			session.flush();
-		} catch (ConstraintViolationException ex) {
-			logger.error("", ex);
-			throw new ConflictException(SchoolRestControllerConstants.CREATE_USER_FAILURE_DUPLICATE_ENTRY);
-		}
+		School school = SchoolServiceUtils.createSchoolFromSchoolResponseObject(schoolRequestObject);
+		User user = SchoolServiceUtils.createUserFromSchoolResponseObject(schoolRequestObject);
+		user.setSchool(school);
+		session.save(user);
+		Authority authority = SchoolServiceUtils.createAuthorityFromSchoolRequestObject(schoolRequestObject);
+		authority.setUser(user);
+		session.save(authority);
+		session.flush();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -119,40 +105,33 @@ public class SchoolDaoImpl implements SchoolDao {
 	}
 
 	@Override()
-	public void update(final School school) {
+	public School update(final SchoolUpdateRequestObject request) {
+		School schoolToUpdate = this.getSchool(request.getId());
+		validator.validateSchoolName(request.getName(), request.getId());
+		SchoolServiceUtils.copyAttributes(schoolToUpdate, request);
 		try {
 			session = sessionFactory.openSession();
-			transaction = session.beginTransaction();
-			Optional<School> schoolToUpdate = Optional.of((School) session.get(School.class, new Long(school.getId())));
-			copyAttributes(schoolToUpdate.get(), school);
-			session.update(schoolToUpdate.get());
-			transaction.commit();
-		} catch (ObjectNotFoundException | NullPointerException ex) {
-			logger.error("", ex);
-			throw new NotFoundException(Constant.RESOURSE_DOES_NOT_EXIST);
-		} catch (ConstraintViolationException ex) {
-			logger.error("", ex);
-			throw new ConflictException(SchoolRestControllerConstants.DUPLICATE_SCHOOL_NAME);
+			session.update(schoolToUpdate);
 		} catch (Exception ex) {
 			logger.error("", ex);
 			throw new UnknownException();
 		} finally {
 			closeSession();
 		}
+		return schoolToUpdate;
 	}
 
 	@Override()
-	public void create(final SchoolCreateRequestObject schoolRequestObject) {
+	public void create(final SchoolCreateRequestObject request) {
+		validator.validateRequest(request.getName(), request.getUsername());
 		boolean wasCreateSuccessFull = false;
 		try {
 			session = sessionFactory.openSession();
 			transaction = session.beginTransaction();
-			createSchool(schoolRequestObject);
-			createUser(schoolRequestObject);
+			createSchool(request);
+			createUser(request);
 			wasCreateSuccessFull = true;
 			transaction.commit();
-		} catch (ConflictException ex) {
-			throw ex;
 		} catch (Exception ex) {
 			logger.error("", ex);
 			throw new UnknownException(ex.getMessage());
@@ -166,15 +145,10 @@ public class SchoolDaoImpl implements SchoolDao {
 
 	@Override()
 	public void delete(final long id) {
+		School schoolToDelete = this.getSchool(id);
 		try {
 			session = sessionFactory.openSession();
-			transaction = session.beginTransaction();
-			Optional<School> school = Optional.of((School) session.load(School.class, new Long(id)));
-			session.delete(school.get());
-			transaction.commit();
-		} catch (ObjectNotFoundException | NullPointerException ex) {
-			logger.error("", ex);
-			throw new NotFoundException(Constant.RESOURSE_DOES_NOT_EXIST);
+			session.delete(schoolToDelete);
 		} catch (Exception ex) {
 			logger.error("", ex);
 			throw new UnknownException();

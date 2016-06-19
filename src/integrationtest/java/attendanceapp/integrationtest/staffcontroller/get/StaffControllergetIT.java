@@ -49,7 +49,7 @@ public class StaffControllergetIT extends TestConfigurerIT {
 				.perform(get(StaffControllerUtilIT.GETALLSTAFFS, 1).header(AttendanceAppUtilIT.AUTHORIZATION,
 						StaffControllerUtilIT.BASIC_DIGEST_HEADER_VALUE))
 				.andExpect(status().isOk()).andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(jsonPath("$", hasSize(1))).andExpect(jsonPath("$[0].id", is(1)))
+				.andExpect(jsonPath("$", hasSize(2))).andExpect(jsonPath("$[0].id", is(1)))
 				.andExpect(jsonPath("$[0].createdOn", is("2016-05-01T14:39:56")))
 				.andExpect(jsonPath("$[0].updatedOn", is("2016-05-01T14:39:56")))
 				.andExpect(jsonPath("$[0].firstName", is("stafffirstname")))
@@ -58,7 +58,16 @@ public class StaffControllergetIT extends TestConfigurerIT {
 				.andExpect(jsonPath("$[0].telephone", is("1234569411")))
 				.andExpect(jsonPath("$[0].shortName", is("stu")))
 				.andExpect(jsonPath("$[0].comment", is("staff test user")))
-				.andExpect(jsonPath("$[0].email", is("stafftest@email.com")));
+				.andExpect(jsonPath("$[0].email", is("stafftest@email.com"))).andExpect(jsonPath("$[1].id", is(2)))
+				.andExpect(jsonPath("$[1].createdOn", is("2016-05-01T14:39:56")))
+				.andExpect(jsonPath("$[1].updatedOn", is("2016-05-01T14:39:56")))
+				.andExpect(jsonPath("$[1].firstName", is("stafffirstname1")))
+				.andExpect(jsonPath("$[1].lastName", is("stafflastname1")))
+				.andExpect(jsonPath("$[1].role", is("ROLE_TEACHER")))
+				.andExpect(jsonPath("$[1].telephone", is("1234569411")))
+				.andExpect(jsonPath("$[1].shortName", is("stu1")))
+				.andExpect(jsonPath("$[1].comment", is("staff test user")))
+				.andExpect(jsonPath("$[1].email", is("stafftest1@email.com")));
 	}
 
 }

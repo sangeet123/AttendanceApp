@@ -1,5 +1,7 @@
 package attendanceapp.integrationtest.staffcontroller.create;
 
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -60,7 +62,6 @@ public class StaffControllercreateIT extends TestConfigurerIT {
 	@Test()
 	public void create_staff_with_email_that_exist_in_database() throws Exception {
 		final long schoolId = 1L;
-		final String responseJsonString = "{\"statusCode\":3,\"messages\":[\"Staff with email already exists. Please try with different email.\"]}";
 		final String duplicateEmail = "stafftest@email.com";
 		Map<String, Object> createObject = StaffControllerUtilIT.getStaffRequestObject("firstname", "lastname",
 				"username123", "password1A@", duplicateEmail, "2233562322", "stt", "ROLE_TEACHER", "test staff");
@@ -71,16 +72,18 @@ public class StaffControllercreateIT extends TestConfigurerIT {
 						.content(AttendanceAppUtilIT.convertObjectToJsonBytes(createObject)))
 				.andExpect(status().isConflict())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(content().string(responseJsonString));
+				.andExpect(jsonPath("$.fieldErrors", hasSize(1)))
+				.andExpect(jsonPath("$.fieldErrors[*].field", containsInAnyOrder("staff.email")))
+				.andExpect(jsonPath("$.fieldErrors[*].message",
+						containsInAnyOrder("Staff with email already exists. Please try with different email.")));
 	}
 
 	@Test()
 	public void create_staff_with_short_name_that_exist_in_database() throws Exception {
 		final long schoolId = 1L;
-		final String responseJsonString = "{\"statusCode\":3,\"messages\":[\"Staff with short name already exists. Please try with different short name.\"]}";
 		final String duplicateShortName = "stu";
 		Map<String, Object> createObject = StaffControllerUtilIT.getStaffRequestObject("firstname", "lastname",
-				"username123", "password1A@", "stafftest1@email.com", "2233562322", duplicateShortName, "ROLE_TEACHER",
+				"username123", "password1A@", "stafftest11@email.com", "2233562322", duplicateShortName, "ROLE_TEACHER",
 				"test staff");
 		getMockMvc()
 				.perform(post(StaffControllerUtilIT.CREATESTAFF, schoolId)
@@ -89,13 +92,16 @@ public class StaffControllercreateIT extends TestConfigurerIT {
 						.content(AttendanceAppUtilIT.convertObjectToJsonBytes(createObject)))
 				.andExpect(status().isConflict())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(content().string(responseJsonString));
+				.andExpect(jsonPath("$.fieldErrors", hasSize(1)))
+				.andExpect(jsonPath("$.fieldErrors[*].field", containsInAnyOrder("staff.shortname")))
+				.andExpect(jsonPath("$.fieldErrors[*].message", containsInAnyOrder(
+						"Staff with short name already exists. Please try with different short name.")));
+		;
 	}
 
 	@Test()
 	public void create_staff_with_user_name_that_exist_in_database() throws Exception {
 		final long schoolId = 1L;
-		final String responseJsonString = "{\"statusCode\":3,\"messages\":[\"Staff with username already exists. Please try with different user name.\"]}";
 		final String duplicateUserName = "staffusername";
 		Map<String, Object> createObject = StaffControllerUtilIT.getStaffRequestObject("firstname", "lastname",
 				duplicateUserName, "password1A@", "stafftest10@email.com", "2233562322", "sn1", "ROLE_TEACHER",
@@ -105,9 +111,10 @@ public class StaffControllercreateIT extends TestConfigurerIT {
 						.header(AttendanceAppUtilIT.AUTHORIZATION, StaffControllerUtilIT.BASIC_DIGEST_HEADER_VALUE)
 						.contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)
 						.content(AttendanceAppUtilIT.convertObjectToJsonBytes(createObject)))
-				.andExpect(status().isConflict())
-				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(content().string(responseJsonString));
+				.andExpect(status().isConflict()).andExpect(jsonPath("$.fieldErrors", hasSize(1)))
+				.andExpect(jsonPath("$.fieldErrors[*].field", containsInAnyOrder("staff.username")))
+				.andExpect(jsonPath("$.fieldErrors[*].message", containsInAnyOrder(
+						"Staff with username already exists. Please try with different user name.")));
 	}
 
 }

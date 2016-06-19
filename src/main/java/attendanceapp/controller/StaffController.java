@@ -10,16 +10,16 @@ import attendanceapp.model.responseobject.StaffResponseObject;
 
 public interface StaffController {
 
-	public StaffResponseObject getStaff(final long schoolId, final long staffId);
+	StaffResponseObject getStaff(final long schoolId, final long staffId);
 
-	public List<StaffResponseObject> getStaffList(final long schoolId);
+	List<StaffResponseObject> getStaffList(final long schoolId);
 
-	public Status delete(final long schoolId, final long staffId);
+	Status delete(final long schoolId, final long staffId);
 
-	public Status delete(final long schoolId, final DeleteStaffsRequestObject deleteStaffsRequestObject);
+	Status delete(final long schoolId, final DeleteStaffsRequestObject deleteStaffsRequestObject);
 
-	public StaffResponseObject create(final long schoolId, final StaffCreateRequestObject staffCreateRequestObject);
+	StaffResponseObject create(final long schoolId, final StaffCreateRequestObject staffCreateRequestObject);
 
-	public StaffResponseObject update(final long schoolId, final StaffUpdateRequestObject staffUpdateRequestObject);
+	StaffResponseObject update(final long schoolId, final StaffUpdateRequestObject staffUpdateRequestObject);
 
 }

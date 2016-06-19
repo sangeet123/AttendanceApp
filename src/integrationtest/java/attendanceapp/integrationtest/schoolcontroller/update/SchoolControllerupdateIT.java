@@ -1,5 +1,6 @@
 package attendanceapp.integrationtest.schoolcontroller.update;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -69,7 +70,6 @@ public class SchoolControllerupdateIT extends TestConfigurerIT {
 		String schoolThatExistInDatabase = "test10";
 		SchoolUpdateRequestObject schoolUpdateRequestObject = SchoolControllerUtilIT.getSchoolUpdateRequestObject(1L,
 				schoolThatExistInDatabase, "testemail@email.com", "2453469123");
-		final String responseJsonString = "{\"statusCode\":3,\"messages\":[\"School with given name already exists. Please enter different name.\"]}";
 		getMockMvc()
 				.perform(put(SchoolControllerUtilIT.UPDATESCHOOL)
 						.header(AttendanceAppUtilIT.AUTHORIZATION, SchoolControllerUtilIT.BASIC_DIGEST_HEADER_VALUE)
@@ -77,7 +77,10 @@ public class SchoolControllerupdateIT extends TestConfigurerIT {
 						.content(AttendanceAppUtilIT.convertObjectToJsonBytes(schoolUpdateRequestObject)))
 				.andExpect(status().isConflict())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(content().string(responseJsonString));
+				.andExpect(jsonPath("$.fieldErrors", hasSize(1)))
+				.andExpect(jsonPath("$.fieldErrors[0].field", is("school.name")))
+				.andExpect(jsonPath("$.fieldErrors[0].message",
+						is("School with given name already exists. Please enter different name.")));
 	}
 
 	@Test()

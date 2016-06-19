@@ -18,7 +18,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +30,9 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import attendanceapp.constants.Constant;
-import attendanceapp.constants.SchoolRestControllerConstants;
 import attendanceapp.controller.SchoolController;
 import attendanceapp.controllerimpl.SchoolControllerImpl;
+import attendanceapp.dao.validator.SchoolDaoValidator;
 import attendanceapp.exceptions.ConflictException;
 import attendanceapp.exceptions.NotFoundException;
 import attendanceapp.model.requestobject.DeleteSchoolsRequestObject;
@@ -283,16 +285,19 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 		final String duplicateSchoolName = "Test School";
 		SchoolUpdateRequestObject schoolUpdateRequestObject = SchoolControllerUnitTestUtil
 				.getSchoolUpdateRequestObject(1L, duplicateSchoolName, "testemail@email.com", "2453469123");
-		doThrow(new ConflictException(SchoolRestControllerConstants.DUPLICATE_SCHOOL_NAME)).when(schoolServiceMock)
-				.update(schoolUpdateRequestObject);
-		final String responseJsonString = "{\"statusCode\":3,\"messages\":[\"School with given name already exists. Please enter different name.\"]}";
+		Set<String> fieldErrors = new HashSet<>();
+		fieldErrors.add(SchoolDaoValidator.INVALID_NAME);
+		doThrow(new ConflictException(fieldErrors)).when(schoolServiceMock).update(schoolUpdateRequestObject);
 		getMockMvc()
 				.perform(put(SchoolControllerUnitTestUtil.UPDATESCHOOL)
 						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8)
 						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(schoolUpdateRequestObject)))
 				.andExpect(status().isConflict())
 				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
-				.andExpect(content().string(responseJsonString));
+				.andExpect(jsonPath("$.fieldErrors", hasSize(1)))
+				.andExpect(jsonPath("$.fieldErrors[*].field", containsInAnyOrder("school.name")))
+				.andExpect(jsonPath("$.fieldErrors[*].message",
+						containsInAnyOrder("School with given name already exists. Please enter different name.")));
 		verify(schoolServiceMock, atLeast(1)).update(schoolUpdateRequestObject);
 		verifyNoMoreInteractions(schoolServiceMock);
 	}

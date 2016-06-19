@@ -1,7 +1,10 @@
 package attendanceapp.integrationtest.schoolcontroller.create;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.sql.SQLException;
@@ -60,7 +63,6 @@ public class SchoolControllercreateIT extends TestConfigurerIT {
 		String schoolThatExistInDatabase = "Test School";
 		SchoolCreateRequestObject schoolRequestObject = SchoolControllerUtilIT.getSchoolRequestObject("testschool25",
 				"Rujesh1@", schoolThatExistInDatabase, "testemail@email.com", "2453469123");
-		final String responseJsonString = "{\"statusCode\":3,\"messages\":[\"School with given name already exists. Please enter different name.\"]}";
 		getMockMvc()
 				.perform(post(SchoolControllerUtilIT.CREATESCHOOL)
 						.header(AttendanceAppUtilIT.AUTHORIZATION, SchoolControllerUtilIT.BASIC_DIGEST_HEADER_VALUE)
@@ -68,7 +70,10 @@ public class SchoolControllercreateIT extends TestConfigurerIT {
 						.content(AttendanceAppUtilIT.convertObjectToJsonBytes(schoolRequestObject)))
 				.andExpect(status().isConflict())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(content().string(responseJsonString));
+				.andExpect(jsonPath("$.fieldErrors", hasSize(1)))
+				.andExpect(jsonPath("$.fieldErrors[0].field", is("school.name")))
+				.andExpect(jsonPath("$.fieldErrors[0].message",
+						is("School with given name already exists. Please enter different name.")));
 	}
 
 	@Test()
@@ -76,7 +81,6 @@ public class SchoolControllercreateIT extends TestConfigurerIT {
 		String userThatExistInDatabase = "testschool15";
 		SchoolCreateRequestObject schoolRequestObject = SchoolControllerUtilIT.getSchoolRequestObject(
 				userThatExistInDatabase, "Rujesh1@", "Test School2", "testemail@email.com", "2453469123");
-		final String responseJsonString = "{\"statusCode\":3,\"messages\":[\"User with given name already exists. Please try with different name.\"]}";
 		getMockMvc()
 				.perform(post(SchoolControllerUtilIT.CREATESCHOOL)
 						.header(AttendanceAppUtilIT.AUTHORIZATION, SchoolControllerUtilIT.BASIC_DIGEST_HEADER_VALUE)
@@ -84,7 +88,10 @@ public class SchoolControllercreateIT extends TestConfigurerIT {
 						.content(AttendanceAppUtilIT.convertObjectToJsonBytes(schoolRequestObject)))
 				.andExpect(status().isConflict())
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
-				.andExpect(content().string(responseJsonString));
+				.andExpect(jsonPath("$.fieldErrors", hasSize(1)))
+				.andExpect(jsonPath("$.fieldErrors[0].field", is("user.username")))
+				.andExpect(jsonPath("$.fieldErrors[0].message",
+						is("User with given name already exists. Please try with different name.")));
 	}
 
 }

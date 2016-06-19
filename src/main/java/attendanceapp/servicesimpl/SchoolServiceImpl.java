@@ -34,9 +34,7 @@ public class SchoolServiceImpl implements SchoolService {
 
 	@Override()
 	public SchoolResponseObject update(final SchoolUpdateRequestObject schoolUpdateRequestObject) {
-		School school = SchoolServiceUtils.createSchoolFromSchoolUpdateRequestObject(schoolUpdateRequestObject);
-		schoolDao.update(school);
-		return SchoolServiceUtils.createSchoolResponseFromSchool(school);
+		return SchoolServiceUtils.createSchoolResponseFromSchool(schoolDao.update(schoolUpdateRequestObject));
 	}
 
 	@Override()

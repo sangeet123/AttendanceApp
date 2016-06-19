@@ -92,8 +92,8 @@ public class StaffDaoImpl implements StaffDao {
 
 	@Override()
 	public Staff update(long schoolId, final StaffUpdateRequestObject request) {
-		validator.validateStaffUpdateRequestObject(schoolId, request);
 		Staff originalStaff = this.getStaff(schoolId, request.getId());
+		validator.validateStaffUpdateRequestObject(schoolId, request);
 		StaffServiceUtil.copyAttributes(originalStaff, request);
 		try {
 			session = sessionFactory.openSession();

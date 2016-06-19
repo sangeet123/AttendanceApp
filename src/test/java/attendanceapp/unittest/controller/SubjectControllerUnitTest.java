@@ -17,7 +17,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +29,9 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import attendanceapp.constants.Constant;
-import attendanceapp.constants.SubjectRestControllerConstants;
 import attendanceapp.controller.SubjectController;
 import attendanceapp.controllerimpl.SubjectControllerImpl;
+import attendanceapp.dao.validator.SubjectDaoValidator;
 import attendanceapp.exceptions.ConflictException;
 import attendanceapp.exceptions.NotFoundException;
 import attendanceapp.model.requestobject.DeleteSubjectsRequestObject;
@@ -248,18 +250,23 @@ public class SubjectControllerUnitTest extends UnitTestConfigurer {
 		final String duplicateSubjectShortName = "CP 101";
 		SubjectUpdateRequestObject subjectUpdateRequestObject = SubjectControllerUnitTestUtil
 				.getSubjectUpdateRequestObject(1, "Java Programming", duplicateSubjectShortName, 5);
-		doThrow(new ConflictException(SubjectRestControllerConstants.DUPLICATE_SUBJECT_SHORT_NAME))
-				.when(subjectServiceMock).update(SCHOOLID, subjectUpdateRequestObject);
-		final String responseJsonString = "{\"statusCode\":3,\"messages\":[\"Subject with given short name already exists. Please enter different short name.\"]}";
+		Set<String> fieldErrors = new HashSet<>();
+		fieldErrors.add(SubjectDaoValidator.INVALID_SHORTNAME);
+		doThrow(new ConflictException(fieldErrors)).when(subjectServiceMock).update(SCHOOLID,
+				subjectUpdateRequestObject);
 		getMockMvc()
 				.perform(put(SubjectControllerUnitTestUtil.UPDATESUBJECT, SCHOOLID)
 						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8).content(
 								AttendanceAppUnitTestUtil.convertObjectToJsonBytes(subjectUpdateRequestObject)))
 				.andExpect(status().isConflict())
 				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
-				.andExpect(content().string(responseJsonString));
+				.andExpect(jsonPath("$.fieldErrors", hasSize(1)))
+				.andExpect(jsonPath("$.fieldErrors[*].field", containsInAnyOrder("subject.shortname")))
+				.andExpect(jsonPath("$.fieldErrors[*].message", containsInAnyOrder(
+						"Subject with given short name already exists. Please enter different short name.")));
 		verify(subjectServiceMock, atLeast(1)).update(SCHOOLID, subjectUpdateRequestObject);
 		verifyNoMoreInteractions(subjectServiceMock);
+
 	}
 
 	@Test

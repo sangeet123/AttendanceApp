@@ -18,6 +18,19 @@
 		</property>
 	</bean>
 
+	<bean id="errorValidationProcessor" class="attendanceapp.dao.validator.ValidationErrorProcessor">
+		<property name="messageSource" ref="messageSource" />
+	</bean>
+
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/school/**" />
+			<bean id="authorizationInterceptor" class="attendanceapp.interceptor.AuthorizationInterceptor">
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+
 	<mvc:annotation-driven />
 
 </beans>

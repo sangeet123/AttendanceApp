@@ -1,5 +1,6 @@
 package attendanceapp.integrationtest.staffcontroller.update;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -16,6 +17,7 @@ import org.junit.Test;
 import attendanceapp.integrationtest.common.util.AttendanceAppUtilIT;
 import attendanceapp.integrationtest.common.util.TestConfigurerIT;
 import attendanceapp.integrationtest.utils.StaffControllerUtilIT;
+import attendanceapp.unitest.common.util.AttendanceAppUnitTestUtil;
 
 public class StaffControllerupdateIT extends TestConfigurerIT {
 
@@ -63,7 +65,7 @@ public class StaffControllerupdateIT extends TestConfigurerIT {
 
 	@Test()
 	public void updating_staff_that_does_not_exist() throws Exception {
-		int staffIdThatDoesNotExist = 2;
+		int staffIdThatDoesNotExist = 10;
 		Map<String, Object> updateObject = StaffControllerUtilIT.getStaffUpdateRequestObject(staffIdThatDoesNotExist,
 				"firstname", "lastname", "staffupdate@email.com", "4433562344", "sta", "ROLE_TEACHER",
 				"test update staff");
@@ -77,6 +79,44 @@ public class StaffControllerupdateIT extends TestConfigurerIT {
 				.andExpect(content().contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));
 
+	}
+
+	@Test()
+	public void updating_to_staff_short_name_that_already_exist() throws Exception {
+		final long schoolId = 1L;
+		final String shortNameThatExist = "stu1";
+		Map<String, Object> updateObject = StaffControllerUtilIT.getStaffUpdateRequestObject(1, "firstname", "lastname",
+				"staffupdate@email.com", "4433562344", shortNameThatExist, "ROLE_TEACHER", "test update staff");
+		getMockMvc()
+				.perform(put(StaffControllerUtilIT.UPDATESTAFF, schoolId)
+						.header(AttendanceAppUtilIT.AUTHORIZATION, StaffControllerUtilIT.BASIC_DIGEST_HEADER_VALUE)
+						.contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)
+						.content(AttendanceAppUtilIT.convertObjectToJsonBytes(updateObject)))
+				.andExpect(status().isConflict())
+				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$.fieldErrors", hasSize(1)))
+				.andExpect(jsonPath("$.fieldErrors[0].field", is("staff.shortname")))
+				.andExpect(jsonPath("$.fieldErrors[0].message",
+						is("Staff with short name already exists. Please try with different short name.")));
+	}
+
+	@Test()
+	public void updating_to_staff_email_that_already_exist() throws Exception {
+		final long schoolId = 1L;
+		final String emailThatExist = "stafftest1@email.com";
+		Map<String, Object> updateObject = StaffControllerUtilIT.getStaffUpdateRequestObject(1, "firstname", "lastname",
+				emailThatExist, "4433562344", "stu", "ROLE_TEACHER", "test update staff");
+		getMockMvc()
+				.perform(put(StaffControllerUtilIT.UPDATESTAFF, schoolId)
+						.header(AttendanceAppUtilIT.AUTHORIZATION, StaffControllerUtilIT.BASIC_DIGEST_HEADER_VALUE)
+						.contentType(AttendanceAppUtilIT.APPLICATION_JSON_UTF8)
+						.content(AttendanceAppUtilIT.convertObjectToJsonBytes(updateObject)))
+				.andExpect(status().isConflict())
+				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$.fieldErrors", hasSize(1)))
+				.andExpect(jsonPath("$.fieldErrors[0].field", is("staff.email")))
+				.andExpect(jsonPath("$.fieldErrors[0].message",
+						is("Staff with email already exists. Please try with different email.")));
 	}
 
 }
