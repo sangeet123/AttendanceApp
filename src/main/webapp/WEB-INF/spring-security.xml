@@ -7,9 +7,10 @@
         http://www.springframework.org/schema/beans 
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<security:http auto-config="true" create-session="stateless">
+	<security:http auto-config="true" create-session="stateless"
+		pattern="/admin/**">
 		<!-- requires-channel="https" -->
-		<security:intercept-url pattern="/school/**"
+		<security:intercept-url pattern="/admin/**"
 			access="ROLE_SCHOOL_ADMIN,ROLE_ADMIN" />
 		<security:http-basic />
 	</security:http>
@@ -28,8 +29,7 @@
 	</authentication-manager>
 
 
-	<!-- Authenticating staff -->
-	<authentication-manager alias="customAuthenticationManager"
+	<authentication-manager id="basicAuthManager"
 		xmlns="http://www.springframework.org/schema/security">
 		<authentication-provider ref="customAuthenticationProvider" />
 	</authentication-manager>
@@ -40,8 +40,8 @@
 
 
 	<security:http entry-point-ref="basicAuthEntryPoint"
-		pattern="/schoolrealm/**">
-		<security:intercept-url pattern="/schoolrealm"
+		pattern="/school/**">
+		<security:intercept-url pattern="/school/**"
 			access="ROLE_STAFF" />
 		<security:custom-filter ref="basicAuthenticationFilter"
 			after="BASIC_AUTH_FILTER" />
@@ -54,7 +54,7 @@
 
 	<bean id="basicAuthenticationFilter"
 		class="org.springframework.security.web.authentication.www.BasicAuthenticationFilter">
-		<property name="authenticationManager" ref="customAuthenticationManager" />
+		<property name="authenticationManager" ref="basicAuthManager" />
 		<property name="authenticationEntryPoint" ref="basicAuthEntryPoint" />
 	</bean>
 

@@ -9,8 +9,6 @@
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
 
-	<context:component-scan base-package="attendanceapp" />
-
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basename">
@@ -21,6 +19,8 @@
 	<bean id="errorValidationProcessor" class="attendanceapp.dao.validator.ValidationErrorProcessor">
 		<property name="messageSource" ref="messageSource" />
 	</bean>
+
+	<context:component-scan base-package="attendanceapp" />
 
 	<mvc:interceptors>
 		<mvc:interceptor>
