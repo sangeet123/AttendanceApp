@@ -11,8 +11,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {
-		"classpath*:mvc-dispatcher-servlet-unit-test.xml",
+@ContextConfiguration(locations = { "classpath*:mvc-dispatcher-servlet-unit-test.xml",
 		"classpath*:service-beans-unit-test.xml" })
 @WebAppConfiguration
 public abstract class UnitTestConfigurer {

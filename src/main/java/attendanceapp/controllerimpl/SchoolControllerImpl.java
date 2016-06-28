@@ -56,8 +56,7 @@ public class SchoolControllerImpl implements SchoolController {
 	@Override()
 	@RequestMapping(value = SchoolRestControllerConstants.DELETE_SCHOOL_LIST, method = RequestMethod.DELETE)
 	@ResponseBody()
-	public Status delete(
-			@Valid @RequestBody final DeleteSchoolsRequestObject deleteSelectedSchoolRequestObject) {
+	public Status delete(@Valid @RequestBody final DeleteSchoolsRequestObject deleteSelectedSchoolRequestObject) {
 		schoolService.delete(deleteSelectedSchoolRequestObject);
 		return new Status(
 				AttendanceAppUtils.messageToList(SchoolRestControllerConstants.SELECTED_SCHOOL_DELETE_SUCCESS),
