@@ -9,6 +9,7 @@ target/
 # netbeans specific
 nbproject/private/
 build/
+out/
 nbbuild/
 dist/
 nbdist/
