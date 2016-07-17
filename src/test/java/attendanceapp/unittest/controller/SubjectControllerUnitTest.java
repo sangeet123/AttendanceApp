@@ -39,8 +39,8 @@ import attendanceapp.model.requestobject.SubjectCreateRequestObject;
 import attendanceapp.model.requestobject.SubjectUpdateRequestObject;
 import attendanceapp.model.responseobject.SubjectResponseObject;
 import attendanceapp.services.SubjectService;
-import attendanceapp.unitest.common.util.AttendanceAppUnitTestUtil;
-import attendanceapp.unitest.common.util.UnitTestConfigurer;
+import attendanceapp.unittest.common.util.AttendanceAppUnitTestUtil;
+import attendanceapp.unittest.common.util.UnitTestConfigurer;
 import attendanceapp.unittest.testdata.SubjectControllerUnitTestData;
 import attendanceapp.unittest.utils.SubjectControllerUnitTestUtil;
 

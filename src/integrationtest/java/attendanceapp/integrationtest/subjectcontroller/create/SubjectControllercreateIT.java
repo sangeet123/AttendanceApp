@@ -18,7 +18,7 @@ import attendanceapp.integrationtest.common.util.AttendanceAppUtilIT;
 import attendanceapp.integrationtest.common.util.TestConfigurerIT;
 import attendanceapp.integrationtest.utils.SubjectControllerUtilIT;
 import attendanceapp.model.requestobject.SubjectCreateRequestObject;
-import attendanceapp.unitest.common.util.AttendanceAppUnitTestUtil;
+import attendanceapp.unittest.common.util.AttendanceAppUnitTestUtil;
 
 public class SubjectControllercreateIT extends TestConfigurerIT {
 

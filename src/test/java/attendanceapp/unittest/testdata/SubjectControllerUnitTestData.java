@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import attendanceapp.model.responseobject.SubjectResponseObject;
-import attendanceapp.unitest.common.util.AttendanceAppUnitTestUtil;
+import attendanceapp.unittest.common.util.AttendanceAppUnitTestUtil;
 import attendanceapp.unittest.utils.SubjectControllerUnitTestUtil;
 
 public class SubjectControllerUnitTestData {

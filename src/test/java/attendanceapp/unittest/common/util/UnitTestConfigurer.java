@@ -1,4 +1,4 @@
-package attendanceapp.unitest.common.util;
+package attendanceapp.unittest.common.util;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;

@@ -40,8 +40,8 @@ import attendanceapp.model.requestobject.SchoolCreateRequestObject;
 import attendanceapp.model.requestobject.SchoolUpdateRequestObject;
 import attendanceapp.model.responseobject.SchoolResponseObject;
 import attendanceapp.services.SchoolService;
-import attendanceapp.unitest.common.util.AttendanceAppUnitTestUtil;
-import attendanceapp.unitest.common.util.UnitTestConfigurer;
+import attendanceapp.unittest.common.util.AttendanceAppUnitTestUtil;
+import attendanceapp.unittest.common.util.UnitTestConfigurer;
 import attendanceapp.unittest.testdata.SchoolControllerUnitTestData;
 import attendanceapp.unittest.utils.SchoolControllerUnitTestUtil;
 

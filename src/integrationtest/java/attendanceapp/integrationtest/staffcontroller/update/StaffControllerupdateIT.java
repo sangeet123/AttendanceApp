@@ -17,7 +17,7 @@ import org.junit.Test;
 import attendanceapp.integrationtest.common.util.AttendanceAppUtilIT;
 import attendanceapp.integrationtest.common.util.TestConfigurerIT;
 import attendanceapp.integrationtest.utils.StaffControllerUtilIT;
-import attendanceapp.unitest.common.util.AttendanceAppUnitTestUtil;
+import attendanceapp.unittest.common.util.AttendanceAppUnitTestUtil;
 
 public class StaffControllerupdateIT extends TestConfigurerIT {
 
