@@ -3,6 +3,8 @@ target/
 *.tar.gz
 .DS_Store
 *.log
+.project
+.springbeans
 # intellij specific
 .idea/
 *.iml
