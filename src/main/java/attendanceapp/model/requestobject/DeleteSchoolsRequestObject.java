@@ -45,7 +45,7 @@ public class DeleteSchoolsRequestObject {
 		return new EqualsBuilder().append(commaSeparatedIds, other.getCommaSeparatedIds()).isEquals();
 	}
 
-	@Override
+	@Override()
 	public String toString() {
 		return "DeleteSelectedSchoolRequestObject [commaSeparatedIds=" + commaSeparatedIds + "]";
 	}

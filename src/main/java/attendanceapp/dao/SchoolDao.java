@@ -4,17 +4,18 @@ import java.util.List;
 
 import attendanceapp.model.School;
 import attendanceapp.model.requestobject.SchoolCreateRequestObject;
+import attendanceapp.model.requestobject.SchoolUpdateRequestObject;
 
 public interface SchoolDao {
-	public School getSchool(final long id);
+	School getSchool(final long id);
 
-	public List<School> getSchoolList();
+	List<School> getSchoolList();
 
-	public void update(final School school);
+	School update(final SchoolUpdateRequestObject school);
 
-	public void delete(final long id);
+	void delete(final long id);
 
-	public void delete(final String ids);
+	void delete(final String ids);
 
 	void create(final SchoolCreateRequestObject schoolRequestObject);
 }

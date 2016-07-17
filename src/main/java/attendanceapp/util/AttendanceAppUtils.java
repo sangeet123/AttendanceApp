@@ -39,5 +39,4 @@ public final class AttendanceAppUtils {
 		List<String> messages = Arrays.asList(string.split(SPLITTER));
 		return messages;
 	}
-
 }

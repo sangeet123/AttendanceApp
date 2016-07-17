@@ -7,9 +7,10 @@
         http://www.springframework.org/schema/beans 
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<security:http auto-config="true" create-session="stateless">
+	<security:http auto-config="true" create-session="stateless"
+		pattern="/admin/**">
 		<!-- requires-channel="https" -->
-		<security:intercept-url pattern="/school/**"
+		<security:intercept-url pattern="/admin/**"
 			access="ROLE_SCHOOL_ADMIN,ROLE_ADMIN" />
 		<security:http-basic />
 	</security:http>
@@ -26,5 +27,35 @@
 			<password-encoder ref="passwordEncoder" />
 		</authentication-provider>
 	</authentication-manager>
+
+
+	<authentication-manager id="basicAuthManager"
+		xmlns="http://www.springframework.org/schema/security">
+		<authentication-provider ref="customAuthenticationProvider" />
+	</authentication-manager>
+
+	<bean id="customAuthenticationProvider"
+		class="attendanceapp.staff.authenticationprovider.UserAuthenticationProvider">
+	</bean>
+
+
+	<security:http entry-point-ref="basicAuthEntryPoint"
+		pattern="/school/**">
+		<security:intercept-url pattern="/school/**"
+			access="ROLE_STAFF" />
+		<security:custom-filter ref="basicAuthenticationFilter"
+			after="BASIC_AUTH_FILTER" />
+	</security:http>
+
+	<bean id="basicAuthEntryPoint"
+		class="org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint">
+		<property name="realmName" value="REST Realm" />
+	</bean>
+
+	<bean id="basicAuthenticationFilter"
+		class="org.springframework.security.web.authentication.www.BasicAuthenticationFilter">
+		<property name="authenticationManager" ref="basicAuthManager" />
+		<property name="authenticationEntryPoint" ref="basicAuthEntryPoint" />
+	</bean>
 
 </beans>

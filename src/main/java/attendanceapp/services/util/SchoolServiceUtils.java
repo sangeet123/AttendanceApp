@@ -15,7 +15,6 @@ import attendanceapp.modeltoresponseobjectmapper.SchoolToSchoolResponseMapper;
 import attendanceapp.requestobjecttomodelmapper.SchoolRequestToAuthoritiesMapper;
 import attendanceapp.requestobjecttomodelmapper.SchoolRequestToSchoolMapper;
 import attendanceapp.requestobjecttomodelmapper.SchoolRequestToUserMapper;
-import attendanceapp.requestobjecttomodelmapper.SchoolUpdateRequestToSchoolMapper;
 import attendanceapp.util.Role;
 
 public final class SchoolServiceUtils {
@@ -24,8 +23,7 @@ public final class SchoolServiceUtils {
 		throw new InstantiationException();
 	}
 
-	public static School createSchoolFromSchoolCreateRequestObject(
-			final SchoolCreateRequestObject schoolRequestObject) {
+	public static School createSchoolFromSchoolResponseObject(final SchoolCreateRequestObject schoolRequestObject) {
 		LocalDateTime createdTime = LocalDateTime.now(Clock.systemUTC());
 		return new SchoolRequestToSchoolMapper.SchoolBuilder().id(schoolRequestObject.getId())
 				.email(schoolRequestObject.getEmail()).name(schoolRequestObject.getName())
@@ -50,18 +48,16 @@ public final class SchoolServiceUtils {
 				.updatedOn(school.getUpdatedOn()).build();
 	}
 
-	public static School createSchoolFromSchoolUpdateRequestObject(
-			SchoolUpdateRequestObject schoolUpdateRequestObject) {
-		LocalDateTime utcNow = LocalDateTime.now(Clock.systemUTC());
-		return new SchoolUpdateRequestToSchoolMapper.SchoolBuilder().id(schoolUpdateRequestObject.getId())
-				.email(schoolUpdateRequestObject.getEmail()).name(schoolUpdateRequestObject.getName())
-				.telephone(schoolUpdateRequestObject.getTelephone()).updatedOn(utcNow).build();
-	}
-
 	public static List<SchoolResponseObject> createListOfSchoolResponseFromListOfSchool(List<School> schools) {
-		List<SchoolResponseObject> schoolsResponseObject = new ArrayList<SchoolResponseObject>();
+		List<SchoolResponseObject> schoolsResponseObject = new ArrayList<>();
 		schools.forEach(school -> schoolsResponseObject.add(createSchoolResponseFromSchool(school)));
 		return schoolsResponseObject;
+	}
+
+	public static void copyAttributes(School to, final SchoolUpdateRequestObject from) {
+		to.setEmail(from.getEmail());
+		to.setName(from.getName());
+		to.setTelephone(from.getTelephone());
 	}
 
 }

@@ -19,6 +19,11 @@
 		</property>
 	</bean>
 
+	<bean id="errorValidationProcessor" class="attendanceapp.dao.validator.ValidationErrorProcessor">
+		<property name="messageSource" ref="messageSource" />
+	</bean>
+
+
 	<mvc:annotation-driven />
 
 </beans>

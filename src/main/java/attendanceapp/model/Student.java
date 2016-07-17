@@ -81,8 +81,7 @@ public class Student implements Serializable {
 
 	@Override
 	public String toString() {
-		return "id=" + id + ", name=" + name + ", telephone=" + telephone
-				+ ", email=" + email;
+		return "id=" + id + ", name=" + name + ", telephone=" + telephone + ", email=" + email;
 	}
 
 }

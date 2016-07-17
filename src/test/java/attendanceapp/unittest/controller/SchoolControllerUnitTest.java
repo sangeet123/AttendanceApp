@@ -1,7 +1,8 @@
 package attendanceapp.unittest.controller;
 
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -17,7 +18,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +29,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import attendanceapp.constants.SchoolRestControllerConstants;
+import attendanceapp.constants.Constant;
 import attendanceapp.controller.SchoolController;
 import attendanceapp.controllerimpl.SchoolControllerImpl;
-import attendanceapp.exceptions.DuplicateSchoolNameException;
-import attendanceapp.exceptions.SchoolNotFoundException;
+import attendanceapp.dao.validator.SchoolDaoValidator;
+import attendanceapp.exceptions.ConflictException;
+import attendanceapp.exceptions.NotFoundException;
 import attendanceapp.model.requestobject.DeleteSchoolsRequestObject;
 import attendanceapp.model.requestobject.SchoolCreateRequestObject;
 import attendanceapp.model.requestobject.SchoolUpdateRequestObject;
@@ -111,8 +115,8 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 			throws Exception {
 		long validIdThatDoesNotExist = 11L;
 		when(schoolServiceMock.getSchool(validIdThatDoesNotExist))
-				.thenThrow(new SchoolNotFoundException(SchoolRestControllerConstants.SCHOOL_DOES_NOT_EXIST));
-		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"School does not exist.\"]}";
+				.thenThrow(new NotFoundException(Constant.RESOURSE_DOES_NOT_EXIST));
+		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Resource does not exist.\"]}";
 		getMockMvc().perform(get(SchoolControllerUnitTestUtil.GETSCHOOLWITHID, validIdThatDoesNotExist))
 				.andExpect(status().isNotFound())
 				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
@@ -126,7 +130,7 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	public void get_school_by_id_should_return_http_status_code_404_for_id_that_is_invalid() throws Exception {
 		long invalidSchoolId = -1L;
 		when(schoolServiceMock.getSchool(invalidSchoolId))
-				.thenThrow(new SchoolNotFoundException(SchoolRestControllerConstants.SCHOOL_DOES_NOT_EXIST));
+				.thenThrow(new NotFoundException(Constant.RESOURSE_DOES_NOT_EXIST));
 		getMockMvc().perform(get(SchoolControllerUnitTestUtil.GETSCHOOLWITHID, invalidSchoolId))
 				.andExpect(status().isNotFound());
 		verify(schoolServiceMock, atLeast(1)).getSchool(invalidSchoolId);
@@ -137,8 +141,8 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	public void delete_school_by_id_should_return_http_status_code_404_for_id_that_is_valid_but_does_not_exist()
 			throws Exception {
 		long validSchoolIdThatDoesNotExist = 15L;
-		doThrow(new SchoolNotFoundException(SchoolRestControllerConstants.SCHOOL_DOES_NOT_EXIST))
-				.when(schoolServiceMock).delete(validSchoolIdThatDoesNotExist);
+		doThrow(new NotFoundException(Constant.RESOURSE_DOES_NOT_EXIST)).when(schoolServiceMock)
+				.delete(validSchoolIdThatDoesNotExist);
 		getMockMvc().perform(delete(SchoolControllerUnitTestUtil.DELETESCHOOL, validSchoolIdThatDoesNotExist))
 				.andExpect(status().isNotFound());
 		verify(schoolServiceMock, atLeast(1)).delete(validSchoolIdThatDoesNotExist);
@@ -148,8 +152,8 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 	@Test()
 	public void delete_school_by_id_should_return_http_status_code_404_for_id_that_is_invalid() throws Exception {
 		long invalidSchoolId = -1L;
-		doThrow(new SchoolNotFoundException(SchoolRestControllerConstants.SCHOOL_DOES_NOT_EXIST))
-				.when(schoolServiceMock).delete(invalidSchoolId);
+		doThrow(new NotFoundException(Constant.RESOURSE_DOES_NOT_EXIST)).when(schoolServiceMock)
+				.delete(invalidSchoolId);
 		getMockMvc().perform(delete(SchoolControllerUnitTestUtil.DELETESCHOOL, invalidSchoolId))
 				.andExpect(status().isNotFound());
 		verify(schoolServiceMock, atLeast(1)).delete(invalidSchoolId);
@@ -281,16 +285,19 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 		final String duplicateSchoolName = "Test School";
 		SchoolUpdateRequestObject schoolUpdateRequestObject = SchoolControllerUnitTestUtil
 				.getSchoolUpdateRequestObject(1L, duplicateSchoolName, "testemail@email.com", "2453469123");
-		doThrow(new DuplicateSchoolNameException(SchoolRestControllerConstants.DUPLICATE_SCHOOL_NAME))
-				.when(schoolServiceMock).update(schoolUpdateRequestObject);
-		final String responseJsonString = "{\"statusCode\":3,\"messages\":[\"School with given name already exists. Please enter different name.\"]}";
+		Set<String> fieldErrors = new HashSet<>();
+		fieldErrors.add(SchoolDaoValidator.INVALID_NAME);
+		doThrow(new ConflictException(fieldErrors)).when(schoolServiceMock).update(schoolUpdateRequestObject);
 		getMockMvc()
 				.perform(put(SchoolControllerUnitTestUtil.UPDATESCHOOL)
 						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8)
 						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(schoolUpdateRequestObject)))
 				.andExpect(status().isConflict())
 				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
-				.andExpect(content().string(responseJsonString));
+				.andExpect(jsonPath("$.fieldErrors", hasSize(1)))
+				.andExpect(jsonPath("$.fieldErrors[*].field", containsInAnyOrder("school.name")))
+				.andExpect(jsonPath("$.fieldErrors[*].message",
+						containsInAnyOrder("School with given name already exists. Please enter different name.")));
 		verify(schoolServiceMock, atLeast(1)).update(schoolUpdateRequestObject);
 		verifyNoMoreInteractions(schoolServiceMock);
 	}
@@ -301,9 +308,9 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 		final long nonExistantSchoolId = 10L;
 		SchoolUpdateRequestObject schoolUpdateRequestObject = SchoolControllerUnitTestUtil
 				.getSchoolUpdateRequestObject(nonExistantSchoolId, "Test School", "testemail@email.com", "2453469123");
-		doThrow(new SchoolNotFoundException(SchoolRestControllerConstants.SCHOOL_DOES_NOT_EXIST))
-				.when(schoolServiceMock).update(schoolUpdateRequestObject);
-		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"School does not exist.\"]}";
+		doThrow(new NotFoundException(Constant.RESOURSE_DOES_NOT_EXIST)).when(schoolServiceMock)
+				.update(schoolUpdateRequestObject);
+		final String responseJsonString = "{\"statusCode\":2,\"messages\":[\"Resource does not exist.\"]}";
 		getMockMvc()
 				.perform(put(SchoolControllerUnitTestUtil.UPDATESCHOOL)
 						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8)
@@ -322,8 +329,8 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 		deleteSchoolsRequestObject.setCommaSeparatedIds(commaSeparatedIds);
 		getMockMvc()
 				.perform(delete(SchoolControllerUnitTestUtil.DELETE_SCHOOLS)
-						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8)
-						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(deleteSchoolsRequestObject)))
+						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8).content(
+								AttendanceAppUnitTestUtil.convertObjectToJsonBytes(deleteSchoolsRequestObject)))
 				.andExpect(status().isBadRequest())
 				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$.fieldErrors", hasSize(1)))
@@ -338,8 +345,8 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 		DeleteSchoolsRequestObject deleteSchoolsRequestObject = new DeleteSchoolsRequestObject();
 		getMockMvc()
 				.perform(delete(SchoolControllerUnitTestUtil.DELETE_SCHOOLS)
-						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8)
-						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(deleteSchoolsRequestObject)))
+						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8).content(
+								AttendanceAppUnitTestUtil.convertObjectToJsonBytes(deleteSchoolsRequestObject)))
 				.andExpect(status().isBadRequest())
 				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$.fieldErrors", hasSize(1)))
@@ -358,8 +365,8 @@ public class SchoolControllerUnitTest extends UnitTestConfigurer {
 		final String responseJsonString = "{\"statusCode\":1,\"messages\":[\"Schools have been deleted successfully.\"]}";
 		getMockMvc()
 				.perform(delete(SchoolControllerUnitTestUtil.DELETE_SCHOOLS)
-						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8)
-						.content(AttendanceAppUnitTestUtil.convertObjectToJsonBytes(deleteSchoolsRequestObject)))
+						.contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8).content(
+								AttendanceAppUnitTestUtil.convertObjectToJsonBytes(deleteSchoolsRequestObject)))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(AttendanceAppUnitTestUtil.APPLICATION_JSON_UTF8))
 				.andExpect(content().string(responseJsonString));

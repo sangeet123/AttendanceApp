@@ -12,7 +12,7 @@ public class StatusCodeUtil {
 	public static final int INTERNAL_ERROR_CODE = 4;
 
 	public static final int MODEL_VALIDATION_ERROR_CODE = 5;
-	
+
 	public static final int BAD_REQUEST_ERROR_CODE = 6;
 
 }

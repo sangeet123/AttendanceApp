@@ -11,25 +11,25 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import attendanceapp.customstatus.Status;
-import attendanceapp.exceptions.SchoolNotFoundException;
+import attendanceapp.exceptions.NotFoundException;
 import attendanceapp.util.AttendanceAppUtils;
 import attendanceapp.util.StatusCodeUtil;
 
 @ControllerAdvice()
-public class SchoolNotFoundExceptionHandler {
+public class NotFoundExceptionHandler {
 
 	private MessageSource messageSource;
-	private final Logger logger = LoggerFactory.getLogger(SchoolNotFoundExceptionHandler.class);
+	private final Logger logger = LoggerFactory.getLogger(NotFoundExceptionHandler.class);
 
 	@Autowired()
-	public SchoolNotFoundExceptionHandler(MessageSource messageSource) {
+	public NotFoundExceptionHandler(MessageSource messageSource) {
 		this.messageSource = messageSource;
 	}
 
 	@ResponseBody()
-	@ExceptionHandler(SchoolNotFoundException.class)
+	@ExceptionHandler(NotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public Status processSchoolNotFoundException(SchoolNotFoundException ex) {
+	public Status processSchoolNotFoundException(NotFoundException ex) {
 		logger.error("School not found", ex);
 		Status status = AttendanceAppUtils.createStatus(ex.getMessage(), StatusCodeUtil.ITEM_NOT_FOUND_CODE);
 		return status;
